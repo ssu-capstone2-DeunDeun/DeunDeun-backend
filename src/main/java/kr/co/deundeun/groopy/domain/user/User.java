@@ -7,8 +7,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.Email;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -21,6 +23,8 @@ public class User extends BaseEntity {
 
     private String phoneNumber;
 
+    @Email
+    @Column(nullable = false)
     private String email;
 
     @OneToOne
@@ -33,13 +37,17 @@ public class User extends BaseEntity {
     private UserSecurity userSecurity;
 
     @Builder
-    public User(UserSecurity userSecurity, String nickname) {
+    public User(UserSecurity userSecurity, String email) {
         this.userSecurity = userSecurity;
-        this.nickname = nickname;
+        this.email = email;
     }
 
     private void setName(String name){
         this.name = name;
+    }
+
+    private void setNickname(String nickname){
+        this.name = nickname;
     }
 
     private void setUserImage(UserImage userImage){
