@@ -1,17 +1,22 @@
 package kr.co.deundeun.groopy.domain.hashtag;
 
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import lombok.Getter;
-import lombok.ToString;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-
-@MappedSuperclass
 @Getter
-@ToString
+@DiscriminatorColumn
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@NoArgsConstructor
+@Entity
 public abstract class Hashtag extends BaseEntity {
 
-    @Column(nullable = false)
-    private String name;
+  @ManyToOne(fetch = FetchType.LAZY)
+  private HashtagInfo hashtagInfo;
 }

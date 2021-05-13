@@ -1,7 +1,7 @@
 package kr.co.deundeun.groopy.dao;
 
-import kr.co.deundeun.groopy.domain.like.UserClubLike;
+import kr.co.deundeun.groopy.domain.like.ClubLike;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserClubLikeRepository extends JpaRepository<UserClubLike, Long> {
+public interface UserClubLikeRepository extends JpaRepository<ClubLike, Long> {
 }

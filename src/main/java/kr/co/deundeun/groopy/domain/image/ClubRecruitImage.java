@@ -1,18 +1,17 @@
 package kr.co.deundeun.groopy.domain.image;
 
-import kr.co.deundeun.groopy.domain.club.ClubRecruit;
+import javax.persistence.FetchType;
+import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
-@NoArgsConstructor
 @Getter
+@NoArgsConstructor
 @Entity
 public class ClubRecruitImage extends Image{
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private ClubRecruit clubRecruit;
-
 }

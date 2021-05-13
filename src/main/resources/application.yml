@@ -1,14 +1,3 @@
 spring:
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    properties.hibernate.hbm2ddl.auto: update
-    showSql: true
-    open-in-view: false
-  datasource:
-    url: jdbc:h2:mem:groopy
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-  h2:
-    console:
-      enabled: true
+  profiles:
+    active: local

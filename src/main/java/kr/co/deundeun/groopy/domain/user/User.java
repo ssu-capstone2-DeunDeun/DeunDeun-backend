@@ -1,19 +1,35 @@
 package kr.co.deundeun.groopy.domain.user;
 
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.Email;
+import kr.co.deundeun.groopy.config.security.oauth2.SocialProviderType;
 import kr.co.deundeun.groopy.domain.BaseEntity;
-import kr.co.deundeun.groopy.domain.image.UserImage;
-import lombok.AccessLevel;
-import lombok.Builder;
+import kr.co.deundeun.groopy.domain.hashtag.UserHashtag;
+import kr.co.deundeun.groopy.domain.like.ClubLike;
+import kr.co.deundeun.groopy.domain.like.PostLike;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Getter
 @Entity
 public class User extends BaseEntity {
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private SocialProviderType socialProvider;
+
+    @Column(nullable = false)
+    private String socialId;
+
+    private String jwtRefreshToken;
 
     private String name;
 
@@ -21,37 +37,22 @@ public class User extends BaseEntity {
 
     private String phoneNumber;
 
+    @Email
+    @Column(nullable = false)
     private String email;
 
-    @OneToOne
-    private UserImage userImage;
+    private String userImageUrl;
 
-    @OneToOne
-    private UserHistory userHistory;
+    @OneToMany(mappedBy = "user")
+    private Set<Participate> participates = new HashSet<>();
 
-    @OneToOne
-    private UserSecurity userSecurity;
+    @OneToMany(mappedBy = "user")
+    private Set<UserHashtag> userHashtags = new HashSet<>();
 
-    @Builder
-    public User(UserSecurity userSecurity, String nickname) {
-        this.userSecurity = userSecurity;
-        this.nickname = nickname;
-    }
+    @OneToMany(mappedBy = "user")
+    private Set<ClubLike> clubLikes = new HashSet<>();
 
-    private void setName(String name){
-        this.name = name;
-    }
-
-    private void setUserImage(UserImage userImage){
-        this.userImage = userImage;
-    }
-
-    private void setPhoneNumber(String phoneNumber){
-        this.phoneNumber = phoneNumber;
-    }
-
-    private void setEmail(String email){
-        this.email = email;
-    }
+    @OneToMany(mappedBy = "user")
+    private Set<PostLike> postLikes = new HashSet<>();
 
 }
