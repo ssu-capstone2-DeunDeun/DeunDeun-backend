@@ -1,7 +1,7 @@
 package kr.co.deundeun.groopy.domain.alarm;
 
 import kr.co.deundeun.groopy.domain.BaseEntity;
-import kr.co.deundeun.groopy.domain.user.UserHistory;
+import kr.co.deundeun.groopy.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +14,7 @@ import javax.persistence.MappedSuperclass;
 public abstract class Alarm extends BaseEntity {
 
     @ManyToOne
-    private UserHistory userHistory;
+    private User user;
 
     private Long targetId;
 

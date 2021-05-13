@@ -1,6 +1,6 @@
 package kr.co.deundeun.groopy.domain.image;
 
-import kr.co.deundeun.groopy.domain.user.User;
+import kr.co.deundeun.groopy.domain.user.UserInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +13,6 @@ import javax.persistence.OneToOne;
 public class UserImage extends Image {
 
     @OneToOne
-    private User user;
+    private UserInfo userInfo;
 
 }

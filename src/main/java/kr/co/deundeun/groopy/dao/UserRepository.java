@@ -1,13 +1,13 @@
 package kr.co.deundeun.groopy.dao;
 
-import kr.co.deundeun.groopy.domain.user.User;
+import kr.co.deundeun.groopy.domain.user.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<UserInfo, Long> {
 
-    Optional<User> findByEmail(String email);
+    Optional<UserInfo> findByEmail(String email);
 
     boolean existsByNickname(String nickname);
 }

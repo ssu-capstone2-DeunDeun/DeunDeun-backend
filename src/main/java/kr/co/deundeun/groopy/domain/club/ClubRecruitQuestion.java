@@ -1,6 +1,7 @@
 package kr.co.deundeun.groopy.domain.club;
 
 import kr.co.deundeun.groopy.domain.BaseEntity;
+import kr.co.deundeun.groopy.domain.club.constant.QuestionType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

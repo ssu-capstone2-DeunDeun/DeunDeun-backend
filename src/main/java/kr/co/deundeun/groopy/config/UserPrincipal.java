@@ -1,6 +1,6 @@
 package kr.co.deundeun.groopy.config;
 
-import kr.co.deundeun.groopy.domain.user.User;
+import kr.co.deundeun.groopy.domain.user.UserInfo;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,20 +27,20 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         this.authorities = authorities;
     }
 
-    public static UserPrincipal create(User user) {
+    public static UserPrincipal create(UserInfo userInfo) {
         List<GrantedAuthority> authorities = Collections.
                 singletonList(new SimpleGrantedAuthority("ROLE_USER"));
 
         return new UserPrincipal(
-                user.getId(),
-                user.getEmail(),
+                userInfo.getId(),
+                userInfo.getEmail(),
                 authorities
         );
 
     }
 
-    public static UserPrincipal create(User user, Map<String, Object> attributes) {
-        UserPrincipal userPrincipal = UserPrincipal.create(user);
+    public static UserPrincipal create(UserInfo userInfo, Map<String, Object> attributes) {
+        UserPrincipal userPrincipal = UserPrincipal.create(userInfo);
         userPrincipal.setAttributes(attributes);
         return userPrincipal;
     }

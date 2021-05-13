@@ -3,8 +3,7 @@ package kr.co.deundeun.groopy.config.security.oauth2;
 import kr.co.deundeun.groopy.config.UserPrincipal;
 import kr.co.deundeun.groopy.dao.UserRepository;
 import kr.co.deundeun.groopy.dao.UserSecurityRepository;
-import kr.co.deundeun.groopy.domain.user.User;
-import kr.co.deundeun.groopy.domain.user.UserSecurity;
+import kr.co.deundeun.groopy.domain.user.UserInfo;
 import kr.co.deundeun.groopy.exception.OAuth2AuthenticationProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -46,37 +45,37 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
         }
 
-        Optional<User> userOptional = userRepository.findByEmail(oAuth2UserInfo.getEmail());
+        Optional<UserInfo> userOptional = userRepository.findByEmail(oAuth2UserInfo.getEmail());
 
-        User user;
+        UserInfo userInfo;
         if (userOptional.isPresent()) {
-            user = userOptional.get();
-            if (!user.getUserSecurity().getSocialProvider()
-                    .equals(SocialProviderType.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))) {
+            userInfo = userOptional.get();
+            if (!userInfo.getUserSecurity().getSocialProvider()
+                         .equals(SocialProviderType.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))) {
                 throw new OAuth2AuthenticationProcessingException(
-                        user.getUserSecurity().getSocialProvider().toString() + " 로 등록한 아이디가 있습니다");
+                        userInfo.getUserSecurity().getSocialProvider().toString() + " 로 등록한 아이디가 있습니다");
             }
 
         } else {
-            user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
+            userInfo = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
         }
 
-        return UserPrincipal.create(user, oAuth2User.getAttributes());
+        return UserPrincipal.create(userInfo, oAuth2User.getAttributes());
     }
 
-    private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
+    private UserInfo registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
         UserSecurity userSecurity = UserSecurity.builder()
                 .socialProvider(SocialProviderType.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))
                 .socialId(oAuth2UserInfo.getId())
                 .build();
 
-        User user = User.builder()
-                .email(oAuth2UserInfo.getEmail())
-                .userSecurity(userSecurity)
-                .build();
+        UserInfo userInfo = UserInfo.builder()
+                                    .email(oAuth2UserInfo.getEmail())
+                                    .userSecurity(userSecurity)
+                                    .build();
 
         userSecurityRepository.save(userSecurity);
-        return userRepository.save(user);
+        return userRepository.save(userInfo);
     }
 
 }

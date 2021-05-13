@@ -3,7 +3,7 @@ package kr.co.deundeun.groopy.service;
 import kr.co.deundeun.groopy.controller.user.dto.SignupRequestDto;
 import kr.co.deundeun.groopy.controller.user.dto.UserResponseDto;
 import kr.co.deundeun.groopy.dao.UserRepository;
-import kr.co.deundeun.groopy.domain.user.User;
+import kr.co.deundeun.groopy.domain.user.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,15 +20,15 @@ public class UserService {
 
     @Transactional
     public UserResponseDto signup(Long id, SignupRequestDto signupRequestDto){
-        User user = userRepository.findById(id).orElseThrow(RuntimeException::new);
-        user.setName(signupRequestDto.getName());
-        user.setNickname(signupRequestDto.getNickname());
-        user.setPhoneNumber(signupRequestDto.getPhoneNumber());
+        UserInfo userInfo = userRepository.findById(id).orElseThrow(RuntimeException::new);
+        userInfo.setName(signupRequestDto.getName());
+        userInfo.setNickname(signupRequestDto.getNickname());
+        userInfo.setPhoneNumber(signupRequestDto.getPhoneNumber());
 
-        userRepository.save(user);
+        userRepository.save(userInfo);
 
         UserResponseDto userResponseDto = new UserResponseDto();
-        userResponseDto.setNickname(user.getNickname());
+        userResponseDto.setNickname(userInfo.getNickname());
         userResponseDto.setMsg("회원 가입 성공");
         return userResponseDto;
     }

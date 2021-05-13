@@ -1,5 +1,6 @@
 package kr.co.deundeun.groopy.domain.user;
 
+import javax.persistence.FetchType;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.club.ClubRecruit;
@@ -14,20 +15,20 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class UserClub extends BaseEntity {
+public class UserClub extends BaseEntity{
 
-    @ManyToOne
-    private UserHistory userHistory;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Club club;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private ClubRecruit clubRecruit;
 
     @Builder
-    public UserClub(UserHistory userHistory, Club club){
-        this.userHistory = userHistory;
+    public UserClub(User user, Club club){
+        this.user = user;
         this.club = club;
     }
 

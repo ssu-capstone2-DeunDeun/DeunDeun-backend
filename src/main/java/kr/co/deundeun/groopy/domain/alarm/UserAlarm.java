@@ -1,6 +1,6 @@
 package kr.co.deundeun.groopy.domain.alarm;
 
-import kr.co.deundeun.groopy.domain.user.UserHistory;
+import kr.co.deundeun.groopy.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +13,6 @@ import javax.persistence.ManyToOne;
 public class UserAlarm extends Alarm {
 
     @ManyToOne
-    private UserHistory userHistory;
+    private User user;
 
 }

@@ -1,7 +1,7 @@
 package kr.co.deundeun.groopy.domain.like;
 
 import kr.co.deundeun.groopy.domain.club.Club;
-import kr.co.deundeun.groopy.domain.user.UserHistory;
+import kr.co.deundeun.groopy.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +14,7 @@ import javax.persistence.ManyToOne;
 public class UserClubLike extends Like {
 
     @ManyToOne
-    private UserHistory userHistory;
+    private User user;
 
     @ManyToOne
     private Club club;

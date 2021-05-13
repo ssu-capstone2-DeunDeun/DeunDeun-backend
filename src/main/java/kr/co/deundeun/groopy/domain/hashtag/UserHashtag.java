@@ -1,6 +1,6 @@
 package kr.co.deundeun.groopy.domain.hashtag;
 
-import kr.co.deundeun.groopy.domain.user.UserHistory;
+import kr.co.deundeun.groopy.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -15,6 +15,6 @@ import javax.persistence.ManyToOne;
 public class UserHashtag extends Hashtag {
 
     @ManyToOne
-    private UserHistory userHistory;
+    private User user;
 
 }

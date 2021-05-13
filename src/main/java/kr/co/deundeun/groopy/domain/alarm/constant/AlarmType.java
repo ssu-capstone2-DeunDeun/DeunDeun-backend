@@ -1,4 +1,4 @@
-package kr.co.deundeun.groopy.domain.alarm;
+package kr.co.deundeun.groopy.domain.alarm.constant;
 
 import lombok.Getter;
 

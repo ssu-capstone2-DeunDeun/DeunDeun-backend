@@ -1,42 +1,42 @@
 package kr.co.deundeun.groopy.domain.user;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import kr.co.deundeun.groopy.domain.BaseEntity;
-import kr.co.deundeun.groopy.domain.image.UserImage;
-import lombok.*;
+import kr.co.deundeun.groopy.domain.alarm.UserAlarm;
+import kr.co.deundeun.groopy.domain.club.ClubApply;
+import kr.co.deundeun.groopy.domain.hashtag.UserHashtag;
+import kr.co.deundeun.groopy.domain.like.UserClubLike;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.Email;
+import javax.persistence.OneToMany;
+import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Getter
-@Setter
 @Entity
-public class User extends BaseEntity {
+public class User {
 
-    private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private String nickname;
+    @OneToMany(mappedBy = "userHistory")
+    private List<UserHashtag> userHashtagList;
 
-    private String phoneNumber;
+    @OneToMany(mappedBy = "userHistory")
+    private List<UserAlarm> userAlarmList;
 
-    @Email
-    @Column(nullable = false)
-    private String email;
+    @OneToMany(mappedBy = "userHistory")
+    private List<UserClub> userClubList;
 
-    @OneToOne
-    private UserImage userImage;
+    @OneToMany(mappedBy = "userHistory")
+    private List<UserClubLike> userClubLikeList;
 
-    @OneToOne
-    private UserHistory userHistory;
+    @OneToMany(mappedBy = "userHistory")
+    private List<ClubApply> clubApplyList;
 
-    @OneToOne
-    private UserSecurity userSecurity;
-
-    @Builder
-    public User(UserSecurity userSecurity, String email) {
-        this.userSecurity = userSecurity;
-        this.email = email;
-    }
 }
