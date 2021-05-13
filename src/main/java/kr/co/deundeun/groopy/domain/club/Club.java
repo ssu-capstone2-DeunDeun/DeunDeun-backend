@@ -1,45 +1,40 @@
 package kr.co.deundeun.groopy.domain.club;
 
-import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.hashtag.ClubHashtag;
 import kr.co.deundeun.groopy.domain.image.ClubImage;
 import kr.co.deundeun.groopy.domain.like.UserClubLike;
-import kr.co.deundeun.groopy.domain.post.ClubPost;
+import kr.co.deundeun.groopy.domain.post.Post;
 import kr.co.deundeun.groopy.domain.user.UserClub;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @NoArgsConstructor
 @Getter
 @Entity
-public class Club extends BaseEntity {
+public class Club  {
 
-    private String clubName;
-
-    private int generation;
-
-    private String introduction;
+    @Id
+    private Long id;
 
     @OneToMany(mappedBy = "club")
-    private List<UserClub> memberList;
+    private List<UserClub> userClubs;
 
     @OneToMany(mappedBy = "club")
-    private List<ClubHashtag> clubHashtagList;
+    private List<ClubHashtag> clubHashtags;
 
     @OneToMany(mappedBy = "club")
-    private List<UserClubLike> userClubLikeList;
+    private List<ClubImage> clubImages;
 
     @OneToMany(mappedBy = "club")
-    private List<ClubImage> clubImageList;
+    private List<Post> clubPosts;
 
     @OneToMany(mappedBy = "club")
-    private List<ClubPost> clubPostList;
+    private List<ClubRecruit> clubRecruits;
 
-    @OneToMany(mappedBy = "club")
-    private List<ClubRecruit> clubRecruitList;
+    @Enumerated(EnumType.STRING)
+    private CategoryType categoryType;
 
 }

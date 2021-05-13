@@ -25,9 +25,9 @@ public class ClubApply extends BaseEntity {
     private ClubApplyStatus clubApplyStatus;
 
     @OneToMany(mappedBy = "clubApply")
-    private List<ClubApplyAnswer> clubApplyAnswerList;
+    private List<ClubApplyAnswer> clubApplyAnswers;
 
     @OneToMany(mappedBy = "clubApply")
-    private  List<ClubApplyComment> clubApplyCommentList;
+    private  List<ClubApplyComment> clubApplyComments;
 
 }

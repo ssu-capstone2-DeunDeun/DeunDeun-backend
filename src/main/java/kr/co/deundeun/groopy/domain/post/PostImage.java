@@ -1,6 +1,6 @@
-package kr.co.deundeun.groopy.domain.image;
+package kr.co.deundeun.groopy.domain.post;
 
-import kr.co.deundeun.groopy.domain.post.ClubPost;
+import kr.co.deundeun.groopy.domain.image.Image;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,8 +10,8 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 @Getter
 @Entity
-public class ClubPostImage extends Image{
+public class PostImage extends Image {
 
     @ManyToOne
-    private ClubPost clubPost;
+    private Post post;
 }

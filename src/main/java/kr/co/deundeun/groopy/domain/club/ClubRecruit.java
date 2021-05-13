@@ -24,15 +24,15 @@ public class ClubRecruit extends BaseEntity {
     private String content;
 
     @OneToMany(mappedBy = "clubRecruit")
-    private List<ClubRecruitImage> clubRecruitImageList;
+    private List<ClubRecruitImage> clubRecruitImages;
 
     @OneToMany(mappedBy = "clubRecruit")
-    private List<ClubApply> clubApplyList;
+    private List<ClubApply> clubApplys;
 
     @OneToMany(mappedBy = "clubRecruit")
-    private List<ClubRecruitComment> clubRecruitCommentList;
+    private List<ClubRecruitComment> clubRecruitComments;
 
     @OneToMany(mappedBy = "clubRecruit")
-    private List<ClubRecruitQuestion> clubRecruitQuestionList;
+    private List<ClubRecruitQuestion> clubRecruitQuestions;
 
 }

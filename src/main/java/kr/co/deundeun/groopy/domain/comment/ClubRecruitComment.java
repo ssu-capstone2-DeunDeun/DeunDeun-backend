@@ -16,9 +16,9 @@ public class ClubRecruitComment extends Comment{
     private ClubRecruit clubRecruit;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private ClubRecruitComment parentComment;
+    private Comment parentComment;
 
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL)
-    private List<ClubRecruitComment> childComment;
+    private List<Comment> childComment;
 
 }

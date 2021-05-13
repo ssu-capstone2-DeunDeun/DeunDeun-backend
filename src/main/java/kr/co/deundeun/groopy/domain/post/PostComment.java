@@ -1,7 +1,7 @@
-package kr.co.deundeun.groopy.domain.comment;
+package kr.co.deundeun.groopy.domain.post;
 
 
-import kr.co.deundeun.groopy.domain.post.ClubPost;
+import kr.co.deundeun.groopy.domain.comment.Comment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -13,15 +13,15 @@ import java.util.List;
 @Getter
 @ToString
 @Entity
-public class ClubPostComment extends Comment{
+public class PostComment extends Comment {
 
     @ManyToOne
-    private ClubPost clubPost;
+    private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private ClubPostComment parentComment;
+    private Comment parentComment;
 
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL)
-    private List<ClubPostComment> childComment;
+    private List<Comment> childComment;
 
 }
