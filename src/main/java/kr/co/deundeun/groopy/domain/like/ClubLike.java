@@ -1,5 +1,6 @@
-package kr.co.deundeun.groopy.domain.image;
+package kr.co.deundeun.groopy.domain.like;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -7,10 +8,12 @@ import kr.co.deundeun.groopy.domain.club.Club;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @Getter
 @NoArgsConstructor
 @Entity
-public class ClubImage extends Image{
-  @ManyToOne(fetch = FetchType.LAZY)
-  private Club club;
+public class ClubLike extends Likes {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(nullable = false)
+    private Club club;
 }

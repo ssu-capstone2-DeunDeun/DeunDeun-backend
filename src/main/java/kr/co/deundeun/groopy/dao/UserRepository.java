@@ -1,6 +1,5 @@
 package kr.co.deundeun.groopy.dao;
 
-import kr.co.deundeun.groopy.domain.user.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

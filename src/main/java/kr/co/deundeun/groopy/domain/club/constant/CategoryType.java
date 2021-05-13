@@ -1,7 +1,5 @@
 package kr.co.deundeun.groopy.domain.club.constant;
 
-public enum QuestionType {
-
-    MULTIPLE, YESORNO
-
+public enum CategoryType {
+    IT, ART, MUSIC, DESIGN
 }

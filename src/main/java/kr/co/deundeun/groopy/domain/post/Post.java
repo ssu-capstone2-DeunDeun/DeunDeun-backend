@@ -1,15 +1,18 @@
 package kr.co.deundeun.groopy.domain.post;
 
+import javax.persistence.FetchType;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.club.Club;
-import kr.co.deundeun.groopy.domain.user.UserInfo;
+import kr.co.deundeun.groopy.domain.comment.Comment;
+import kr.co.deundeun.groopy.domain.image.Image;
+import kr.co.deundeun.groopy.domain.image.PostImage;
+import kr.co.deundeun.groopy.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import java.util.List;
 
 @NoArgsConstructor
@@ -17,19 +20,16 @@ import java.util.List;
 @Entity
 public class Post extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Club club;
 
     private String title;
 
     private String content;
 
-    @OneToOne
-    private UserInfo author;
-
     @OneToMany(mappedBy = "clubPost")
     private List<PostImage> postImages;
 
     @OneToMany(mappedBy = "clubPost")
-    private List<PostComment> postComments;
+    private List<Comment> comments;
 }

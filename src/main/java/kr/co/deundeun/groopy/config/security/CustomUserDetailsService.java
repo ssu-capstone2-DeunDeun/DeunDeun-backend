@@ -2,7 +2,6 @@ package kr.co.deundeun.groopy.config.security;
 
 import kr.co.deundeun.groopy.config.UserPrincipal;
 import kr.co.deundeun.groopy.dao.UserRepository;
-import kr.co.deundeun.groopy.domain.user.UserInfo;
 import kr.co.deundeun.groopy.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

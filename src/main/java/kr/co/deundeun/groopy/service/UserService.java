@@ -1,9 +1,9 @@
 package kr.co.deundeun.groopy.service;
 
+import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 import kr.co.deundeun.groopy.controller.user.dto.SignupRequestDto;
 import kr.co.deundeun.groopy.controller.user.dto.UserResponseDto;
 import kr.co.deundeun.groopy.dao.UserRepository;
-import kr.co.deundeun.groopy.domain.user.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,42 +1,58 @@
 package kr.co.deundeun.groopy.domain.user;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.Email;
+import kr.co.deundeun.groopy.config.security.oauth2.SocialProviderType;
 import kr.co.deundeun.groopy.domain.BaseEntity;
-import kr.co.deundeun.groopy.domain.alarm.UserAlarm;
-import kr.co.deundeun.groopy.domain.club.ClubApply;
 import kr.co.deundeun.groopy.domain.hashtag.UserHashtag;
-import kr.co.deundeun.groopy.domain.like.UserClubLike;
+import kr.co.deundeun.groopy.domain.like.ClubLike;
+import kr.co.deundeun.groopy.domain.like.PostLike;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import java.util.List;
 
 @NoArgsConstructor
 @Getter
 @Entity
-public class User {
+public class User extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private SocialProviderType socialProvider;
 
-    @OneToMany(mappedBy = "userHistory")
-    private List<UserHashtag> userHashtagList;
+    @Column(nullable = false)
+    private String socialId;
 
-    @OneToMany(mappedBy = "userHistory")
-    private List<UserAlarm> userAlarmList;
+    private String jwtRefreshToken;
 
-    @OneToMany(mappedBy = "userHistory")
-    private List<UserClub> userClubList;
+    private String name;
 
-    @OneToMany(mappedBy = "userHistory")
-    private List<UserClubLike> userClubLikeList;
+    private String nickname;
 
-    @OneToMany(mappedBy = "userHistory")
-    private List<ClubApply> clubApplyList;
+    private String phoneNumber;
+
+    @Email
+    @Column(nullable = false)
+    private String email;
+
+    private String userImageUrl;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Participate> participates = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserHashtag> userHashtags = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<ClubLike> clubLikes = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<PostLike> postLikes = new HashSet<>();
 
 }

@@ -1,6 +1,11 @@
 package kr.co.deundeun.groopy.domain.alarm;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import kr.co.deundeun.groopy.domain.BaseEntity;
+import kr.co.deundeun.groopy.domain.alarm.constant.AlarmType;
 import kr.co.deundeun.groopy.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,17 +13,24 @@ import lombok.NoArgsConstructor;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
-@MappedSuperclass
 @NoArgsConstructor
 @Getter
-public abstract class Alarm extends BaseEntity {
+@Entity
+public class Alarm extends BaseEntity {
 
-    @ManyToOne
-    private User user;
+    @Column(nullable = false)
+    private Long userId;
 
-    private Long targetId;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AlarmType alarmType;
 
+    @Column(nullable = false)
+    private String targetUrl;
+
+    @Column(nullable = false)
     private String message;
 
+    @Column(nullable = false)
     private boolean isRead;
 }

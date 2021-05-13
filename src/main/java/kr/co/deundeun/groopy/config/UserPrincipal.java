@@ -1,6 +1,5 @@
 package kr.co.deundeun.groopy.config;
 
-import kr.co.deundeun.groopy.domain.user.UserInfo;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

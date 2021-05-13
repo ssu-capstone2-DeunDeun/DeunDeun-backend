@@ -1,10 +1,12 @@
 package kr.co.deundeun.groopy.domain.club;
 
+import kr.co.deundeun.groopy.domain.BaseEntity;
+import kr.co.deundeun.groopy.domain.club.constant.CategoryType;
+import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.hashtag.ClubHashtag;
 import kr.co.deundeun.groopy.domain.image.ClubImage;
-import kr.co.deundeun.groopy.domain.like.UserClubLike;
+import kr.co.deundeun.groopy.domain.image.Image;
 import kr.co.deundeun.groopy.domain.post.Post;
-import kr.co.deundeun.groopy.domain.user.UserClub;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,13 +16,21 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Entity
-public class Club  {
+public class Club extends BaseEntity {
 
-    @Id
-    private Long id;
+    @Enumerated(EnumType.STRING)
+    private CategoryType categoryType;
 
-    @OneToMany(mappedBy = "club")
-    private List<UserClub> userClubs;
+    @Column(nullable = false)
+    private String clubName;
+
+    private int generation;
+
+    private String introduction;
+
+    private String representImageUrl;
+
+    private String backgroundImageUrl;
 
     @OneToMany(mappedBy = "club")
     private List<ClubHashtag> clubHashtags;
@@ -33,8 +43,5 @@ public class Club  {
 
     @OneToMany(mappedBy = "club")
     private List<ClubRecruit> clubRecruits;
-
-    @Enumerated(EnumType.STRING)
-    private CategoryType categoryType;
 
 }

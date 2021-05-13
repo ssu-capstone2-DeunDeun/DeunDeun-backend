@@ -1,5 +1,6 @@
 package kr.co.deundeun.groopy.domain.hashtag;
 
+import javax.persistence.FetchType;
 import kr.co.deundeun.groopy.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class UserHashtag extends Hashtag {
 
-    @ManyToOne
-    private User user;
+  @ManyToOne(fetch = FetchType.LAZY)
+  private User user;
 
 }

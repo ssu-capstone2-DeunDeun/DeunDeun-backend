@@ -1,4 +1,4 @@
-package kr.co.deundeun.groopy.domain.club.constant;
+package kr.co.deundeun.groopy.domain.clubRecruit.constant;
 
 public enum ClubRecruitStatus {
 

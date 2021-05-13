@@ -1,7 +1,10 @@
-package kr.co.deundeun.groopy.domain.club;
+package kr.co.deundeun.groopy.domain.clubRecruit;
 
+import javax.persistence.FetchType;
 import kr.co.deundeun.groopy.domain.BaseEntity;
-import kr.co.deundeun.groopy.domain.comment.ClubRecruitComment;
+import kr.co.deundeun.groopy.domain.club.Club;
+import kr.co.deundeun.groopy.domain.clubApply.ClubApply;
+import kr.co.deundeun.groopy.domain.comment.Comment;
 import kr.co.deundeun.groopy.domain.image.ClubRecruitImage;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +19,7 @@ import java.util.List;
 @Entity
 public class ClubRecruit extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Club club;
 
     private int generation;
@@ -27,10 +30,7 @@ public class ClubRecruit extends BaseEntity {
     private List<ClubRecruitImage> clubRecruitImages;
 
     @OneToMany(mappedBy = "clubRecruit")
-    private List<ClubApply> clubApplys;
-
-    @OneToMany(mappedBy = "clubRecruit")
-    private List<ClubRecruitComment> clubRecruitComments;
+    private List<Comment> comments;
 
     @OneToMany(mappedBy = "clubRecruit")
     private List<ClubRecruitQuestion> clubRecruitQuestions;

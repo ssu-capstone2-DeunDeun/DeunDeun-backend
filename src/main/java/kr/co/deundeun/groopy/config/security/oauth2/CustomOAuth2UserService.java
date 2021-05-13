@@ -3,7 +3,6 @@ package kr.co.deundeun.groopy.config.security.oauth2;
 import kr.co.deundeun.groopy.config.UserPrincipal;
 import kr.co.deundeun.groopy.dao.UserRepository;
 import kr.co.deundeun.groopy.dao.UserSecurityRepository;
-import kr.co.deundeun.groopy.domain.user.UserInfo;
 import kr.co.deundeun.groopy.exception.OAuth2AuthenticationProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;

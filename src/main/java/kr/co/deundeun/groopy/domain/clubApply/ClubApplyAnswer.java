@@ -1,7 +1,8 @@
-package kr.co.deundeun.groopy.domain.club;
+package kr.co.deundeun.groopy.domain.clubApply;
 
+import javax.persistence.FetchType;
 import kr.co.deundeun.groopy.domain.BaseEntity;
-import kr.co.deundeun.groopy.domain.club.constant.QuestionType;
+import kr.co.deundeun.groopy.domain.clubRecruit.constant.QuestionType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,11 +16,11 @@ import javax.persistence.ManyToOne;
 @Entity
 public class ClubApplyAnswer extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private ClubApply clubApply;
-
-    private String answerContent;
 
     @Enumerated(EnumType.STRING)
     private QuestionType questionType;
+
+    private String answerContent;
 }

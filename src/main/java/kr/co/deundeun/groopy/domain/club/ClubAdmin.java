@@ -1,15 +1,12 @@
 package kr.co.deundeun.groopy.domain.club;
 
 import javax.persistence.*;
+import kr.co.deundeun.groopy.domain.BaseEntity;
 
 @Entity
-public class ClubAdmin {
+public class ClubAdmin extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Club club;
 
     @Column(nullable = false)
