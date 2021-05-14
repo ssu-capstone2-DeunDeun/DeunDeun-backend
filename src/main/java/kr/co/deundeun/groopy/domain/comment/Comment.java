@@ -2,7 +2,10 @@ package kr.co.deundeun.groopy.domain.comment;
 
 import java.util.List;
 import kr.co.deundeun.groopy.domain.BaseEntity;
+import kr.co.deundeun.groopy.domain.clubApply.ClubApply;
+import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.comment.constant.CommentType;
+import kr.co.deundeun.groopy.domain.post.Post;
 import kr.co.deundeun.groopy.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +30,17 @@ public class Comment extends BaseEntity {
 
   @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL)
   private List<Comment> childComment;
+
+  @ManyToOne
+  private ClubRecruit clubRecruit;
+
+  @ManyToOne
+  private ClubApply clubApply;
+
+  @ManyToOne
+  private Post post;
+
+
 
 
 }

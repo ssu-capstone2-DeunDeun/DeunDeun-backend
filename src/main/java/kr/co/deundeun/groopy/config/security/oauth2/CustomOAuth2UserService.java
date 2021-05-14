@@ -2,7 +2,7 @@ package kr.co.deundeun.groopy.config.security.oauth2;
 
 import kr.co.deundeun.groopy.config.UserPrincipal;
 import kr.co.deundeun.groopy.dao.UserRepository;
-import kr.co.deundeun.groopy.dao.UserSecurityRepository;
+import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.exception.OAuth2AuthenticationProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -21,7 +21,6 @@ import java.util.Optional;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
-    private final UserSecurityRepository userSecurityRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
@@ -44,37 +43,33 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
         }
 
-        Optional<UserInfo> userOptional = userRepository.findByEmail(oAuth2UserInfo.getEmail());
+        Optional<User> userOptional = userRepository.findByEmail(oAuth2UserInfo.getEmail());
 
-        UserInfo userInfo;
+        User user;
         if (userOptional.isPresent()) {
-            userInfo = userOptional.get();
-            if (!userInfo.getUserSecurity().getSocialProvider()
-                         .equals(SocialProviderType.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))) {
+            user = userOptional.get();
+            if (!user.getSocialProvider()
+                    .equals(SocialProviderType.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))) {
                 throw new OAuth2AuthenticationProcessingException(
-                        userInfo.getUserSecurity().getSocialProvider().toString() + " 로 등록한 아이디가 있습니다");
+                        user.getSocialProvider().toString() + " 로 등록한 아이디가 있습니다");
             }
 
         } else {
-            userInfo = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
+            user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
         }
 
-        return UserPrincipal.create(userInfo, oAuth2User.getAttributes());
+        return UserPrincipal.create(user, oAuth2User.getAttributes());
     }
 
-    private UserInfo registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
-        UserSecurity userSecurity = UserSecurity.builder()
+    private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
+
+        User user = User.builder()
                 .socialProvider(SocialProviderType.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))
                 .socialId(oAuth2UserInfo.getId())
+                .email(oAuth2UserInfo.getEmail())
                 .build();
 
-        UserInfo userInfo = UserInfo.builder()
-                                    .email(oAuth2UserInfo.getEmail())
-                                    .userSecurity(userSecurity)
-                                    .build();
-
-        userSecurityRepository.save(userSecurity);
-        return userRepository.save(userInfo);
+        return userRepository.save(user);
     }
 
 }

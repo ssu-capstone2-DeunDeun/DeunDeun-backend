@@ -2,6 +2,7 @@ package kr.co.deundeun.groopy.config.security;
 
 import kr.co.deundeun.groopy.config.UserPrincipal;
 import kr.co.deundeun.groopy.dao.UserRepository;
+import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,20 +22,20 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
-        UserInfo userInfo = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(email)
                                           .orElseThrow(() ->
                         new UsernameNotFoundException("User not found with email : " + email)
         );
 
-        return UserPrincipal.create(userInfo);
+        return UserPrincipal.create(user);
     }
 
     @Transactional
     public UserDetails loadUserById(Long id) {
-        UserInfo userInfo = userRepository.findById(id).orElseThrow(
+        User user = userRepository.findById(id).orElseThrow(
             () -> new ResourceNotFoundException("User", "id", id)
         );
 
-        return UserPrincipal.create(userInfo);
+        return UserPrincipal.create(user);
     }
 }

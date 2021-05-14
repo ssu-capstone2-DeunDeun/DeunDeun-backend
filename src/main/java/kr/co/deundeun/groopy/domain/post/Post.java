@@ -27,9 +27,9 @@ public class Post extends BaseEntity {
 
     private String content;
 
-    @OneToMany(mappedBy = "clubPost")
+    @OneToMany(mappedBy = "post")
     private List<PostImage> postImages;
 
-    @OneToMany(mappedBy = "clubPost")
+    @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 }

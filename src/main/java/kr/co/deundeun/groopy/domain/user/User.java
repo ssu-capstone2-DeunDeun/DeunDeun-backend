@@ -11,6 +11,7 @@ import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.hashtag.UserHashtag;
 import kr.co.deundeun.groopy.domain.like.ClubLike;
 import kr.co.deundeun.groopy.domain.like.PostLike;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -54,5 +55,18 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private Set<PostLike> postLikes = new HashSet<>();
+
+    @Builder
+    public User(String socialId, SocialProviderType socialProvider, String email){
+        this.socialId = socialId;
+        this.socialProvider = socialProvider;
+        this.email = email;
+    }
+
+    public void saveSignupInfo(String nickname, String name, String phoneNumber){
+        this.nickname = nickname;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+    }
 
 }
