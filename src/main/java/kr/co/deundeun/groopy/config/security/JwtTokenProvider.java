@@ -34,7 +34,7 @@ public class JwtTokenProvider {
         Date expiryDate = new Date(now.getTime() + EXPIRES_IN);
 
         return Jwts.builder()
-                .setSubject(Long.toString(userPrincipal.getId()))
+                .setSubject(Long.toString(userPrincipal.getUser().getId()))
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(SECRET_KEY)

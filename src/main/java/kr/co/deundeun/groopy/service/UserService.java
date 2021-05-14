@@ -33,8 +33,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponseDto signup(Long id, SignupRequestDto signupRequestDto) {
-        User user = userRepository.findById(id).orElseThrow(RuntimeException::new);
+    public UserResponseDto signup(User user, SignupRequestDto signupRequestDto) {
         user.saveSignupInfo(signupRequestDto.getNickname(), signupRequestDto.getName(), signupRequestDto.getPhoneNumber());
 
         userRepository.save(user);
@@ -42,16 +41,17 @@ public class UserService {
     }
 
     @Transactional
-    public void updateNickname(Long id, String nickname){
+    public void updateNickname(User user, String nickname){
         if(isDuplicatedNickname(nickname))
             throw new DuplicateResourceException("중복된 닉네임입니다.");
 
-        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("등록되지 않은 ID 입니다."));
         user.changeNickname(nickname);
     }
 
-    public void updateHashtags(Long id, List<String> hashtags){
-        User user = userRepository.findById(id).orElseThrow(RuntimeException::new);
+    public void updateHashtags(User user, List<String> hashtags){
+        if(hashtags.size() < 3)
+            throw new IllegalArgumentException("해시태그는 3개 이상 등록해야 합니다.");
+
         userHashtagRepository.saveAll(hashtagService.getHashtagInfos(hashtags).stream()
                 .map(tag -> UserHashtag.builder().user(user).hashtagInfo(tag).build())
                 .collect(Collectors.toList()));

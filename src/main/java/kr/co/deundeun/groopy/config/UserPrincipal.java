@@ -1,7 +1,5 @@
 package kr.co.deundeun.groopy.config;
 
-import kr.co.deundeun.groopy.domain.hashtag.Hashtag;
-import kr.co.deundeun.groopy.domain.hashtag.UserHashtag;
 import kr.co.deundeun.groopy.domain.user.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,33 +11,17 @@ import java.util.*;
 
 @Getter
 public class UserPrincipal implements OAuth2User, UserDetails {
-    private Long id;
-    private String email;
-    private String nickname;
-    private String password;
-    private Set<UserHashtag> hashtags = new HashSet<>();
-    private Collection<? extends GrantedAuthority> authorities;
+
+    private User user;
     private Map<String, Object> attributes;
     private boolean enabled;
 
-    public UserPrincipal(Long id, String email, String nickname, Collection<? extends GrantedAuthority> authorities) {
-        this.id = id;
-        this.email = email;
-        this.nickname = nickname;
-        this.authorities = authorities;
+    private UserPrincipal(User user){
+        this.user = user;
     }
 
     public static UserPrincipal create(User user) {
-        List<GrantedAuthority> authorities = Collections.
-                singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-
-        return new UserPrincipal(
-                user.getId(),
-                user.getEmail(),
-                user.getNickname(),
-                authorities
-        );
-
+        return new UserPrincipal(user);
     }
 
     public static UserPrincipal create(User user, Map<String, Object> attributes) {
@@ -48,15 +30,14 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         return userPrincipal;
     }
 
-
     @Override
     public String getPassword() {
-        return password;
+        return null;
     }
 
     @Override
     public String getUsername() {
-        return email;
+        return user.getEmail();
     }
 
     @Override
@@ -76,7 +57,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
@@ -90,6 +71,6 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     @Override
     public String getName() {
-        return String.valueOf(id);
+        return user.getName();
     }
 }

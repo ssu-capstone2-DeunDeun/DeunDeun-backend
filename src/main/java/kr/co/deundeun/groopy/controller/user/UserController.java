@@ -27,24 +27,24 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<UserResponseDto> registerUser(@Me UserPrincipal userPrincipal,
+    public ResponseEntity<UserResponseDto> registerUser(@Me User user,
                                                         @RequestBody SignupRequestDto signupRequestDto) {
 
-        UserResponseDto userResponseDto = userService.signup(userPrincipal.getId(), signupRequestDto);
+        UserResponseDto userResponseDto = userService.signup(user, signupRequestDto);
         return ResponseEntity.ok(userResponseDto);
     }
 
     @PatchMapping("/nickname")
-    public ResponseEntity<Void> updateNickname(@Me UserPrincipal userPrincipal,
+    public ResponseEntity<Void> updateNickname(@Me User user,
                                                @RequestBody String nickname) {
-        userService.updateNickname(userPrincipal.getId(), nickname);
+        userService.updateNickname(user, nickname);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/hashtags")
-    public ResponseEntity<Void> addHashtagList(@Me UserPrincipal userPrincipal,
+    public ResponseEntity<Void> addHashtagList(@Me User user,
                                                @RequestBody List<String> hashtags) {
-        userService.updateHashtags(userPrincipal.getId(), hashtags);
+        userService.updateHashtags(user, hashtags);
         return ResponseEntity.ok().build();
     }
 
