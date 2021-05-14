@@ -2,9 +2,7 @@ package kr.co.deundeun.groopy.domain.user;
 
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import kr.co.deundeun.groopy.config.security.oauth2.SocialProviderType;
 import kr.co.deundeun.groopy.domain.BaseEntity;
@@ -14,9 +12,6 @@ import kr.co.deundeun.groopy.domain.like.PostLike;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 
 @NoArgsConstructor
 @Getter
@@ -47,7 +42,7 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private Set<Participate> participates = new HashSet<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<UserHashtag> userHashtags = new HashSet<>();
 
     @OneToMany(mappedBy = "user")

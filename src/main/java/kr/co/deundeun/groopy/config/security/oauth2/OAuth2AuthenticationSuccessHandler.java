@@ -64,7 +64,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
         Boolean hasInfo = hasInfo(authentication);
-        Boolean hasHashTags =hasHashTags(authentication);
+        Boolean hasHashTags = hasHashTags(authentication);
         String token = jwtTokenProvider.createToken(authentication);
 
         return UriComponentsBuilder.fromUriString(targetUrl)
@@ -97,11 +97,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private boolean hasInfo(Authentication authentication){
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        return userPrincipal.getNickname() != null;
+        return userPrincipal.getUser().getNickname() != null;
     }
 
     private boolean hasHashTags(Authentication authentication){
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        return !userPrincipal.getHashtags().isEmpty();
+        return !userPrincipal.getUser().getUserHashtags().isEmpty();
     }
 }
