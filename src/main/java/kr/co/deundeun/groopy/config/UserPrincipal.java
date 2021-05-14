@@ -1,5 +1,7 @@
 package kr.co.deundeun.groopy.config;
 
+import kr.co.deundeun.groopy.domain.hashtag.Hashtag;
+import kr.co.deundeun.groopy.domain.hashtag.UserHashtag;
 import kr.co.deundeun.groopy.domain.user.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -7,23 +9,23 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 public class UserPrincipal implements OAuth2User, UserDetails {
     private Long id;
     private String email;
+    private String nickname;
     private String password;
+    private Set<UserHashtag> hashtags = new HashSet<>();
     private Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;
     private boolean enabled;
 
-    public UserPrincipal(Long id, String email, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(Long id, String email, String nickname, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.email = email;
+        this.nickname = nickname;
         this.authorities = authorities;
     }
 
@@ -34,6 +36,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         return new UserPrincipal(
                 user.getId(),
                 user.getEmail(),
+                user.getNickname(),
                 authorities
         );
 
