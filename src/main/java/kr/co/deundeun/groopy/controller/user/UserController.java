@@ -29,6 +29,12 @@ public class UserController {
         return ResponseEntity.ok(userResponseDto);
     }
 
+    @PatchMapping("/nickname")
+    public ResponseEntity<Void> changeNickname(@Me UserPrincipal userPrincipal,
+                                               @RequestBody String nickname){
+        userService.changeNickname(userPrincipal.getId(), nickname);
+        return ResponseEntity.ok().build();
+    }
 
 
 }
