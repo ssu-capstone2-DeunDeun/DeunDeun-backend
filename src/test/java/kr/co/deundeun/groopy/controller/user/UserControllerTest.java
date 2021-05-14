@@ -1,6 +1,5 @@
 package kr.co.deundeun.groopy.controller.user;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.deundeun.groopy.config.UserPrincipal;
 import kr.co.deundeun.groopy.config.security.oauth2.SocialProviderType;
@@ -19,6 +18,7 @@ import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,11 +27,11 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -48,9 +48,9 @@ class UserControllerTest {
     public void setup(WebApplicationContext webApplicationContext,
                       RestDocumentationContextProvider restDocumentation) {
 
-        User user = User.builder().email("asdasd@gmail.com")
+        User user = User.builder().email("test@gmail.com")
                 .socialProvider(SocialProviderType.google)
-                .socialId("sadsdaasd")
+                .socialId("testId")
                 .build();
         UserPrincipal userPrincipal = UserPrincipal.create(user);
 
@@ -86,6 +86,16 @@ class UserControllerTest {
 
         mvc.perform(post("/user/signup")
                 .content(new ObjectMapper().writeValueAsString(signupRequestDto))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer USER_TOKEN"))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    void changeNickname() throws Exception{
+        mvc.perform(patch("/user/nickname")
+                .content(new ObjectMapper().writeValueAsString("newNickname"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer USER_TOKEN"))
                 .andExpect(status().isOk())

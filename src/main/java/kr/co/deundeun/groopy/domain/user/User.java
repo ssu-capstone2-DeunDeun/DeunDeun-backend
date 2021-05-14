@@ -69,4 +69,12 @@ public class User extends BaseEntity {
         this.phoneNumber = phoneNumber;
     }
 
+    public void changeNickname(String nickname){
+        this.nickname = nickname;
+    }
+
+    public void changePhoneNumber(String phoneNumber){
+        this.phoneNumber = phoneNumber;
+    }
+
 }
