@@ -1,7 +1,11 @@
 package kr.co.deundeun.groopy.controller.user;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.deundeun.groopy.config.UserPrincipal;
 import kr.co.deundeun.groopy.config.security.oauth2.SocialProviderType;
+import kr.co.deundeun.groopy.controller.user.dto.SignupRequestDto;
+import kr.co.deundeun.groopy.controller.user.dto.UserResponseDto;
 import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,11 +24,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,7 +46,7 @@ class UserControllerTest {
 
     @BeforeEach
     public void setup(WebApplicationContext webApplicationContext,
-                      RestDocumentationContextProvider restDocumentation){
+                      RestDocumentationContextProvider restDocumentation) {
 
         User user = User.builder().email("asdasd@gmail.com")
                 .socialProvider(SocialProviderType.google)
@@ -51,11 +59,11 @@ class UserControllerTest {
 
         mvc = MockMvcBuilders
                 .webAppContextSetup(webApplicationContext)
+                .addFilters(new CharacterEncodingFilter("UTF-8", true))
                 .apply(documentationConfiguration(restDocumentation))
                 .apply(springSecurity())
                 .build();
     }
-
 
 
     @Test
@@ -71,7 +79,16 @@ class UserControllerTest {
     }
 
     @Test
-    void registerUser() {
+    void registerUser() throws Exception {
+        when(userService.signup(any(), any())).thenReturn(new UserResponseDto("asd", "테스트 통과"));
 
+        SignupRequestDto signupRequestDto = new SignupRequestDto("이름이요", "닉네임12", "010-2232");
+
+        mvc.perform(post("/user/signup")
+                .content(new ObjectMapper().writeValueAsString(signupRequestDto))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer USER_TOKEN"))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 }
