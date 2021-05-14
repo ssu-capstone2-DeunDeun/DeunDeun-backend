@@ -25,11 +25,7 @@ public class UserService {
         user.saveSignupInfo(signupRequestDto.getNickname(), signupRequestDto.getName(), signupRequestDto.getPhoneNumber());
 
         userRepository.save(user);
-
-        UserResponseDto userResponseDto = new UserResponseDto();
-        userResponseDto.setNickname(user.getNickname());
-        userResponseDto.setMsg("회원 가입 성공");
-        return userResponseDto;
+        return new UserResponseDto(user.getNickname(), user.getNickname());
     }
 
 

@@ -1,6 +1,7 @@
 package kr.co.deundeun.groopy.config.security.oauth2;
 
 import kr.co.deundeun.groopy.config.AppProperties;
+import kr.co.deundeun.groopy.config.UserPrincipal;
 import kr.co.deundeun.groopy.config.security.HttpCookieOAuth2AuthorizationRequestRepository;
 import kr.co.deundeun.groopy.config.security.JwtTokenProvider;
 import kr.co.deundeun.groopy.exception.BadRequestException;
@@ -62,10 +63,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
-
+        Boolean hasInfo = hasInfo(authentication);
+        Boolean hasHashTags =hasHashTags(authentication);
         String token = jwtTokenProvider.createToken(authentication);
 
         return UriComponentsBuilder.fromUriString(targetUrl)
+                .queryParam("info", hasInfo)
+                .queryParam("hashtag", hasHashTags)
                 .queryParam("token", token)
                 .build().toUriString();
     }
@@ -89,5 +93,15 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     }
                     return false;
                 });
+    }
+
+    private boolean hasInfo(Authentication authentication){
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        return userPrincipal.getNickname() != null;
+    }
+
+    private boolean hasHashTags(Authentication authentication){
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        return !userPrincipal.getHashtags().isEmpty();
     }
 }
