@@ -1,7 +1,11 @@
 package kr.co.deundeun.groopy.config;
 
+import kr.co.deundeun.groopy.config.security.GroupInterceptor;
+import kr.co.deundeun.groopy.dao.ClubAdminRepository;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -18,4 +22,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
         .allowCredentials(true)
         .maxAge(MAX_AGE_SECS);
     }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(groupInterceptor()).addPathPatterns("/clubs/**");
+    }
+
+    @Bean
+    public GroupInterceptor groupInterceptor(){
+        return new GroupInterceptor();
+    }
+
 }
