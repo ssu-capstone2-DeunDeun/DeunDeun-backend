@@ -7,6 +7,7 @@ import kr.co.deundeun.groopy.domain.comment.Comment;
 import kr.co.deundeun.groopy.domain.image.Image;
 import kr.co.deundeun.groopy.domain.image.PostImage;
 import kr.co.deundeun.groopy.domain.user.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,6 +26,8 @@ public class Post extends BaseEntity {
 
     private String title;
 
+    private String author;
+
     private String content;
 
     @OneToMany(mappedBy = "post")
@@ -32,4 +35,14 @@ public class Post extends BaseEntity {
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
+
+    @Builder
+    public Post(Club club, String title, String author, String content, List<PostImage> postImages, List<Comment> comments){
+        this.club = club;
+        this.title = title;
+        this.author = author;
+        this.content = content;
+        this.postImages = postImages;
+        this.comments = comments;
+    }
 }
