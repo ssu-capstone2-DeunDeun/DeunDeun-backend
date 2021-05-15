@@ -7,6 +7,7 @@ import kr.co.deundeun.groopy.domain.hashtag.ClubHashtag;
 import kr.co.deundeun.groopy.domain.image.ClubImage;
 import kr.co.deundeun.groopy.domain.image.Image;
 import kr.co.deundeun.groopy.domain.post.Post;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,7 +22,7 @@ public class Club extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private CategoryType categoryType;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String clubName;
 
     private int generation;
@@ -43,5 +44,23 @@ public class Club extends BaseEntity {
 
     @OneToMany(mappedBy = "club")
     private List<ClubRecruit> clubRecruits;
+
+    @Builder
+    public Club(CategoryType categoryType, String clubName, int generation, String introduction,
+                String representImageUrl, String backgroundImageUrl, List<ClubHashtag> clubHashtags,
+                List<ClubImage> clubImages, List<Post> clubPosts, List<ClubRecruit> clubRecruits){
+
+        this.categoryType = categoryType;
+        this.clubName = clubName;
+        this.generation = generation;
+        this.introduction = introduction;
+        this.representImageUrl = representImageUrl;
+        this.backgroundImageUrl = backgroundImageUrl;
+        this.clubHashtags = clubHashtags;
+        this.clubImages = clubImages;
+        this.clubPosts = clubPosts;
+        this.clubRecruits = clubRecruits;
+
+    }
 
 }

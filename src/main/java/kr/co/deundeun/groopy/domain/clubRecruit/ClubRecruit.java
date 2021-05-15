@@ -6,6 +6,7 @@ import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.clubApply.ClubApply;
 import kr.co.deundeun.groopy.domain.comment.Comment;
 import kr.co.deundeun.groopy.domain.image.ClubRecruitImage;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -34,5 +35,15 @@ public class ClubRecruit extends BaseEntity {
 
     @OneToMany(mappedBy = "clubRecruit")
     private List<ClubRecruitQuestion> clubRecruitQuestions;
+
+    @Builder
+    public ClubRecruit(Club club, int generation, List<ClubRecruitImage> clubRecruitImages,
+                       List<Comment> comments, List<ClubRecruitQuestion> clubRecruitQuestions){
+        this.club = club;
+        this.generation = generation;
+        this.clubRecruitImages = clubRecruitImages;
+        this.comments = comments;
+        this.clubRecruitQuestions = clubRecruitQuestions;
+    }
 
 }
