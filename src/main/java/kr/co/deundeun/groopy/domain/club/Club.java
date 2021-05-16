@@ -1,5 +1,6 @@
 package kr.co.deundeun.groopy.domain.club;
 
+import kr.co.deundeun.groopy.controller.club.dto.ClubRequestDto;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.club.constant.CategoryType;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
@@ -60,7 +61,12 @@ public class Club extends BaseEntity {
         this.clubImages = clubImages;
         this.clubPosts = clubPosts;
         this.clubRecruits = clubRecruits;
+    }
 
+    public void update(ClubRequestDto clubRequestDto){
+        this.clubName = clubRequestDto.getName();
+        this.introduction = clubRequestDto.getIntroduction();
+        this.representImageUrl = clubRequestDto.getRepresentImageUrl();
     }
 
 }

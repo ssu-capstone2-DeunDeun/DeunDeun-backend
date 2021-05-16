@@ -13,23 +13,27 @@ import org.springframework.web.bind.annotation.*;
 import javax.naming.NameNotFoundException;
 
 @RequiredArgsConstructor
-@RequestMapping("/club")
+@RequestMapping("/clubs")
 @RestController
 public class ClubController {
 
     private final ClubService clubService;
 
     @PostMapping
-    public ResponseEntity<ClubResponseDto> registerClub(@Me User user,
-                                                        @RequestBody ClubRequestDto clubRequestDto){
-
+    public ResponseEntity<ClubResponseDto> registerClub(@Me User user, @RequestBody ClubRequestDto clubRequestDto){
         clubService.registerClub(user, clubRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping
-    public ResponseEntity<ClubResponseDto> getClubInfo(@RequestBody String name) throws NameNotFoundException {
-        return ResponseEntity.ok(clubService.getClubInfo(name));
+    @GetMapping("/{clubName}")
+    public ResponseEntity<ClubResponseDto> getClubInfo(@PathVariable String clubName) throws NameNotFoundException {
+        return ResponseEntity.ok(clubService.getClubInfo(clubName));
+    }
+
+    @PatchMapping("/{clubName}")
+    public ResponseEntity<Void> updateClub(@PathVariable String clubName, @RequestBody ClubRequestDto clubRequestDto) throws NameNotFoundException {
+        clubService.updateClub(clubName, clubRequestDto);
+        return ResponseEntity.ok().build();
     }
 
 }

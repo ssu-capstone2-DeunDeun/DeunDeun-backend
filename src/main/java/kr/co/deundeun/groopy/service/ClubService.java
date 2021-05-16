@@ -9,8 +9,12 @@ import kr.co.deundeun.groopy.dao.ParticipateRepository;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.club.ClubAdmin;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
+import kr.co.deundeun.groopy.domain.hashtag.ClubHashtag;
+import kr.co.deundeun.groopy.domain.hashtag.HashtagInfo;
+import kr.co.deundeun.groopy.domain.hashtag.UserHashtag;
 import kr.co.deundeun.groopy.domain.user.Participate;
 import kr.co.deundeun.groopy.domain.user.User;
+import kr.co.deundeun.groopy.exception.DuplicateResourceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.naming.NameNotFoundException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -31,11 +36,15 @@ public class ClubService {
 
     private final ClubAdminRepository clubAdminRepository;
 
+    private final HashtagService hashtagService;
+
 
     @Transactional
     public void registerClub(User user, ClubRequestDto clubRequestDto) {
         Club club = clubRequestDto.toClub();
         clubRepository.save(club);
+
+        hashtagService.registerClubHashtags(club, clubRequestDto.getClubHashtagNames());
 
         ClubRecruit clubRecruit = ClubRecruit.builder()
                 .club(club)
@@ -63,5 +72,15 @@ public class ClubService {
         return ClubResponseDto.of(club);
     }
 
+    @Transactional
+    public void updateClub(String name, ClubRequestDto clubRequestDto) throws NameNotFoundException {
+        Club club = clubRepository.findByClubName(name).orElseThrow(NameNotFoundException::new);
+        if (isDuplicatedName(name)) throw new DuplicateResourceException("닉네임 중복");
 
+        club.update(clubRequestDto);
+    }
+
+    private boolean isDuplicatedName(String clubName) {
+        return clubRepository.existsByClubName(clubName);
+    }
 }

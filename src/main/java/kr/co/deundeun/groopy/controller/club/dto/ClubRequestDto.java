@@ -15,6 +15,7 @@ public class ClubRequestDto {
     private String introduction;
     private List<String> clubHashtags;
     private String representImageUrl;
+    private List<String> clubHashtagNames;
     //private List<ClubImage> introductionImageUrls;
 
     public Club toClub(){
@@ -22,9 +23,11 @@ public class ClubRequestDto {
                 .clubName(name)
                 .categoryType(categoryType)
                 .introduction(introduction)
-                //.clubHashtags(clubHashtags)
                 .representImageUrl(representImageUrl)
                 //.clubImages(introductionImageUrls)
                 .build();
     }
+
+
+
  }
