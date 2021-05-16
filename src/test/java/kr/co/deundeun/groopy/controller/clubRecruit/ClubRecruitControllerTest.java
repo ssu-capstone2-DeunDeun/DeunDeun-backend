@@ -31,40 +31,4 @@ class ClubRecruitControllerTest {
 
     private MockMvc mvc;
 
-    @BeforeEach
-    public void setup(WebApplicationContext webApplicationContext) {
-
-        User user = User.builder().email("test@gmail.com")
-                .socialProvider(SocialProviderType.google)
-                .socialId("testId")
-                .build();
-        UserPrincipal userPrincipal = UserPrincipal.create(user);
-
-        SecurityContext context = SecurityContextHolder.getContext();
-        context.setAuthentication(new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities()));
-
-        mvc = MockMvcBuilders
-                .webAppContextSetup(webApplicationContext)
-                .addFilters(new CharacterEncodingFilter("UTF-8", true))
-                .apply(springSecurity())
-                .build();
-    }
-
-    @Test
-    void addRecruit() throws Exception {
-
-        String url = "/recruits";
-
-        //when
-        ResultActions resultActions = this.mvc.perform(
-                post(url)
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content("{\"name\":\"jojoldu\", \"requestDateTime\":\"2018-12-15T10:00:00\"}"));
-
-        //then
-        resultActions
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("post 성공")))
-                .andDo(print() );
-    }
 }

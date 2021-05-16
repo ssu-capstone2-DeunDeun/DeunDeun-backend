@@ -70,7 +70,7 @@ class UserControllerTest {
         String nickname = "test123";
         when(userService.isDuplicatedNickname(nickname)).thenReturn(true);
 
-        mvc.perform(get("/user/nickname")
+        mvc.perform(get("/users/test123")
                 .content(nickname))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -82,7 +82,7 @@ class UserControllerTest {
 
         SignupRequestDto signupRequestDto = new SignupRequestDto("이름이요", "닉네임12", "010-2232");
 
-        mvc.perform(post("/user/signup")
+        mvc.perform(post("/users")
                 .content(new ObjectMapper().writeValueAsString(signupRequestDto))
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer USER_TOKEN"))
@@ -92,7 +92,7 @@ class UserControllerTest {
 
     @Test
     void changeNickname() throws Exception{
-        mvc.perform(patch("/user/nickname")
+        mvc.perform(patch("/users/nickname")
                 .content(new ObjectMapper().writeValueAsString("newNickname"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer USER_TOKEN"))

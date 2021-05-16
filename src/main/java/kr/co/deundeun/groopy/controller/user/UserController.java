@@ -12,18 +12,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/users")
 @RestController
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/nickname")
-    public ResponseEntity<Boolean> isDuplicatedNickname(@RequestBody String nickname) {
+    @GetMapping("/{nickname}")
+    public ResponseEntity<Boolean> isDuplicatedNickname(@PathVariable String nickname) {
         return ResponseEntity.ok(userService.isDuplicatedNickname(nickname));
     }
 
-    @PostMapping("/signup")
+    @PostMapping
     public ResponseEntity<UserResponseDto> registerUser(@Me User user,
                                                         @RequestBody SignupRequestDto signupRequestDto) {
 
@@ -31,9 +31,8 @@ public class UserController {
         return ResponseEntity.ok(userResponseDto);
     }
 
-    @PatchMapping("/nickname")
-    public ResponseEntity<Void> updateNickname(@Me User user,
-                                               @RequestBody String nickname) {
+    @PatchMapping("/{nickname}")
+    public ResponseEntity<Void> updateNickname(@Me User user, @PathVariable String nickname) {
         userService.updateNickname(user, nickname);
         return ResponseEntity.ok().build();
     }
