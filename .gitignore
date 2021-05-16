@@ -37,3 +37,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### key ###
+application-aws/yml
