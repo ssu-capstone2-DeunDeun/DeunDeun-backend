@@ -3,6 +3,7 @@ package kr.co.deundeun.groopy.domain.clubApply;
 import javax.persistence.FetchType;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.clubRecruit.constant.QuestionType;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +24,15 @@ public class ClubApplyAnswer extends BaseEntity {
     private QuestionType questionType;
 
     private String answerContent;
+
+    @Builder
+    public ClubApplyAnswer(ClubApply clubApply, QuestionType questionType, String answerContent){
+        this.clubApply = clubApply;
+        this.questionType = questionType;
+        this.answerContent = answerContent;
+    }
+
+    public void updateAnswerContent(String content){
+        this.answerContent = content;
+    }
 }

@@ -11,6 +11,7 @@ import kr.co.deundeun.groopy.exception.ClubNotFoundException;
 import kr.co.deundeun.groopy.exception.ClubRecruitNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,27 +23,32 @@ public class ClubRecruitService {
 
     private final ClubRepository clubRepository;
 
+    @Transactional
     public void addRecruit(String clubName, RecruitRequestDto recruitRequestDto){
         Club club = clubRepository.findByClubName(clubName).orElseThrow(ClubNotFoundException::new);
         clubRecruitRepository.save(recruitRequestDto.toClubRecruit(club));
     }
 
+    @Transactional(readOnly = true)
     public List<RecruitSummaryResponseDto> getRecruits(String clubName){
         Club club = clubRepository.findByClubName(clubName).orElseThrow(ClubNotFoundException::new);
         return RecruitSummaryResponseDto.listOf(clubRecruitRepository.findAllByClub(club));
     }
 
+    @Transactional(readOnly = true)
     public RecruitResponseDto getRecruit(Long recruitId){
         ClubRecruit clubRecruit = clubRecruitRepository.findById(recruitId).orElseThrow(ClubRecruitNotFoundException::new);
         return new RecruitResponseDto(clubRecruit);
     }
 
+    @Transactional
     public void updateRecruit(Long recruitId, RecruitRequestDto recruitRequestDto){
         ClubRecruit clubRecruit = clubRecruitRepository.findById(recruitId).orElseThrow(ClubRecruitNotFoundException::new);
         clubRecruit.update(recruitRequestDto);
         clubRecruitRepository.save(clubRecruit);
     }
 
+    @Transactional
     public void deleteRecruit(Long recruitId){
         clubRecruitRepository.deleteById(recruitId);
     }
