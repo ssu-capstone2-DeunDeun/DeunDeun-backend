@@ -3,11 +3,13 @@ package kr.co.deundeun.groopy.controller.user;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.deundeun.groopy.config.security.UserPrincipal;
 import kr.co.deundeun.groopy.config.security.oauth2.SocialProviderType;
+import kr.co.deundeun.groopy.controller.docs.UserDocumentation;
 import kr.co.deundeun.groopy.controller.user.dto.SignupRequestDto;
 import kr.co.deundeun.groopy.controller.user.dto.UserResponseDto;
 import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -63,7 +65,7 @@ class UserControllerTest {
                 .build();
     }
 
-
+    @DisplayName("닉네임 중복을 확인한다.")
     @Test
     @WithMockUser
     void isDuplicatedNickname() throws Exception {
@@ -76,6 +78,7 @@ class UserControllerTest {
                 .andDo(print());
     }
 
+    @DisplayName("회원 가입을 한다.")
     @Test
     void registerUser() throws Exception {
         when(userService.signup(any(), any())).thenReturn(new UserResponseDto("asd", "테스트 통과"));
@@ -87,9 +90,11 @@ class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer USER_TOKEN"))
                 .andExpect(status().isOk())
-                .andDo(print());
+                .andDo(print())
+                .andDo(UserDocumentation.signup());
     }
 
+    @DisplayName("유저 닉네임을 변경한다.")
     @Test
     void changeNickname() throws Exception{
         mvc.perform(patch("/users/nickname")
