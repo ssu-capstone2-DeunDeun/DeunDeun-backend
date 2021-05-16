@@ -1,6 +1,6 @@
 package kr.co.deundeun.groopy.config.security.oauth2;
 
-import kr.co.deundeun.groopy.config.UserPrincipal;
+import kr.co.deundeun.groopy.config.security.UserPrincipal;
 import kr.co.deundeun.groopy.dao.UserRepository;
 import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.exception.OAuth2AuthenticationProcessingException;

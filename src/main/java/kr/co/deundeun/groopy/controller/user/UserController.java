@@ -1,11 +1,8 @@
 package kr.co.deundeun.groopy.controller.user;
 
 import kr.co.deundeun.groopy.config.Me;
-import kr.co.deundeun.groopy.config.UserPrincipal;
 import kr.co.deundeun.groopy.controller.user.dto.SignupRequestDto;
 import kr.co.deundeun.groopy.controller.user.dto.UserResponseDto;
-import kr.co.deundeun.groopy.domain.hashtag.Hashtag;
-import kr.co.deundeun.groopy.domain.hashtag.UserHashtag;
 import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.service.UserService;
 import lombok.RequiredArgsConstructor;

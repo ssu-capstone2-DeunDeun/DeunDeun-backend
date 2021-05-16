@@ -1,17 +1,16 @@
 package kr.co.deundeun.groopy.config.security;
 
-import kr.co.deundeun.groopy.config.UserPrincipal;
 import kr.co.deundeun.groopy.dao.ClubAdminRepository;
 import kr.co.deundeun.groopy.dao.ClubRepository;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.exception.BadRequestException;
+import kr.co.deundeun.groopy.exception.ClubAdminException;
+import kr.co.deundeun.groopy.exception.ClubNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
 
-import javax.mail.AuthenticationFailedException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -31,10 +30,9 @@ public class GroupInterceptor implements HandlerInterceptor {
 
         UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = userPrincipal.getUser().getId();
+        Club club = clubRepository.findByClubName(pathVariables.get("clubName")).orElseThrow(ClubNotFoundException::new);
 
-        Club club = clubRepository.findByClubName(pathVariables.get("clubName")).orElseThrow(()-> new BadRequestException("잘못된 권한"));
-
-        System.out.println("CHECK : " + checkClubAdmin(userId, club));
+        if(checkClubAdmin(userId, club)) throw new ClubAdminException();
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 

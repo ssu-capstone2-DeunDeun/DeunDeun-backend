@@ -2,7 +2,6 @@ package kr.co.deundeun.groopy.config.security;
 
 import io.jsonwebtoken.*;
 import kr.co.deundeun.groopy.config.AppProperties;
-import kr.co.deundeun.groopy.config.UserPrincipal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;

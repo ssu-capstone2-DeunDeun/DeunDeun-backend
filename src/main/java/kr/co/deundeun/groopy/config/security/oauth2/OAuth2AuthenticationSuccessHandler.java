@@ -1,7 +1,7 @@
 package kr.co.deundeun.groopy.config.security.oauth2;
 
 import kr.co.deundeun.groopy.config.AppProperties;
-import kr.co.deundeun.groopy.config.UserPrincipal;
+import kr.co.deundeun.groopy.config.security.UserPrincipal;
 import kr.co.deundeun.groopy.config.security.HttpCookieOAuth2AuthorizationRequestRepository;
 import kr.co.deundeun.groopy.config.security.JwtTokenProvider;
 import kr.co.deundeun.groopy.exception.BadRequestException;
@@ -12,7 +12,6 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

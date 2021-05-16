@@ -1,6 +1,5 @@
 package kr.co.deundeun.groopy.config.security;
 
-import kr.co.deundeun.groopy.config.UserPrincipal;
 import kr.co.deundeun.groopy.dao.UserRepository;
 import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.exception.ResourceNotFoundException;

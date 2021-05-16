@@ -1,4 +1,4 @@
-package kr.co.deundeun.groopy.config;
+package kr.co.deundeun.groopy.config.security;
 
 import kr.co.deundeun.groopy.domain.user.User;
 import lombok.Getter;
