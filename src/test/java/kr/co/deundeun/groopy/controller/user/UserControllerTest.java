@@ -17,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +27,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -44,11 +48,15 @@ class UserControllerTest {
 
     private MockMvc mvc;
 
+    private User user;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @BeforeEach
     public void setup(WebApplicationContext webApplicationContext,
                       RestDocumentationContextProvider restDocumentation) {
 
-        User user = User.builder().email("test@gmail.com")
+        user = User.builder().email("test@gmail.com")
                 .socialProvider(SocialProviderType.google)
                 .socialId("testId")
                 .build();
@@ -72,16 +80,20 @@ class UserControllerTest {
         String nickname = "test123";
         when(userService.isDuplicatedNickname(nickname)).thenReturn(true);
 
-        mvc.perform(get("/users/test123")
-                .content(nickname))
+        mvc.perform(
+                RestDocumentationRequestBuilders
+                        .get("/users")
+                        .param("nickname", "test123"))
                 .andExpect(status().isOk())
-                .andDo(print());
+                .andDo(print())
+                .andDo(UserDocumentation.isDuplicatedNickname());
+
     }
 
     @DisplayName("회원 가입을 한다.")
     @Test
     void registerUser() throws Exception {
-        when(userService.signup(any(), any())).thenReturn(new UserResponseDto("asd", "테스트 통과"));
+        when(userService.signup(any(), any())).thenReturn(UserResponseDto.of(user));
 
         SignupRequestDto signupRequestDto = new SignupRequestDto("이름이요", "닉네임12", "010-2232");
 
@@ -96,12 +108,52 @@ class UserControllerTest {
 
     @DisplayName("유저 닉네임을 변경한다.")
     @Test
-    void changeNickname() throws Exception{
-        mvc.perform(patch("/users/nickname")
-                .content(new ObjectMapper().writeValueAsString("newNickname"))
+    void updateNickname() throws Exception {
+        mvc.perform(RestDocumentationRequestBuilders
+                .patch("/users/{nickname}", "새닉네임")
+                .header("Authorization", "Bearer USER_TOKEN"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(UserDocumentation.changeNickname());
+    }
+
+    @DisplayName("윺저 정보를 확인한다.")
+    @Test
+    void getUserInfo() throws Exception {
+        mvc.perform(RestDocumentationRequestBuilders
+                .get("/users/{nickname}", "닉네임")
+                .header("Authorization", "Bearer USER_TOKEN"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(UserDocumentation.getUserInfo());
+    }
+
+    @DisplayName("회원 가입 시 해시 태그를 추가한다.")
+    @Test
+    void addHashtags() throws Exception {
+
+        List<String> hashtags = new ArrayList<>();
+        hashtags.add("IT");
+        hashtags.add("ART");
+
+        mvc.perform(RestDocumentationRequestBuilders
+                .post("/users/{nickname}/hashtags", "닉네임")
+                .content(objectMapper.writeValueAsString(hashtags))
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer USER_TOKEN"))
                 .andExpect(status().isOk())
-                .andDo(print());
+                .andDo(print())
+                .andDo(UserDocumentation.addHashtags());
+    }
+
+    @DisplayName("회원의 해시 태그 정보를 불러온다.")
+    @Test
+    void getHashtags() throws Exception {
+        mvc.perform(RestDocumentationRequestBuilders
+                .get("/users/{nickname}/hashtags", "닉네임")
+                .header("Authorization", "Bearer USER_TOKEN"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(UserDocumentation.getHashtags());
     }
 }
