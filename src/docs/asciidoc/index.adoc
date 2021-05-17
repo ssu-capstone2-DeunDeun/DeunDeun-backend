@@ -1,0 +1,27 @@
+= Groopy API Docs
+:doctype: book
+:icons: font
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+
+== User
+
+=== 회원 가입
+operation::회원-가입/[snippets='http-request,http-response,request-headers,request-body']
+
+=== 닉네임 중복 체크
+operation::닉네임-중복-체크/[snippets='http-request,http-response,path-parameters']
+
+=== 닉네임 변경
+operation::닉네임-변경/[snippets='http-request,http-response,path-parameters']
+
+=== 회원 정보
+operation::회원-정보/[snippets='http-request,http-response,path-parameters']
+
+=== 회원 해시태그 정보
+operation::회원-해시태그-정보/[snippets='http-request,http-response,path-parameters']
+
+=== 회원 해시태그 추가
+operation::회원-해시태그-추가/[snippets='http-request,http-response,path-parameters']
