@@ -60,6 +60,7 @@ public class RecruitResponseDto {
     }
 
     public static RecruitResponseDto of(ClubRecruit clubRecruit){
+        if(clubRecruit == null) return null;
         return RecruitResponseDto.builder()
                 .clubRecruit(clubRecruit).build();
     }

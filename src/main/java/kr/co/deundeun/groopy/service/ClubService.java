@@ -2,14 +2,11 @@ package kr.co.deundeun.groopy.service;
 
 import kr.co.deundeun.groopy.controller.club.dto.ClubRequestDto;
 import kr.co.deundeun.groopy.controller.club.dto.ClubResponseDto;
-import kr.co.deundeun.groopy.controller.clubRecruit.dto.RecruitResponseDto;
-import kr.co.deundeun.groopy.controller.post.dto.PostResponseDto;
 import kr.co.deundeun.groopy.dao.*;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.club.ClubAdmin;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.image.ClubImage;
-import kr.co.deundeun.groopy.domain.image.Image;
 import kr.co.deundeun.groopy.domain.post.Post;
 import kr.co.deundeun.groopy.domain.user.Participate;
 import kr.co.deundeun.groopy.domain.user.User;
@@ -22,8 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -48,16 +43,7 @@ public class ClubService {
     public void registerClub(User user, ClubRequestDto clubRequestDto) {
         if(isDuplicatedName(clubRequestDto.getName())) throw new NameDuplicateException("동아리 이름이 존재합니다.");
 
-        Club club = clubRequestDto.toClub();
-
-        List<ClubImage> clubImages = clubRequestDto.getClubImages().stream()
-                .map(clubImage -> new ClubImage(club, clubImage))
-                .collect(Collectors.toList());
-        club.updateClubImages(clubImages);
-        clubImageRepository.saveAll(clubImages);
-        clubRepository.save(club);
-
-        hashtagService.registerClubHashtags(club, clubRequestDto.getClubHashtags());
+        Club club = createClub(clubRequestDto);
 
         ClubRecruit clubRecruit = ClubRecruit.builder()
                 .club(club)
@@ -89,21 +75,24 @@ public class ClubService {
     public ClubResponseDto getClubInfo(boolean isAdmin, String name){
         Club club = clubRepository.findByClubName(name).orElseThrow(ClubNotFoundException::new);
         List<Post> posts = postRepository.findTop3ByClubOrderByViewCount(club);
-        List<String> clubImages = clubImageRepository.findAllByClub(club).stream().map(Image::toImageUrl).collect(Collectors.toList());
-        Optional<ClubRecruit> clubRecruit = clubRecruitRepository.findTopByClubAndGenerationGreaterThanOrderByCreatedAt(club, 0);
-
-        RecruitResponseDto recruitResponseDto = null;
-        if(clubRecruit.isPresent()) recruitResponseDto = RecruitResponseDto.of(clubRecruit.get());
-
-        return ClubResponseDto.of(club, PostResponseDto.listOf(posts), recruitResponseDto, clubImages, isAdmin);
+        ClubRecruit clubRecruit = clubRecruitRepository.findTopByClubAndGenerationGreaterThanOrderByCreatedAt(club, 0);
+        return ClubResponseDto.of(club, posts, clubRecruit, isAdmin);
     }
 
     @Transactional
     public void updateClub(String name, ClubRequestDto clubRequestDto) {
         Club club = clubRepository.findByClubName(name).orElseThrow(ClubNotFoundException::new);
         if (isDuplicatedName(name)) throw new DuplicateResourceException("닉네임 중복");
-        club.update(clubRequestDto);
-        clubRepository.save(club);
+        clubRepository.save(club.update(clubRequestDto));
+    }
+
+    private Club createClub(ClubRequestDto clubRequestDto){
+        List<ClubImage> clubImages = ClubImage.ofList(clubRequestDto.getClubImages());
+        Club club = clubRequestDto.toClub();
+        club.setClubImages(clubImages);
+        hashtagService.registerClubHashtags(club, clubRequestDto.getClubHashtags());
+        clubImageRepository.saveAll(clubImages);
+        return clubRepository.save(club);
     }
 
     private boolean isDuplicatedName(String clubName) {

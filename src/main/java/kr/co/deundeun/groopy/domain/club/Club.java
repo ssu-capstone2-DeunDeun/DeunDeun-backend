@@ -6,13 +6,16 @@ import kr.co.deundeun.groopy.domain.club.constant.CategoryType;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.hashtag.ClubHashtag;
 import kr.co.deundeun.groopy.domain.image.ClubImage;
+import kr.co.deundeun.groopy.domain.image.Image;
 import kr.co.deundeun.groopy.domain.post.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Getter
@@ -62,14 +65,28 @@ public class Club extends BaseEntity {
         this.clubRecruits = clubRecruits;
     }
 
-    public void update(ClubRequestDto clubRequestDto){
+    public Club update(ClubRequestDto clubRequestDto){
         this.clubName = clubRequestDto.getName();
         this.introduction = clubRequestDto.getIntroduction();
         this.representImageUrl = clubRequestDto.getRepresentImageUrl();
+        return this;
     }
 
-    public void updateClubImages(List<ClubImage> clubImages){
-        this.clubImages = clubImages;
+    public void setClubImage(ClubImage clubImage){
+        if(clubImages.stream().anyMatch(image -> image.toImageUrl().equals(clubImage.getImageUrl()))) return;
+        this.clubImages.add(clubImage);
+        clubImage.setClub(this);
+    }
+
+    public void setClubImages(List<ClubImage> clubImages){
+        if(this.clubImages == null) this.clubImages = new ArrayList<>();
+        clubImages.forEach(clubImage -> setClubImage(clubImage));
+    }
+
+    public List<String> toImageUrls(){
+        return this.clubImages.stream()
+                .map(Image::toImageUrl)
+                .collect(Collectors.toList());
     }
 
 }
