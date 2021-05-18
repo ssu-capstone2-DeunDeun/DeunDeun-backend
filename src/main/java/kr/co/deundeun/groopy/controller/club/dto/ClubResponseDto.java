@@ -1,10 +1,13 @@
 package kr.co.deundeun.groopy.controller.club.dto;
 
+import kr.co.deundeun.groopy.controller.clubRecruit.dto.RecruitResponseDto;
+import kr.co.deundeun.groopy.controller.post.dto.PostResponseDto;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.club.constant.CategoryType;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.post.Post;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +16,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ClubResponseDto {
 
     private String clubName;
@@ -27,14 +31,27 @@ public class ClubResponseDto {
 
     private String backgroundImageUrl;
 
-    //private List<Post> clubPosts;
+    private List<String> clubImages;
 
-    //private List<ClubRecruit> clubRecruits;
+    private List<PostResponseDto> posts;
 
-    public static ClubResponseDto of(Club club){
-        return new ClubResponseDto(club.getClubName(), club.getCategoryType(),
-                club.getGeneration(), club.getIntroduction(), club.getRepresentImageUrl(),
-                club.getBackgroundImageUrl());
+    private RecruitResponseDto recruit;
+
+    private boolean isAdmin;
+
+    public static ClubResponseDto of(Club club, List<PostResponseDto> postResponseDtos,
+                                     RecruitResponseDto recruit, List<String> clubImages, boolean isAdmin) {
+        return ClubResponseDto.builder()
+                .clubName(club.getClubName())
+                .categoryType(club.getCategoryType())
+                .generation(club.getGeneration())
+                .introduction(club.getIntroduction())
+                .representImageUrl(club.getRepresentImageUrl())
+                .backgroundImageUrl(club.getBackgroundImageUrl())
+                .clubImages(clubImages)
+                .posts(postResponseDtos)
+                .recruit(recruit)
+                .isAdmin(isAdmin).build();
     }
 
 }

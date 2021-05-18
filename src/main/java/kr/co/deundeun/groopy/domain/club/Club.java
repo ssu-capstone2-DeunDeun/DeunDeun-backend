@@ -6,7 +6,6 @@ import kr.co.deundeun.groopy.domain.club.constant.CategoryType;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.hashtag.ClubHashtag;
 import kr.co.deundeun.groopy.domain.image.ClubImage;
-import kr.co.deundeun.groopy.domain.image.Image;
 import kr.co.deundeun.groopy.domain.post.Post;
 import lombok.Builder;
 import lombok.Getter;
@@ -67,6 +66,10 @@ public class Club extends BaseEntity {
         this.clubName = clubRequestDto.getName();
         this.introduction = clubRequestDto.getIntroduction();
         this.representImageUrl = clubRequestDto.getRepresentImageUrl();
+    }
+
+    public void updateClubImages(List<ClubImage> clubImages){
+        this.clubImages = clubImages;
     }
 
 }

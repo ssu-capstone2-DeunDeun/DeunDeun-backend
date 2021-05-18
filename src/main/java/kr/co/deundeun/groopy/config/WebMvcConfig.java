@@ -25,7 +25,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        //registry.addInterceptor(groupInterceptor()).addPathPatterns("/clubs/**");
+        registry.addInterceptor(groupInterceptor()).addPathPatterns("/clubs/**");
     }
 
     @Bean

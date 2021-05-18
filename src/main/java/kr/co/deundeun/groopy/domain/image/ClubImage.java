@@ -13,4 +13,9 @@ import lombok.NoArgsConstructor;
 public class ClubImage extends Image{
   @ManyToOne(fetch = FetchType.LAZY)
   private Club club;
+
+  public ClubImage(Club club, String imageUrl){
+    this.club = club;
+    this.imageUrl = imageUrl;
+  }
 }
