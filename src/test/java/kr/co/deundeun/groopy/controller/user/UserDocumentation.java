@@ -1,4 +1,4 @@
-package kr.co.deundeun.groopy.controller.docs;
+package kr.co.deundeun.groopy.controller.user;
 
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.JsonFieldType;
