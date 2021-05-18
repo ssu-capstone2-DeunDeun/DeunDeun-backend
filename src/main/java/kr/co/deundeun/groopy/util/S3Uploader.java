@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,15 +50,21 @@ public class S3Uploader {
                                     .build();
   }
 
-  @Transactional
-  public String upload(Long userId, MultipartFile file){
+  public List<String> uploadImageList(Long userId, List<MultipartFile> multipartFiles) {
 
-    // File 객체 생성
-    File uploadFile = convertToFileObject(file);
+    return multipartFiles.stream()
+                         .map(multipartFile -> uploadImage(userId, multipartFile))
+                         .collect(Collectors.toList());
+  }
+
+  public String uploadImage(Long userId, MultipartFile multipartFile) {
+
+    File uploadFile = convertToFileObject(multipartFile);
     String uploadImageUrl = putS3(userId, uploadFile);
     removeNewFile(uploadFile);
     return uploadImageUrl;
-//    ObjectMetadata objectMetadata = new ObjectMetadata();
+
+    //    ObjectMetadata objectMetadata = new ObjectMetadata();
 //    objectMetadata.setContentType(file.getContentType());
 //
 //    try (InputStream inputStream = file.getInputStream()) {
