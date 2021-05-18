@@ -1,6 +1,5 @@
 package kr.co.deundeun.groopy.service;
 
-import kr.co.deundeun.groopy.controller.clubRecruit.dto.RecruitSummaryResponseDto;
 import kr.co.deundeun.groopy.controller.clubRecruit.dto.RecruitRequestDto;
 import kr.co.deundeun.groopy.controller.clubRecruit.dto.RecruitResponseDto;
 import kr.co.deundeun.groopy.dao.ClubRecruitRepository;
@@ -30,9 +29,9 @@ public class ClubRecruitService {
     }
 
     @Transactional(readOnly = true)
-    public List<RecruitSummaryResponseDto> getRecruits(String clubName){
+    public List<RecruitResponseDto> getRecruits(String clubName){
         Club club = clubRepository.findByClubName(clubName).orElseThrow(ClubNotFoundException::new);
-        return RecruitSummaryResponseDto.listOf(clubRecruitRepository.findAllByClub(club));
+        return RecruitResponseDto.listOf(clubRecruitRepository.findAllByClub(club));
     }
 
     @Transactional(readOnly = true)

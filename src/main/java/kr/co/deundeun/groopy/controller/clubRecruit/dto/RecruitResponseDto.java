@@ -4,6 +4,8 @@ import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class RecruitResponseDto {
@@ -51,4 +53,9 @@ public class RecruitResponseDto {
     }
 
 
+    public static List<RecruitResponseDto> listOf(List<ClubRecruit> clubRecruits) {
+        return clubRecruits.stream()
+                .map(RecruitResponseDto::new)
+                .collect(Collectors.toList());
+    }
 }

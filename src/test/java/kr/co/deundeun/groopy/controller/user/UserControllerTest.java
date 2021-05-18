@@ -3,7 +3,6 @@ package kr.co.deundeun.groopy.controller.user;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.deundeun.groopy.config.security.UserPrincipal;
 import kr.co.deundeun.groopy.config.security.oauth2.SocialProviderType;
-import kr.co.deundeun.groopy.controller.docs.UserDocumentation;
 import kr.co.deundeun.groopy.controller.user.dto.SignupRequestDto;
 import kr.co.deundeun.groopy.controller.user.dto.UserResponseDto;
 import kr.co.deundeun.groopy.domain.user.User;

@@ -1,6 +1,5 @@
 package kr.co.deundeun.groopy.controller.clubRecruit;
 
-import kr.co.deundeun.groopy.controller.clubRecruit.dto.RecruitSummaryResponseDto;
 import kr.co.deundeun.groopy.controller.clubRecruit.dto.RecruitRequestDto;
 import kr.co.deundeun.groopy.controller.clubRecruit.dto.RecruitResponseDto;
 import kr.co.deundeun.groopy.service.ClubRecruitService;
@@ -25,7 +24,7 @@ public class ClubRecruitController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RecruitSummaryResponseDto>> getRecruits(@PathVariable String clubName){
+    public ResponseEntity<List<RecruitResponseDto>> getRecruits(@PathVariable String clubName){
         return ResponseEntity.ok(clubRecruitService.getRecruits(clubName));
     }
 
