@@ -19,25 +19,39 @@ public class JwtTokenProvider {
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
 
     private final SecretKey SECRET_KEY;
-    private final Long EXPIRES_IN;
+    private final Long ACCESS_EXPIRES_IN;
+    private final Long REFRESH_EXPIRES_IN;
 
     public JwtTokenProvider(AppProperties appProperties){
         this.SECRET_KEY = hmacShaKeyFor(appProperties.getSecretKey().getBytes(StandardCharsets.UTF_8));
-        this.EXPIRES_IN = appProperties.getExpiresIn();
+        this.ACCESS_EXPIRES_IN = appProperties.getAccessExpiresIn() * 1000;
+        this.REFRESH_EXPIRES_IN = appProperties.getRefreshExpiresIn() * 1000;
     }
 
-    public String createToken(Authentication authentication) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-
+    public String createAccessToken(Authentication authentication){
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + EXPIRES_IN);
-
+        Date expiryDate = new Date(now.getTime() + ACCESS_EXPIRES_IN);
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         return Jwts.builder()
-                .setSubject(Long.toString(userPrincipal.getUser().getId()))
-                .setIssuedAt(new Date())
-                .setExpiration(expiryDate)
-                .signWith(SECRET_KEY)
-                .compact();
+                   .setSubject("ACCESS_TOKEN")
+                   .setAudience(Long.toString(userPrincipal.getUser().getId()))
+                   .setIssuedAt(now)
+                   .setExpiration(expiryDate)
+                   .signWith(SECRET_KEY)
+                   .compact();
+    }
+
+    public String createRefreshToken(Authentication authentication){
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + REFRESH_EXPIRES_IN);
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        return Jwts.builder()
+                   .setSubject("REFRESH_TOKEN")
+                   .setAudience(Long.toString(userPrincipal.getUser().getId()))
+                   .setIssuedAt(now)
+                   .setExpiration(expiryDate)
+                   .signWith(SECRET_KEY)
+                   .compact();
     }
 
     public Long getUserIdFromToken(String token) {
@@ -50,13 +64,15 @@ public class JwtTokenProvider {
         return Long.parseLong(claims.getSubject());
     }
 
-    public boolean validateToken(String authToken) {
+    public boolean validateToken(String authToken, String tokenType) {
         try {
-            Jwts.parserBuilder()
-                    .setSigningKey(SECRET_KEY)
-                    .build()
-                    .parseClaimsJws(authToken);
-            return true;
+            String sub = Jwts.parserBuilder()
+                             .setSigningKey(SECRET_KEY)
+                             .build()
+                             .parseClaimsJws(authToken)
+                             .getBody()
+                             .getSubject();
+            return tokenType.equals(sub);
         } catch (MalformedJwtException ex) {
             logger.error("Invalid JWT token");
         } catch (ExpiredJwtException ex) {
@@ -68,5 +84,4 @@ public class JwtTokenProvider {
         }
         return false;
     }
-
 }

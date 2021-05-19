@@ -4,9 +4,10 @@ import kr.co.deundeun.groopy.config.AppProperties;
 import kr.co.deundeun.groopy.config.security.UserPrincipal;
 import kr.co.deundeun.groopy.config.security.HttpCookieOAuth2AuthorizationRequestRepository;
 import kr.co.deundeun.groopy.config.security.JwtTokenProvider;
+import kr.co.deundeun.groopy.dao.UserRepository;
 import kr.co.deundeun.groopy.exception.BadRequestException;
 import kr.co.deundeun.groopy.util.CookieUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ import java.util.Optional;
 
 import static kr.co.deundeun.groopy.config.security.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
-
+@RequiredArgsConstructor
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
@@ -31,14 +32,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
-
-    @Autowired
-    OAuth2AuthenticationSuccessHandler(JwtTokenProvider jwtTokenProvider, AppProperties appProperties,
-                                       HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.appProperties = appProperties;
-        this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
-    }
+    private final UserRepository userRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException{
@@ -64,13 +58,16 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
         Boolean hasInfo = hasInfo(authentication);
         Boolean hasHashTags = hasHashTags(authentication);
-        String token = jwtTokenProvider.createToken(authentication);
+        String jwtAccessToken = jwtTokenProvider.createAccessToken(authentication);
+        String jwtRefreshToken = jwtTokenProvider.createRefreshToken(authentication);
 
         return UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("info", hasInfo)
-                .queryParam("hashtag", hasHashTags)
-                .queryParam("token", token)
-                .build().toUriString();
+                                   .queryParam("info", hasInfo)
+                                   .queryParam("hashtag", hasHashTags)
+                                   .queryParam("jwtAccessToken", jwtAccessToken)
+                                   .queryParam("jwtRefreshToken", jwtRefreshToken)
+                                   .build()
+                                   .toUriString();
     }
 
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
