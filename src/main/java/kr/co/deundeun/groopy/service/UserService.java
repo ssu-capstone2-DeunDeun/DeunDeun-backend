@@ -5,7 +5,6 @@ import kr.co.deundeun.groopy.controller.user.dto.SignupRequestDto;
 import kr.co.deundeun.groopy.controller.user.dto.UserResponseDto;
 import kr.co.deundeun.groopy.dao.UserHashtagRepository;
 import kr.co.deundeun.groopy.dao.UserRepository;
-import kr.co.deundeun.groopy.domain.hashtag.UserHashtag;
 import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.exception.DuplicateResourceException;
 import lombok.RequiredArgsConstructor;
@@ -13,15 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
+
     private final UserRepository userRepository;
     private final UserHashtagRepository userHashtagRepository;
     private final HashtagService hashtagService;
-
 
     public boolean isDuplicatedNickname(String nickname) {
         return userRepository.existsByNickname(nickname);

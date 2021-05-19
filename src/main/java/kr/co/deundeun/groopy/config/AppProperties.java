@@ -13,7 +13,8 @@ import java.util.List;
 public class AppProperties {
 
     private String secretKey;
-    private long expiresIn;
+    private long accessExpiresIn;
+    private long refreshExpiresIn;
 
     private final OAuth2 oauth2 = new OAuth2();
 
