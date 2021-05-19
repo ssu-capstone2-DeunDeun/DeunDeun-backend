@@ -29,25 +29,33 @@ public class JwtTokenProvider {
     }
 
     public String createAccessToken(Authentication authentication){
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        return createAccessToken(userPrincipal.getUser().getId());
+    }
+
+    public String createAccessToken(Long id){
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + ACCESS_EXPIRES_IN);
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         return Jwts.builder()
-                   .setSubject("ACCESS_TOKEN")
-                   .setAudience(Long.toString(userPrincipal.getUser().getId()))
-                   .setIssuedAt(now)
-                   .setExpiration(expiryDate)
-                   .signWith(SECRET_KEY)
-                   .compact();
+                          .setSubject("ACCESS_TOKEN")
+                          .setAudience(Long.toString(id))
+                          .setIssuedAt(now)
+                          .setExpiration(expiryDate)
+                          .signWith(SECRET_KEY)
+                          .compact();
     }
 
     public String createRefreshToken(Authentication authentication){
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        return createRefreshToken(userPrincipal.getUser().getId());
+    }
+
+    public String createRefreshToken(Long id){
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + REFRESH_EXPIRES_IN);
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         return Jwts.builder()
                    .setSubject("REFRESH_TOKEN")
-                   .setAudience(Long.toString(userPrincipal.getUser().getId()))
+                   .setAudience(Long.toString(id))
                    .setIssuedAt(now)
                    .setExpiration(expiryDate)
                    .signWith(SECRET_KEY)
@@ -83,5 +91,21 @@ public class JwtTokenProvider {
             logger.error("JWT claims string is empty.");
         }
         return false;
+    }
+
+    public long calculateDaysLeft(String jwtRefreshToken){
+
+        Date exp = Jwts.parserBuilder()
+                       .setSigningKey(SECRET_KEY)
+                       .build()
+                       .parseClaimsJws(jwtRefreshToken)
+                       .getBody()
+                       .getExpiration();
+        Date now = new Date();
+
+        long calDate = exp.getTime() - now.getTime();
+
+        // 1일로 나눠서 몇 일 남았는지 계산
+        return calDate / (24 * 60 * 60 * 1000);
     }
 }

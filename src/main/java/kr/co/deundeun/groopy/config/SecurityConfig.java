@@ -80,28 +80,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.jpg",
                         "/**/*.html",
                         "/**/*.css",
-                        "/**/*.js")
-                .permitAll()
-
-                .antMatchers("/auth/**", "/oauth2/**")
-                .permitAll()
-                .antMatchers("/user/**")
-                .authenticated()
+                        "/**/*.js").permitAll()
+                .antMatchers("/auth/**", "/oauth2/**", "/jwt/refresh/**").permitAll()
+                .antMatchers("/user/**").authenticated()
                 .and()
 
                 .oauth2Login()
-                .authorizationEndpoint()
-                .baseUri("/oauth2/authorize")
-                .authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository)
+                    .authorizationEndpoint()
+                    .baseUri("/oauth2/authorize")
+                    .authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository)
                 .and()
-                .redirectionEndpoint()
-                .baseUri("/oauth2/callback/*")
+                    .redirectionEndpoint()
+                    .baseUri("/oauth2/callback/*")
                 .and()
-                .userInfoEndpoint()
-                .userService(customOAuth2UserService)
+                    // OAuth 2 로그인 성공 이후 사용자 정보를 가져올 때의 설정들을 담당합니다.
+                    .userInfoEndpoint()
+
+                    // 소셜 로그인 성공 시 후속 조치를 진행할 UserService 인터페이스의 구현체를 등록합니다.
+                    // 리소스 서버(즉, 소셜 서비스들)에서 사용자 정보를 가져온 상태에서 추가로 진행하고자 하는 기능을 명시할 수 있습니다.
+                    .userService(customOAuth2UserService)
+
                 .and()
-                .successHandler(oAuth2AuthenticationSuccessHandler)
-                .failureHandler(oAuth2AuthenticationFailureHandler);
+                    .successHandler(oAuth2AuthenticationSuccessHandler)
+                    .failureHandler(oAuth2AuthenticationFailureHandler);
 
         http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
