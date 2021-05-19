@@ -40,7 +40,7 @@ public class Club extends BaseEntity {
     private List<ClubHashtag> clubHashtags;
 
     @OneToMany(mappedBy = "club")
-    private List<ClubImage> clubImages;
+    private List<ClubImage> clubImages = new ArrayList<>();
 
     @OneToMany(mappedBy = "club")
     private List<Post> clubPosts;
@@ -79,7 +79,6 @@ public class Club extends BaseEntity {
     }
 
     public void setClubImages(List<ClubImage> clubImages){
-        if(this.clubImages == null) this.clubImages = new ArrayList<>();
         clubImages.forEach(clubImage -> setClubImage(clubImage));
     }
 

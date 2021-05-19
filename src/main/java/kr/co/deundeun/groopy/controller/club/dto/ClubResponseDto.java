@@ -40,34 +40,24 @@ public class ClubResponseDto {
 
     public static ClubResponseDto of(Club club, List<Post> posts, ClubRecruit clubRecruit, boolean isAdmin) {
         return ClubResponseDto.builder()
-                .id(club.getId())
-                .clubName(club.getClubName())
-                .categoryType(club.getCategoryType())
-                .generation(club.getGeneration())
-                .introduction(club.getIntroduction())
-                .representImageUrl(club.getRepresentImageUrl())
-                .backgroundImageUrl(club.getBackgroundImageUrl())
-                .clubImageUrls(club.toImageUrls())
-                .postResponseDtos(PostResponseDto.listOf(posts))
-                .recruitResponseDto(RecruitResponseDto.of(clubRecruit))
+                .club(club)
+                .posts(posts)
+                .clubRecruit(clubRecruit)
                 .isAdmin(isAdmin).build();
     }
 
     @Builder
-    public ClubResponseDto(Long id, String clubName, CategoryType categoryType, int generation,
-                           String introduction, String representImageUrl, String backgroundImageUrl,
-                           List<String> clubImageUrls, List<PostResponseDto> postResponseDtos,
-                           RecruitResponseDto recruitResponseDto, boolean isAdmin) {
-        this.id = id;
-        this.clubName = clubName;
-        this.categoryType = categoryType;
-        this.generation = generation;
-        this.introduction = introduction;
-        this.representImageUrl = representImageUrl;
-        this.backgroundImageUrl = backgroundImageUrl;
-        this.clubImageUrls = clubImageUrls;
-        this.postResponseDtos = postResponseDtos;
-        this.recruitResponseDto = recruitResponseDto;
+    public ClubResponseDto(Club club, List<Post> posts, ClubRecruit clubRecruit, boolean isAdmin) {
+        this.id = club.getId();
+        this.clubName = club.getClubName();
+        this.categoryType = club.getCategoryType();
+        this.generation = club.getGeneration();
+        this.introduction = club.getIntroduction();
+        this.representImageUrl = club.getRepresentImageUrl();
+        this.backgroundImageUrl = club.getBackgroundImageUrl();
+        this.clubImageUrls = club.toImageUrls();
+        this.postResponseDtos = PostResponseDto.listOf(posts);
+        this.recruitResponseDto = RecruitResponseDto.of(clubRecruit);
         this.isAdmin = isAdmin;
     }
 }
