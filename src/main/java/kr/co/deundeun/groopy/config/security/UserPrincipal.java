@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Getter
 public class UserPrincipal implements OAuth2User, UserDetails {
@@ -29,6 +31,8 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         userPrincipal.setAttributes(attributes);
         return userPrincipal;
     }
+
+    List<String> roles = new ArrayList<>(Stream.of("ROLE_USER").collect(Collectors.toList()));
 
     @Override
     public String getPassword() {
@@ -57,7 +61,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+        return this.roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 
     @Override
@@ -72,5 +76,9 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     @Override
     public String getName() {
         return user.getName();
+    }
+
+    public void updateRoles(String role){
+       roles = Collections.singletonList(role);
     }
 }

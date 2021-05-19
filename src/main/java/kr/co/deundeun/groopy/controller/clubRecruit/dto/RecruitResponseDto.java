@@ -1,6 +1,7 @@
 package kr.co.deundeun.groopy.controller.clubRecruit.dto;
 
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -34,9 +35,14 @@ public class RecruitResponseDto {
 
     private LocalDateTime finalPassEndDate;
 
+    private LocalDateTime createdAt;
+
     private LocalDateTime modifiedAt;
 
+    @Builder
     public RecruitResponseDto(ClubRecruit clubRecruit){
+        if(clubRecruit == null) return;
+
         this.id = clubRecruit.getId();
         this.title = clubRecruit.getTitle();
         this.content = clubRecruit.getContent();
@@ -49,8 +55,16 @@ public class RecruitResponseDto {
         this.interviewEndDate = clubRecruit.getInterviewEndDate();
         this.finalPassStartDate = clubRecruit.getFinalPassStartDate();
         this.finalPassEndDate = clubRecruit.getFinalPassEndDate();
+        this.createdAt = clubRecruit.getCreatedAt();
         this.modifiedAt = clubRecruit.getModifiedAt();
     }
+
+    public static RecruitResponseDto of(ClubRecruit clubRecruit){
+        if(clubRecruit == null) return null;
+        return RecruitResponseDto.builder()
+                .clubRecruit(clubRecruit).build();
+    }
+
 
 
     public static List<RecruitResponseDto> listOf(List<ClubRecruit> clubRecruits) {

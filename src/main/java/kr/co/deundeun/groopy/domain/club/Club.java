@@ -13,7 +13,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Getter
@@ -38,7 +40,7 @@ public class Club extends BaseEntity {
     private List<ClubHashtag> clubHashtags;
 
     @OneToMany(mappedBy = "club")
-    private List<ClubImage> clubImages;
+    private List<ClubImage> clubImages = new ArrayList<>();
 
     @OneToMany(mappedBy = "club")
     private List<Post> clubPosts;
@@ -63,10 +65,27 @@ public class Club extends BaseEntity {
         this.clubRecruits = clubRecruits;
     }
 
-    public void update(ClubRequestDto clubRequestDto){
+    public Club update(ClubRequestDto clubRequestDto){
         this.clubName = clubRequestDto.getName();
         this.introduction = clubRequestDto.getIntroduction();
         this.representImageUrl = clubRequestDto.getRepresentImageUrl();
+        return this;
+    }
+
+    public void setClubImage(ClubImage clubImage){
+        if(clubImages.stream().anyMatch(image -> image.toImageUrl().equals(clubImage.getImageUrl()))) return;
+        this.clubImages.add(clubImage);
+        clubImage.setClub(this);
+    }
+
+    public void setClubImages(List<ClubImage> clubImages){
+        clubImages.forEach(clubImage -> setClubImage(clubImage));
+    }
+
+    public List<String> toImageUrls(){
+        return this.clubImages.stream()
+                .map(Image::toImageUrl)
+                .collect(Collectors.toList());
     }
 
 }

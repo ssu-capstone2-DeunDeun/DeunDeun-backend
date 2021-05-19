@@ -17,5 +17,9 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @Entity
 public abstract class Image extends BaseEntity {
-    private String imageUrl;
+    protected String imageUrl;
+
+    public String toImageUrl(){
+        return imageUrl;
+    }
 }

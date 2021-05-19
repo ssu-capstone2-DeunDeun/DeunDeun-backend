@@ -30,6 +30,10 @@ public class Post extends BaseEntity {
 
     private String content;
 
+    private int likeCount;
+
+    private int viewCount;
+
     @OneToMany(mappedBy = "post")
     private List<PostImage> postImages;
 

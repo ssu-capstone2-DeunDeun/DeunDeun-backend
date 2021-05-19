@@ -1,6 +1,7 @@
 package kr.co.deundeun.groopy.controller.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.co.deundeun.groopy.config.DocumentationWithSecurity;
 import kr.co.deundeun.groopy.config.security.UserPrincipal;
 import kr.co.deundeun.groopy.config.security.oauth2.SocialProviderType;
 import kr.co.deundeun.groopy.controller.user.dto.SignupRequestDto;
@@ -40,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @SpringBootTest
-class UserControllerTest {
+class UserControllerTest extends DocumentationWithSecurity {
 
     @MockBean
     private UserService userService;
