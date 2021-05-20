@@ -1,6 +1,8 @@
 package kr.co.deundeun.groopy.controller.post.dto;
 
 import kr.co.deundeun.groopy.domain.club.Club;
+import kr.co.deundeun.groopy.domain.image.ClubImage;
+import kr.co.deundeun.groopy.domain.image.PostImage;
 import kr.co.deundeun.groopy.domain.post.Post;
 import lombok.Getter;
 
