@@ -69,7 +69,7 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody();
 
-        return Long.parseLong(claims.getSubject());
+        return Long.parseLong(claims.getAudience());
     }
 
     public boolean validateToken(String authToken, String tokenType) {

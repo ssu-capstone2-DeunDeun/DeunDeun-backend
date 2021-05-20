@@ -7,6 +7,6 @@ import java.lang.annotation.*;
 @Target({ElementType.PARAMETER, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@AuthenticationPrincipal(expression = "user")
+@AuthenticationPrincipal(expression = "#this == 'anonymousUser' ? new kr.co.deundeun.groopy.domain.user.Anonymous() : user")
 public @interface Me {
 }

@@ -12,6 +12,7 @@ import kr.co.deundeun.groopy.domain.user.Participate;
 import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.exception.ClubNotFoundException;
 import kr.co.deundeun.groopy.exception.DuplicateResourceException;
+import kr.co.deundeun.groopy.exception.LoginException;
 import kr.co.deundeun.groopy.exception.NameDuplicateException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,7 @@ public class ClubService {
 
     @Transactional
     public void registerClub(User user, ClubRequestDto clubRequestDto) {
+        if(user.getId() == null) throw new LoginException();
         if(isDuplicatedName(clubRequestDto.getName())) throw new NameDuplicateException("동아리 이름이 존재합니다.");
 
         Club club = createClub(clubRequestDto);

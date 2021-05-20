@@ -15,11 +15,15 @@ import lombok.NoArgsConstructor;
 @Entity
 public abstract class Likes extends BaseEntity {
 
-    @Column(nullable = false)
-    private boolean isLiked;
+    @Column(nullable = true)
+    protected boolean isLiked;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
-    private User user;
+    protected User user;
+
+    public void updateLike(){
+        isLiked = !isLiked;
+    }
 }
 

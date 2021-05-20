@@ -24,6 +24,8 @@ public class ClubResponseDto {
 
     private int generation;
 
+    private int likeCount;
+
     private String introduction;
 
     private String representImageUrl;
@@ -53,6 +55,7 @@ public class ClubResponseDto {
         this.categoryType = club.getCategoryType();
         this.generation = club.getGeneration();
         this.introduction = club.getIntroduction();
+        this.likeCount = club.getLikeCount();
         this.representImageUrl = club.getRepresentImageUrl();
         this.backgroundImageUrl = club.getBackgroundImageUrl();
         this.clubImageUrls = club.toImageUrls();
