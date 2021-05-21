@@ -1,24 +1,22 @@
 package kr.co.deundeun.groopy.service;
 
-import kr.co.deundeun.groopy.config.Me;
+import kr.co.deundeun.groopy.controller.common.page.PageRequestDto;
 import kr.co.deundeun.groopy.controller.post.dto.PostRequestDto;
 import kr.co.deundeun.groopy.controller.post.dto.PostResponseDto;
 import kr.co.deundeun.groopy.dao.ClubRepository;
+import kr.co.deundeun.groopy.dao.PostImageRepository;
 import kr.co.deundeun.groopy.dao.PostRepository;
 import kr.co.deundeun.groopy.domain.club.Club;
+import kr.co.deundeun.groopy.domain.image.PostImage;
 import kr.co.deundeun.groopy.domain.post.Post;
-import kr.co.deundeun.groopy.domain.user.User;
-import kr.co.deundeun.groopy.exception.BadRequestException;
-import kr.co.deundeun.groopy.exception.ResourceNotFoundException;
+import kr.co.deundeun.groopy.helper.ClubHelper;
+import kr.co.deundeun.groopy.helper.PostHelper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.naming.NameNotFoundException;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -28,19 +26,48 @@ public class PostService {
 
     private final ClubRepository clubRepository;
 
-    public void post(String author, String clubName, PostRequestDto postRequestDto){
-        Club club = clubRepository.findByClubName(clubName).orElseThrow(RuntimeException::new);
-        if(author == null || author.isEmpty()) throw new BadRequestException("동아리에 등록된 인원이 아닙니다.");
+    private final PostImageRepository postImageRepository;
 
-        Post post = postRequestDto.toPost(author, club);
-        postRepository.save(post);
+    @Transactional
+    public void post(String author, String clubName, PostRequestDto postRequestDto) {
+        Club club = ClubHelper.findByClubName(clubRepository, clubName);
+        createPost(author, club, postRequestDto);
     }
 
-    public PostResponseDto getPost(Long postId){
-        Post post = postRepository.findById(postId).orElseThrow(RuntimeException::new);
-
+    @Transactional
+    public PostResponseDto getPost(Long postId) {
+        Post post = PostHelper.findById(postRepository, postId);
+        post.increaseViewCount();
+        postRepository.save(post);
         return PostResponseDto.of(post);
     }
 
+    @Transactional(readOnly = true)
+    public Page<PostResponseDto> getClubPosts(String clubName, PageRequestDto pageRequestDto) {
+        Club club = ClubHelper.findByClubName(clubRepository, clubName);
+        return postRepository.findAllByClub(club, pageRequestDto.of()).map(PostResponseDto::of);
+    }
 
+    @Transactional(readOnly = true)
+    public Page<PostResponseDto> getPosts(PageRequestDto pageRequestDto) {
+        return postRepository.findAll(pageRequestDto.of()).map(PostResponseDto::of);
+    }
+
+    @Transactional
+    public void updatePost(Long postId, PostRequestDto postRequestDto) {
+        Post post = PostHelper.findById(postRepository, postId);
+        List<PostImage> postImages = post.updatePostImages(postRequestDto.getPostImageUrls());
+        post.update(postRequestDto);
+
+        postImageRepository.saveAll(postImages);
+        postRepository.save(post);
+    }
+
+    private void createPost(String author, Club club, PostRequestDto postRequestDto) {
+        Post post = postRequestDto.toPost(author, club);
+        List<PostImage> postImages = PostImage.ofList(postRequestDto.getPostImageUrls(), post);
+
+        postImageRepository.saveAll(postImages);
+        postRepository.save(post);
+    }
 }

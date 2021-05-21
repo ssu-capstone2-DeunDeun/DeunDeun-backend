@@ -36,11 +36,13 @@ public class Club extends BaseEntity {
 
     private String backgroundImageUrl;
 
+    private int likeCount;
+
     @OneToMany(mappedBy = "club")
     private List<ClubHashtag> clubHashtags;
 
     @OneToMany(mappedBy = "club")
-    private List<ClubImage> clubImages = new ArrayList<>();
+    private List<ClubImage> clubImages;
 
     @OneToMany(mappedBy = "club")
     private List<Post> clubPosts;
@@ -51,7 +53,8 @@ public class Club extends BaseEntity {
     @Builder
     public Club(CategoryType categoryType, String clubName, int generation, String introduction,
                 String representImageUrl, String backgroundImageUrl, List<ClubHashtag> clubHashtags,
-                List<ClubImage> clubImages, List<Post> clubPosts, List<ClubRecruit> clubRecruits){
+                List<ClubImage> clubImages, List<Post> clubPosts, List<ClubRecruit> clubRecruits,
+                int likeCount){
 
         this.categoryType = categoryType;
         this.clubName = clubName;
@@ -63,6 +66,7 @@ public class Club extends BaseEntity {
         this.clubImages = clubImages;
         this.clubPosts = clubPosts;
         this.clubRecruits = clubRecruits;
+        this.likeCount = likeCount;
     }
 
     public Club update(ClubRequestDto clubRequestDto){
@@ -79,7 +83,8 @@ public class Club extends BaseEntity {
     }
 
     public void setClubImages(List<ClubImage> clubImages){
-        clubImages.forEach(clubImage -> setClubImage(clubImage));
+        if(this.clubImages == null) clubImages = new ArrayList<>();
+        clubImages.forEach(this::setClubImage);
     }
 
     public List<String> toImageUrls(){
@@ -88,4 +93,12 @@ public class Club extends BaseEntity {
                 .collect(Collectors.toList());
     }
 
+    public void increaseLikeCount(){
+        likeCount++;
+    }
+
+    public void decreaseLikeCount(){
+        if(likeCount > 0) likeCount--;
+        else likeCount = 0;
+    }
 }

@@ -12,6 +12,5 @@ import lombok.NoArgsConstructor;
 @Entity
 public class PostLike extends Likes {
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
     private Post post;
 }
