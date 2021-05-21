@@ -9,6 +9,7 @@ import kr.co.deundeun.groopy.domain.like.ClubLike;
 import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.exception.ClubNotFoundException;
 import kr.co.deundeun.groopy.exception.LoginException;
+import kr.co.deundeun.groopy.helper.ClubHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,23 +28,19 @@ public class LikeService {
     public void likeClub(User user, String clubName) {
         if(user.getId() == null) throw new LoginException();
 
-        Club club = clubRepository.findByClubName(clubName).orElseThrow(ClubNotFoundException::new);
+        Club club = ClubHelper.findByClubName(clubRepository, clubName);
 
-        ClubLike clubLike;
+        ClubLike clubLike = clubLikeRepository.findByClubAndUser(club, user);
 
-        if (clubLikeRepository.existsByClubAndUser(club, user)) {
-            clubLike = clubLikeRepository.findByClubAndUser(club, user);
+        if(clubLike == null) {
+            clubLike = ClubLike.builder().club(club).user(user).build();
+            club.increaseLikeCount();
+        } else {
             if(clubLike.isLiked())
                 club.decreaseLikeCount();
             else
                 club.increaseLikeCount();
             clubLike.updateLike();
-        } else {
-            clubLike = ClubLike.builder()
-                    .club(club)
-                    .user(user)
-                    .build();
-            club.increaseLikeCount();
         }
         clubRepository.save(club);
         clubLikeRepository.save(clubLike);
@@ -52,7 +49,7 @@ public class LikeService {
     public LikeResponseDto getClubLike(User user, String clubName) {
         if(user.getId() == null) return new LikeResponseDto();
 
-        Club club = clubRepository.findByClubName(clubName).orElseThrow(ClubNotFoundException::new);
+        Club club = ClubHelper.findByClubName(clubRepository, clubName);
         if (clubLikeRepository.existsByClubAndUser(club, user))
             return LikeResponseDto.of(clubLikeRepository.findByClubAndUser(club, user));
         return new LikeResponseDto();

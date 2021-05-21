@@ -9,9 +9,8 @@ import kr.co.deundeun.groopy.dao.PostRepository;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.image.PostImage;
 import kr.co.deundeun.groopy.domain.post.Post;
-import kr.co.deundeun.groopy.exception.BadRequestException;
-import kr.co.deundeun.groopy.exception.ClubNotFoundException;
-import kr.co.deundeun.groopy.exception.IdNotFoundException;
+import kr.co.deundeun.groopy.helper.ClubHelper;
+import kr.co.deundeun.groopy.helper.PostHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -31,14 +30,13 @@ public class PostService {
 
     @Transactional
     public void post(String author, String clubName, PostRequestDto postRequestDto) {
-        if (author == null || author.isEmpty()) throw new BadRequestException("동아리에 등록된 인원이 아닙니다.");
-        Club club = clubRepository.findByClubName(clubName).orElseThrow(ClubNotFoundException::new);
+        Club club = ClubHelper.findByClubName(clubRepository, clubName);
         createPost(author, club, postRequestDto);
     }
 
     @Transactional
     public PostResponseDto getPost(Long postId) {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new IdNotFoundException("게시물을 찾을 수 없습니다."));
+        Post post = PostHelper.findById(postRepository, postId);
         post.increaseViewCount();
         postRepository.save(post);
         return PostResponseDto.of(post);
@@ -46,7 +44,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public Page<PostResponseDto> getClubPosts(String clubName, PageRequestDto pageRequestDto) {
-        Club club = clubRepository.findByClubName(clubName).orElseThrow(ClubNotFoundException::new);
+        Club club = ClubHelper.findByClubName(clubRepository, clubName);
         return postRepository.findAllByClub(club, pageRequestDto.of()).map(PostResponseDto::of);
     }
 
@@ -57,9 +55,8 @@ public class PostService {
 
     @Transactional
     public void updatePost(Long postId, PostRequestDto postRequestDto) {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new IdNotFoundException("게시물을 찾을 수 없습니다."));
-        List<PostImage> postImages = post.getPostImages();
-        postImages = post.updatePostImages(postRequestDto.getPostImageUrls());
+        Post post = PostHelper.findById(postRepository, postId);
+        List<PostImage> postImages = post.updatePostImages(postRequestDto.getPostImageUrls());
         post.update(postRequestDto);
 
         postImageRepository.saveAll(postImages);

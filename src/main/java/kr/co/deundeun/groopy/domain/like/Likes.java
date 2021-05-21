@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public abstract class Likes extends BaseEntity {
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     protected boolean isLiked;
 
     @ManyToOne(fetch = FetchType.LAZY)

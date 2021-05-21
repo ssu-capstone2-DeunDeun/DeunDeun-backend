@@ -25,7 +25,7 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/clubs/{clubName}/posts/{postId}")
+    @GetMapping("/posts/{postId}")
     public ResponseEntity<PostResponseDto> getPost(@PathVariable Long postId) {
         return ResponseEntity.ok(postService.getPost(postId));
     }
