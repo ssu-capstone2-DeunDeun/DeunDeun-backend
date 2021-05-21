@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface ClubRecruitRepository extends JpaRepository<ClubRecruit, Long> {
     List<ClubRecruit> findAllByClub(Club club);
+    List<ClubRecruit> findAllByClubAndGenerationGreaterThan(Club club, int id);
     ClubRecruit findTopByClubAndGenerationGreaterThanOrderByCreatedAt(Club club, int generation);
 
 }

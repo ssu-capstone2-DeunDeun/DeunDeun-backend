@@ -1,6 +1,8 @@
 package kr.co.deundeun.groopy.domain.clubApply;
 
 import javax.persistence.FetchType;
+
+import kr.co.deundeun.groopy.controller.clubApply.dto.ApplyAnswerDto;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.clubRecruit.constant.QuestionType;
 import lombok.Builder;
@@ -32,7 +34,8 @@ public class ClubApplyAnswer extends BaseEntity {
         this.answerContent = answerContent;
     }
 
-    public void updateAnswerContent(String content){
-        this.answerContent = content;
+    public void updateAnswer(ApplyAnswerDto applyAnswerDto){
+        this.questionType = applyAnswerDto.getQuestionType();
+        this.answerContent = applyAnswerDto.getQuestion();
     }
 }

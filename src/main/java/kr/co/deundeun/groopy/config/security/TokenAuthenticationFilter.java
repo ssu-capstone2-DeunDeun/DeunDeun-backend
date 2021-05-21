@@ -1,8 +1,10 @@
 package kr.co.deundeun.groopy.config.security;
 
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,6 +43,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+        }catch (SignatureException ex){
+            response.sendError(HttpStatus.UNAUTHORIZED.value());
+            response.getWriter().write("잘못된 인증 토큰입니다.");
         } catch (Exception ex) {
             logger.error("Could not set user authentication in security context", ex);
         }

@@ -22,29 +22,31 @@ public class ClubApplyController {
     private final ClubApplyService clubApplyService;
 
     @PostMapping
-    public ResponseEntity<Void> apply(@Me User user, @RequestBody ApplyRequestDto applyRequestDto){
-        clubApplyService.apply(user, applyRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<ApplyResponseDto> apply(@Me User user,
+                                                  @RequestBody ApplyRequestDto applyRequestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(clubApplyService.apply(user, applyRequestDto));
+    }
+
+    @PatchMapping("/{applyId}")
+    public ResponseEntity<Void> updateApply(@PathVariable Long applyId,
+                                            @RequestBody ApplyRequestDto applyRequestDto) {
+        clubApplyService.updateApply(applyId, applyRequestDto);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping
-    public ResponseEntity<List<ApplySummaryResponseDto>> getApplies(@Me User user){
+    public ResponseEntity<List<ApplySummaryResponseDto>> getApplies(@Me User user) {
         return ResponseEntity.ok(clubApplyService.getApplies(user));
     }
 
     @GetMapping("/{applyId}")
-    public ResponseEntity<ApplyResponseDto> getApply(@PathVariable Long applyId){
+    public ResponseEntity<ApplyResponseDto> getApply(@PathVariable Long applyId) {
         return ResponseEntity.ok(clubApplyService.getApply(applyId));
     }
 
-    @PatchMapping("/{applyId}")
-    public ResponseEntity<Void> updateApply(@PathVariable Long applyId, @RequestBody ApplyRequestDto applyRequestDto){
-        clubApplyService.changeApply(applyId, applyRequestDto);
-        return ResponseEntity.ok().build();
-    }
-
     @DeleteMapping("/{applyId}")
-    public ResponseEntity<Void> deleteApply(@PathVariable Long applyId){
+    public ResponseEntity<Void> deleteApply(@PathVariable Long applyId) {
         clubApplyService.deleteApply(applyId);
         return ResponseEntity.ok().build();
     }

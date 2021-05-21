@@ -77,7 +77,8 @@ public class Club extends BaseEntity {
     }
 
     public void setClubImage(ClubImage clubImage){
-        if(clubImages.stream().anyMatch(image -> image.toImageUrl().equals(clubImage.getImageUrl()))) return;
+        if(clubImages.stream().anyMatch(image -> image.toImageUrl()
+                .equals(clubImage.getImageUrl()))) return;
         this.clubImages.add(clubImage);
         clubImage.setClub(this);
     }
