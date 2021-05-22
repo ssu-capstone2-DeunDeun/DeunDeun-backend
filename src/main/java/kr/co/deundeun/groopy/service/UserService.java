@@ -1,17 +1,20 @@
 package kr.co.deundeun.groopy.service;
 
+import kr.co.deundeun.groopy.controller.clubApply.dto.ApplyResponseDto;
 import kr.co.deundeun.groopy.controller.hashtag.dto.HashtagResponseDto;
 import kr.co.deundeun.groopy.controller.user.dto.LikeListResponseDto;
 import kr.co.deundeun.groopy.controller.user.dto.UserRequestDto;
 import kr.co.deundeun.groopy.controller.user.dto.UserResponseDto;
 import kr.co.deundeun.groopy.dao.*;
 import kr.co.deundeun.groopy.domain.club.Club;
+import kr.co.deundeun.groopy.domain.clubApply.ClubApply;
 import kr.co.deundeun.groopy.domain.like.ClubLike;
 import kr.co.deundeun.groopy.domain.like.PostLike;
 import kr.co.deundeun.groopy.domain.post.Post;
 import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.exception.DuplicateResourceException;
 import kr.co.deundeun.groopy.exception.NameDuplicateException;
+import kr.co.deundeun.groopy.helper.ApplyHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

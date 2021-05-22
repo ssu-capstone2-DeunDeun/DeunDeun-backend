@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class ClubApplyService {
 
@@ -34,7 +35,6 @@ public class ClubApplyService {
 
     private final ClubRecruitRepository clubRecruitRepository;
 
-    @Transactional
     public ApplyResponseDto apply(User user, ApplyRequestDto applyRequestDto) {
         if (user.getId() == null) throw new LoginException();
         if (applyRequestDto.getClubRecruitId() == null)
@@ -43,24 +43,23 @@ public class ClubApplyService {
         ClubApply clubApply = clubApplyRepository
                 .findByUserAndClubRecruitId(user, applyRequestDto.getClubRecruitId());
 
+        ClubRecruit clubRecruit = RecruitHelper
+                .findById(clubRecruitRepository, applyRequestDto.getClubRecruitId());
+
         if (clubApply == null) {
             ClubApply newClubApply = applyRequestDto.toClubApply(user);
             clubApplyRepository.save(newClubApply);
 
-            ClubRecruit clubRecruit = RecruitHelper
-                    .findById(clubRecruitRepository, applyRequestDto.getClubRecruitId());
-
-            int size = clubRecruit.getClubRecruitQuestions().size();
-
-            List<ClubApplyAnswer> clubApplyAnswers = Arrays.asList(new ClubApplyAnswer[size]);
+            List<ClubApplyAnswer> clubApplyAnswers =
+                    Arrays.asList(new ClubApplyAnswer[getQuestionSize(clubRecruit)]);
             clubApplyAnswers = clubApplyAnswers.stream()
                     .map(clubApplyAnswer -> ClubApplyAnswer.builder().clubApply(newClubApply).build())
                     .collect(Collectors.toList());
             clubApplyAnswerRepository.saveAll(clubApplyAnswers);
-            return ApplyResponseDto.of(newClubApply);
+            return ApplyResponseDto.of(newClubApply, clubRecruit);
         }
 
-        return ApplyResponseDto.of(clubApply);
+        return ApplyResponseDto.of(clubApply, clubRecruit);
     }
 
     @Transactional(readOnly = true)
@@ -78,21 +77,27 @@ public class ClubApplyService {
     @Transactional(readOnly = true)
     public ApplyResponseDto getApply(Long applyId) {
         ClubApply clubApply = ApplyHelper.findById(clubApplyRepository, applyId);
-        return ApplyResponseDto.of(clubApply);
+        ClubRecruit clubRecruit = RecruitHelper.findById(clubRecruitRepository, clubApply.getClubRecruitId());
+        return ApplyResponseDto.of(clubApply, clubRecruit);
     }
 
-    @Transactional
     public void updateApply(Long applyId, ApplyRequestDto applyRequestDto) {
         ClubApply clubApply = ApplyHelper.findById(clubApplyRepository, applyId);
-        if (applyRequestDto.getApplyAnswers().size() != clubApply.getClubApplyAnswers().size())
+        ClubRecruit clubRecruit = RecruitHelper
+                .findById(clubRecruitRepository, applyRequestDto.getClubRecruitId());
+
+        if (applyRequestDto.getApplyAnswers().size() != getQuestionSize(clubRecruit))
             throw new BadRequestException("작성하지 않은 질문이 있습니다.");
 
         clubApply.update(applyRequestDto);
         clubApplyRepository.save(clubApply);
     }
 
-    @Transactional
     public void deleteApply(Long applyId) {
         clubApplyRepository.deleteById(applyId);
+    }
+
+    public int getQuestionSize(ClubRecruit clubRecruit) {
+        return clubRecruit.getClubRecruitQuestions().size();
     }
 }

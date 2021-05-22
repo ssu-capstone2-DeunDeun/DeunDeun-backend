@@ -34,8 +34,7 @@ public class ClubApplyAnswer extends BaseEntity {
         this.answerContent = answerContent;
     }
 
-    public void updateAnswer(ApplyAnswerDto applyAnswerDto){
-        this.questionType = applyAnswerDto.getQuestionType();
-        this.answerContent = applyAnswerDto.getQuestion();
+    public void updateAnswer(String answerContent){
+        this.answerContent = answerContent;
     }
 }

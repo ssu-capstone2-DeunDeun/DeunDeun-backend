@@ -37,10 +37,10 @@ public class ClubApply extends BaseEntity {
     private List<Comment> comments;
 
     @Builder
-    public ClubApply(User user, Long clubRecruitId, ClubApplyStatus clubApplyStatus, List<ClubApplyAnswer> clubApplyAnswers) {
+    public ClubApply(User user, Long clubRecruitId, List<ClubApplyAnswer> clubApplyAnswers) {
         this.user = user;
         this.clubRecruitId = clubRecruitId;
-        this.clubApplyStatus = clubApplyStatus;
+        this.clubApplyStatus = ClubApplyStatus.WAITING;
         this.clubApplyAnswers = clubApplyAnswers;
     }
 
