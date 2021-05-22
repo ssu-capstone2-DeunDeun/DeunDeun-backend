@@ -5,11 +5,15 @@ import kr.co.deundeun.groopy.controller.post.dto.PostRequestDto;
 import kr.co.deundeun.groopy.controller.post.dto.PostResponseDto;
 import kr.co.deundeun.groopy.dao.ClubRepository;
 import kr.co.deundeun.groopy.dao.PostImageRepository;
+import kr.co.deundeun.groopy.dao.PostLikeRepository;
 import kr.co.deundeun.groopy.dao.PostRepository;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.image.PostImage;
+import kr.co.deundeun.groopy.domain.like.PostLike;
 import kr.co.deundeun.groopy.domain.post.Post;
+import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.helper.ClubHelper;
+import kr.co.deundeun.groopy.helper.LikeHelper;
 import kr.co.deundeun.groopy.helper.PostHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,8 +21,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class PostService {
 
@@ -28,13 +34,13 @@ public class PostService {
 
     private final PostImageRepository postImageRepository;
 
-    @Transactional
+    private final PostLikeRepository postLikeRepository;
+
     public void post(String author, String clubName, PostRequestDto postRequestDto) {
         Club club = ClubHelper.findByClubName(clubRepository, clubName);
         createPost(author, club, postRequestDto);
     }
 
-    @Transactional
     public PostResponseDto getPost(Long postId) {
         Post post = PostHelper.findById(postRepository, postId);
         post.increaseViewCount();
@@ -53,7 +59,6 @@ public class PostService {
         return postRepository.findAll(pageRequestDto.of()).map(PostResponseDto::of);
     }
 
-    @Transactional
     public void updatePost(Long postId, PostRequestDto postRequestDto) {
         Post post = PostHelper.findById(postRepository, postId);
         List<PostImage> postImages = post.updatePostImages(postRequestDto.getPostImageUrls());
@@ -69,5 +74,11 @@ public class PostService {
 
         postImageRepository.saveAll(postImages);
         postRepository.save(post);
+    }
+
+    public List<PostResponseDto> getLikedPosts(User user) {
+        List<PostLike> postLikes = postLikeRepository.findAllByUser(user);
+        List<Post> posts = postLikes.stream().map(PostLike::getPost).collect(Collectors.toList());
+        return PostResponseDto.listOf(posts);
     }
 }

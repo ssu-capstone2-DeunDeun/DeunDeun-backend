@@ -45,7 +45,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             }
         }catch (SignatureException ex){
             response.sendError(HttpStatus.UNAUTHORIZED.value());
-            response.getWriter().write("잘못된 인증 토큰입니다.");
+            //response.getWriter().write("잘못된 인증 토큰입니다.");
         } catch (Exception ex) {
             logger.error("Could not set user authentication in security context", ex);
         }

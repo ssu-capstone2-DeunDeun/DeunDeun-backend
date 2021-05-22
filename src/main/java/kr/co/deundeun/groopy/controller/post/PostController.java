@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -37,14 +39,17 @@ public class PostController {
     }
 
     @GetMapping("/clubs/{clubName}/posts")
-    public ResponseEntity<Page<PostResponseDto>> getClubPosts(@PathVariable String clubName, final PageRequestDto pageRequestDto){
+    public ResponseEntity<Page<PostResponseDto>> getClubPosts(@PathVariable String clubName, final PageRequestDto pageRequestDto) {
         return ResponseEntity.ok(postService.getClubPosts(clubName, pageRequestDto));
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<Page<PostResponseDto>> getPosts(final PageRequestDto pageRequestDto){
+    public ResponseEntity<Page<PostResponseDto>> getPosts(final PageRequestDto pageRequestDto) {
         return ResponseEntity.ok(postService.getPosts(pageRequestDto));
     }
 
-
+    @GetMapping("/liked/posts")
+    public ResponseEntity<List<PostResponseDto>> getLikedPosts(@Me User user) {
+        return ResponseEntity.ok(postService.getLikedPosts(user));
+    }
 }

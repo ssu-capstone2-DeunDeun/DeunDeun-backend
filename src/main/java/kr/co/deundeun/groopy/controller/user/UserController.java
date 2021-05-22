@@ -2,6 +2,8 @@ package kr.co.deundeun.groopy.controller.user;
 
 import kr.co.deundeun.groopy.config.Me;
 import kr.co.deundeun.groopy.controller.hashtag.dto.HashtagResponseDto;
+import kr.co.deundeun.groopy.controller.like.dto.LikeResponseDto;
+import kr.co.deundeun.groopy.controller.user.dto.LikeListResponseDto;
 import kr.co.deundeun.groopy.controller.user.dto.SignupRequestDto;
 import kr.co.deundeun.groopy.controller.user.dto.UserResponseDto;
 import kr.co.deundeun.groopy.domain.user.User;
@@ -50,9 +52,13 @@ public class UserController {
     }
 
     @GetMapping("/{nickname}/hashtags")
-    public ResponseEntity<List<HashtagResponseDto>> getHashtags(@Me User user){
+    public ResponseEntity<List<HashtagResponseDto>> getHashtags(@Me User user) {
         return ResponseEntity.ok(userService.getHashtags(user));
     }
 
+    @GetMapping("/{nicknames}/likes")
+    public ResponseEntity<LikeListResponseDto> getLikes(@Me User user){
+        return ResponseEntity.ok(userService.getLikes(user));
+    }
 
 }

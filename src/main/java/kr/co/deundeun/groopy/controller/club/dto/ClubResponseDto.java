@@ -1,6 +1,7 @@
 package kr.co.deundeun.groopy.controller.club.dto;
 
 import kr.co.deundeun.groopy.controller.clubRecruit.dto.RecruitResponseDto;
+import kr.co.deundeun.groopy.controller.like.dto.LikeResponseDto;
 import kr.co.deundeun.groopy.controller.post.dto.PostResponseDto;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.club.constant.CategoryType;
@@ -12,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class ClubResponseDto {
@@ -46,6 +48,18 @@ public class ClubResponseDto {
                 .posts(posts)
                 .clubRecruit(clubRecruit)
                 .isAdmin(isAdmin).build();
+    }
+
+    public static ClubResponseDto of(Club club) {
+        return ClubResponseDto.builder()
+                .club(club)
+                .build();
+    }
+
+    public static List<ClubResponseDto> listOf(List<Club> clubs){
+        return clubs.stream()
+                .map(ClubResponseDto::of)
+                .collect(Collectors.toList());
     }
 
     @Builder

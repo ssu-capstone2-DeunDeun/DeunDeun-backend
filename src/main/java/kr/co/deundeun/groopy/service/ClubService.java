@@ -2,11 +2,13 @@ package kr.co.deundeun.groopy.service;
 
 import kr.co.deundeun.groopy.controller.club.dto.ClubRequestDto;
 import kr.co.deundeun.groopy.controller.club.dto.ClubResponseDto;
+import kr.co.deundeun.groopy.controller.common.page.PageRequestDto;
 import kr.co.deundeun.groopy.dao.*;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.club.ClubAdmin;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.image.ClubImage;
+import kr.co.deundeun.groopy.domain.like.ClubLike;
 import kr.co.deundeun.groopy.domain.post.Post;
 import kr.co.deundeun.groopy.domain.user.Participate;
 import kr.co.deundeun.groopy.domain.user.User;
@@ -15,13 +17,16 @@ import kr.co.deundeun.groopy.exception.DuplicateResourceException;
 import kr.co.deundeun.groopy.exception.LoginException;
 import kr.co.deundeun.groopy.exception.NameDuplicateException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class ClubService {
 
@@ -39,8 +44,8 @@ public class ClubService {
 
     private final ClubImageRepository clubImageRepository;
 
+    private final ClubLikeRepository clubLikeRepository;
 
-    @Transactional
     public void registerClub(User user, ClubRequestDto clubRequestDto) {
         if(user.getId() == null) throw new LoginException();
         if(isDuplicatedName(clubRequestDto.getName())) throw new NameDuplicateException("동아리 이름이 존재합니다.");
@@ -81,7 +86,6 @@ public class ClubService {
         return ClubResponseDto.of(club, posts, clubRecruit, isAdmin);
     }
 
-    @Transactional
     public void updateClub(String name, ClubRequestDto clubRequestDto) {
         Club club = clubRepository.findByClubName(name).orElseThrow(ClubNotFoundException::new);
         if (isDuplicatedName(name)) throw new DuplicateResourceException("닉네임 중복");
@@ -99,5 +103,12 @@ public class ClubService {
 
     private boolean isDuplicatedName(String clubName) {
         return clubRepository.existsByClubName(clubName);
+    }
+
+    public List<ClubResponseDto> getLikedClubs(User user) {
+        if(user.getId() == null) throw new LoginException();
+        List<ClubLike> clubLikes = clubLikeRepository.findAllByUser(user);
+        List<Club> clubs = clubLikes.stream().map(ClubLike::getClub).collect(Collectors.toList());
+        return ClubResponseDto.listOf(clubs);
     }
 }
