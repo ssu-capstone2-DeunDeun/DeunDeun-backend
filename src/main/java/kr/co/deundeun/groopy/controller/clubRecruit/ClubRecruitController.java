@@ -11,35 +11,34 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("/clubs/{clubName}/recruits")
 @RestController
 public class ClubRecruitController {
 
     private final ClubRecruitService clubRecruitService;
 
-    @PostMapping
+    @PostMapping("clubs/{clubName}/recruits")
     public ResponseEntity<Void> addRecruit(@PathVariable String clubName, @RequestBody RecruitRequestDto recruitRequestDto){
         clubRecruitService.addRecruit(clubName, recruitRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping
+    @GetMapping("clubs/{clubName}/recruits")
     public ResponseEntity<List<RecruitResponseDto>> getRecruits(@PathVariable String clubName){
         return ResponseEntity.ok(clubRecruitService.getRecruits(clubName));
     }
 
-    @GetMapping("/{recruitId}")
+    @GetMapping("recruits/{recruitId}")
     public ResponseEntity<RecruitResponseDto> getRecruit(@PathVariable Long recruitId){
         return ResponseEntity.ok(clubRecruitService.getRecruit(recruitId));
     }
 
-    @PatchMapping("/{recruitId}")
+    @PatchMapping("recruits/{recruitId}")
     public ResponseEntity<Void> updateRecruit(@PathVariable Long recruitId, @RequestBody RecruitRequestDto recruitRequestDto){
         clubRecruitService.updateRecruit(recruitId, recruitRequestDto);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{recruitId}")
+    @DeleteMapping("recruits/{recruitId}")
     public ResponseEntity<Void> deleteRecruit(@PathVariable Long recruitId){
         clubRecruitService.deleteRecruit(recruitId);
         return ResponseEntity.ok().build();
