@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface ClubApplyRepository extends JpaRepository<ClubApply, Long> {
     List<ClubApply> findAllByUser(User user);
+
+    ClubApply findByUserAndClubRecruitId(User user, Long clubRecruitId);
 }
