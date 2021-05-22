@@ -1,5 +1,6 @@
 package kr.co.deundeun.groopy.service;
 
+import kr.co.deundeun.groopy.controller.club.dto.ClubResponseDto;
 import kr.co.deundeun.groopy.controller.clubApply.dto.ApplyResponseDto;
 import kr.co.deundeun.groopy.controller.hashtag.dto.HashtagResponseDto;
 import kr.co.deundeun.groopy.controller.user.dto.LikeListResponseDto;
@@ -11,6 +12,7 @@ import kr.co.deundeun.groopy.domain.clubApply.ClubApply;
 import kr.co.deundeun.groopy.domain.like.ClubLike;
 import kr.co.deundeun.groopy.domain.like.PostLike;
 import kr.co.deundeun.groopy.domain.post.Post;
+import kr.co.deundeun.groopy.domain.user.Participate;
 import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.exception.DuplicateResourceException;
 import kr.co.deundeun.groopy.exception.NameDuplicateException;
@@ -34,6 +36,7 @@ public class UserService {
     private final PostLikeRepository postLikeRepository;
     private final ClubRepository clubRepository;
     private final PostRepository postRepository;
+    private final ParticipateRepository participateRepository;
 
     public boolean isDuplicatedNickname(String nickname) {
         return userRepository.existsByNickname(nickname);
@@ -88,4 +91,11 @@ public class UserService {
         return LikeListResponseDto.of(clubs, posts);
     }
 
+    public List<ClubResponseDto> getClubs(User user) {
+        List<Participate> participates = participateRepository.findAllByUser(user);
+        List<Club> clubs = participates.stream()
+                .map(participate -> participate.getClubRecruit().getClub())
+                .collect(Collectors.toList());
+        return ClubResponseDto.listOf(clubs);
+    }
 }

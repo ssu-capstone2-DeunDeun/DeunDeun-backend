@@ -1,6 +1,7 @@
 package kr.co.deundeun.groopy.controller.user;
 
 import kr.co.deundeun.groopy.config.Me;
+import kr.co.deundeun.groopy.controller.club.dto.ClubResponseDto;
 import kr.co.deundeun.groopy.controller.clubApply.dto.ApplyResponseDto;
 import kr.co.deundeun.groopy.controller.hashtag.dto.HashtagResponseDto;
 import kr.co.deundeun.groopy.controller.user.dto.LikeListResponseDto;
@@ -65,5 +66,11 @@ public class UserController {
     public ResponseEntity<LikeListResponseDto> getLikes(@Me User user){
         return ResponseEntity.ok(userService.getLikes(user));
     }
+
+    @GetMapping("/{nickname}/clubs")
+    public ResponseEntity<List<ClubResponseDto>> getClubs(@Me User user){
+        return ResponseEntity.ok(userService.getClubs(user));
+    }
+
 
 }
