@@ -3,14 +3,12 @@ package kr.co.deundeun.groopy.common.advice;
 import jogamp.nativewindow.x11.X11Util;
 import kr.co.deundeun.groopy.common.ErrorCode;
 import kr.co.deundeun.groopy.common.dto.ErrorResponseDto;
-import kr.co.deundeun.groopy.exception.BadRequestException;
-import kr.co.deundeun.groopy.exception.IdNotFoundException;
-import kr.co.deundeun.groopy.exception.LoginException;
-import kr.co.deundeun.groopy.exception.NameDuplicateException;
+import kr.co.deundeun.groopy.exception.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -64,5 +62,17 @@ public class ExceptionAdvice {
     protected ResponseEntity<ErrorResponseDto> methodArgumentNotValidException(MethodArgumentNotValidException e){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ErrorResponseDto.of(ErrorCode.METHOD_ARGUMENT_NOT_VALID));
+    }
+
+    @ExceptionHandler(ClubNotFoundException.class)
+    protected ResponseEntity<ErrorResponseDto> clubNotFoundException(ClubNotFoundException e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponseDto.of(HttpStatus.NOT_FOUND.value(), e.getMessage()));
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    protected ResponseEntity<ErrorResponseDto> userNameNotFoundException(UsernameNotFoundException e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponseDto.of(HttpStatus.NOT_FOUND.value(), e.getMessage()));
     }
 }

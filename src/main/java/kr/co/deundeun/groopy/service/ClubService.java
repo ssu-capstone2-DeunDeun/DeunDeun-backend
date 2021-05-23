@@ -6,6 +6,7 @@ import kr.co.deundeun.groopy.controller.common.page.PageRequestDto;
 import kr.co.deundeun.groopy.dao.*;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.club.ClubAdmin;
+import kr.co.deundeun.groopy.domain.club.ClubPosition;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.image.ClubImage;
 import kr.co.deundeun.groopy.domain.like.ClubLike;
@@ -58,9 +59,16 @@ public class ClubService {
                 .build();
         clubRecruitRepository.save(clubRecruit);
 
+        ClubPosition clubPosition = ClubPosition.builder()
+                .club(club)
+                .positionName("운영진")
+                .build();
+
         Participate participate = Participate.builder()
                 .user(user)
                 .clubRecruit(clubRecruit)
+                .clubPosition(clubPosition)
+                .isAdmin(true)
                 .build();
         participateRepository.save(participate);
 
