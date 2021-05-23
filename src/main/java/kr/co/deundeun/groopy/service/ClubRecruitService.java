@@ -2,12 +2,13 @@ package kr.co.deundeun.groopy.service;
 
 import kr.co.deundeun.groopy.controller.clubRecruit.dto.RecruitRequestDto;
 import kr.co.deundeun.groopy.controller.clubRecruit.dto.RecruitResponseDto;
+import kr.co.deundeun.groopy.dao.ClubRecruitImageRepository;
 import kr.co.deundeun.groopy.dao.ClubRecruitRepository;
 import kr.co.deundeun.groopy.dao.ClubRepository;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
+import kr.co.deundeun.groopy.domain.image.ClubRecruitImage;
 import kr.co.deundeun.groopy.exception.ClubNotFoundException;
-import kr.co.deundeun.groopy.exception.ClubRecruitNotFoundException;
 import kr.co.deundeun.groopy.helper.ClubHelper;
 import kr.co.deundeun.groopy.helper.RecruitHelper;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +25,18 @@ public class ClubRecruitService {
 
     private final ClubRepository clubRepository;
 
+    private final ClubRecruitImageRepository clubRecruitImageRepository;
+
     @Transactional
     public void addRecruit(String clubName, RecruitRequestDto recruitRequestDto){
-        Club club = clubRepository.findByClubName(clubName).orElseThrow(ClubNotFoundException::new);
-        clubRecruitRepository.save(recruitRequestDto.toClubRecruit(club));
+        Club club = ClubHelper.findByClubName(clubRepository, clubName);
+        ClubRecruit clubRecruit = recruitRequestDto.toClubRecruit(club);
+        List<ClubRecruitImage> clubRecruitImages =
+                ClubRecruitImage.ofList(recruitRequestDto.getRecruitImageUrls());
+        clubRecruit.setClubRecruitImages(clubRecruitImages);
+
+        clubRecruitImageRepository.saveAll(clubRecruitImages);
+        clubRecruitRepository.save(clubRecruit);
     }
 
     @Transactional(readOnly = true)

@@ -40,19 +40,25 @@ public class ClubApplyService {
         if (applyRequestDto.getClubRecruitId() == null)
             throw new IdNotFoundException("잘못된 모집 공고 ID 입니다.");
 
-        ClubApply clubApply = applyRequestDto.toClubApply(user);
-        clubApplyRepository.save(clubApply);
+        ClubApply clubApply = clubApplyRepository
+                .findByUserAndClubRecruitId(user, applyRequestDto.getClubRecruitId());
 
-        ClubRecruit clubRecruit = RecruitHelper
-                .findById(clubRecruitRepository, applyRequestDto.getClubRecruitId());
+        if (clubApply == null) {
+            ClubApply newClubApply = applyRequestDto.toClubApply(user);
+            clubApplyRepository.save(newClubApply);
 
-        int size = clubRecruit.getClubRecruitQuestions().size();
+            ClubRecruit clubRecruit = RecruitHelper
+                    .findById(clubRecruitRepository, applyRequestDto.getClubRecruitId());
 
-        List<ClubApplyAnswer> clubApplyAnswers = Arrays.asList(new ClubApplyAnswer[size]);
-        clubApplyAnswers = clubApplyAnswers.stream()
-                .map(clubApplyAnswer -> ClubApplyAnswer.builder().clubApply(clubApply).build())
-                .collect(Collectors.toList());
-        clubApplyAnswerRepository.saveAll(clubApplyAnswers);
+            int size = clubRecruit.getClubRecruitQuestions().size();
+
+            List<ClubApplyAnswer> clubApplyAnswers = Arrays.asList(new ClubApplyAnswer[size]);
+            clubApplyAnswers = clubApplyAnswers.stream()
+                    .map(clubApplyAnswer -> ClubApplyAnswer.builder().clubApply(newClubApply).build())
+                    .collect(Collectors.toList());
+            clubApplyAnswerRepository.saveAll(clubApplyAnswers);
+            return ApplyResponseDto.of(newClubApply);
+        }
 
         return ApplyResponseDto.of(clubApply);
     }

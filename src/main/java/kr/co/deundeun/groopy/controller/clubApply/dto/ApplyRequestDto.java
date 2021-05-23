@@ -2,6 +2,7 @@ package kr.co.deundeun.groopy.controller.clubApply.dto;
 
 import kr.co.deundeun.groopy.domain.clubApply.ClubApply;
 import kr.co.deundeun.groopy.domain.user.User;
+import kr.co.deundeun.groopy.exception.LoginException;
 import lombok.Getter;
 
 import java.util.List;

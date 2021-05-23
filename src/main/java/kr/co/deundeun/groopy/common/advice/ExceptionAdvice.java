@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -57,5 +58,11 @@ public class ExceptionAdvice {
     protected ResponseEntity<ErrorResponseDto> nameDuplicationException(NameDuplicateException e){
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ErrorResponseDto.of(HttpStatus.CONFLICT.value(),e.getMessage()));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<ErrorResponseDto> methodArgumentNotValidException(MethodArgumentNotValidException e){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ErrorResponseDto.of(ErrorCode.METHOD_ARGUMENT_NOT_VALID));
     }
 }

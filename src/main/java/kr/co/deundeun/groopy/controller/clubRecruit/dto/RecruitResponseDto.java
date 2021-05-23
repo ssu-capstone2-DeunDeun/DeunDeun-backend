@@ -1,10 +1,13 @@
 package kr.co.deundeun.groopy.controller.clubRecruit.dto;
 
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
+import kr.co.deundeun.groopy.domain.image.ClubRecruitImage;
+import kr.co.deundeun.groopy.domain.image.Image;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,6 +42,12 @@ public class RecruitResponseDto {
 
     private LocalDateTime modifiedAt;
 
+    private List<String> recruitImageUrls;
+
+    private int likeCount;
+
+    private long remainDays;
+
     @Builder
     public RecruitResponseDto(ClubRecruit clubRecruit){
         if(clubRecruit == null) return;
@@ -57,6 +66,9 @@ public class RecruitResponseDto {
         this.finalPassEndDate = clubRecruit.getFinalPassEndDate();
         this.createdAt = clubRecruit.getCreatedAt();
         this.modifiedAt = clubRecruit.getModifiedAt();
+        this.likeCount = clubRecruit.getLikeCount();
+        this.recruitImageUrls = toRecruitImageUrls(clubRecruit.getClubRecruitImages());
+        this.remainDays = remainDays(submitEndDate);
     }
 
     public static RecruitResponseDto of(ClubRecruit clubRecruit){
@@ -65,11 +77,24 @@ public class RecruitResponseDto {
                 .clubRecruit(clubRecruit).build();
     }
 
-
-
     public static List<RecruitResponseDto> listOf(List<ClubRecruit> clubRecruits) {
         return clubRecruits.stream()
                 .map(RecruitResponseDto::new)
                 .collect(Collectors.toList());
+    }
+
+    public List<String> toRecruitImageUrls(List<ClubRecruitImage> clubRecruitImages){
+        return clubRecruitImages.stream()
+                .map(Image::getImageUrl)
+                .collect(Collectors.toList());
+    }
+
+    private long remainDays(LocalDateTime submitEndDate){
+        long dayLeft = -1;
+
+        if(LocalDateTime.now().isBefore(submitEndDate))
+            dayLeft = ChronoUnit.DAYS.between(LocalDateTime.now(),submitEndDate);
+
+        return dayLeft;
     }
 }

@@ -8,6 +8,7 @@ import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.clubApply.ClubApply;
 import kr.co.deundeun.groopy.domain.comment.Comment;
+import kr.co.deundeun.groopy.domain.image.ClubImage;
 import kr.co.deundeun.groopy.domain.image.ClubRecruitImage;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +18,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -49,6 +51,8 @@ public class ClubRecruit extends BaseEntity {
     private LocalDateTime finalPassStartDate;
 
     private LocalDateTime finalPassEndDate;
+
+    private int likeCount;
 
     @OneToMany(mappedBy = "clubRecruit")
     private List<ClubRecruitImage> clubRecruitImages;
@@ -96,6 +100,18 @@ public class ClubRecruit extends BaseEntity {
         this.interviewEndDate = recruitRequestDto.getInterviewEndDate();
         this.finalPassStartDate = recruitRequestDto.getFinalPassStartDate();
         this.finalPassEndDate = recruitRequestDto.getFinalPassEndDate();
+    }
+
+    public void setClubRecruitImage(ClubRecruitImage clubRecruitImage){
+        if(clubRecruitImages.stream().anyMatch(image -> image.toImageUrl()
+                .equals(clubRecruitImage.getImageUrl()))) return;
+        this.clubRecruitImages.add(clubRecruitImage);
+        clubRecruitImage.setClubRecruit(this);
+    }
+
+    public void setClubRecruitImages(List<ClubRecruitImage> clubRecruitImages){
+        if(this.clubRecruitImages == null) this.clubRecruitImages = new ArrayList<>();
+        clubRecruitImages.forEach(this::setClubRecruitImage);
     }
 
 }
