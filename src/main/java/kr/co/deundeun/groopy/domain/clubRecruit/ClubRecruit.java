@@ -3,6 +3,7 @@ package kr.co.deundeun.groopy.domain.clubRecruit;
 import javax.persistence.FetchType;
 
 import kr.co.deundeun.groopy.controller.clubRecruit.dto.RecruitRequestDto;
+import kr.co.deundeun.groopy.controller.recruitQuestion.dto.RecruitQuestionRequestDto;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.clubApply.ClubApply;
@@ -17,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Stream;
 
 @NoArgsConstructor
 @Getter

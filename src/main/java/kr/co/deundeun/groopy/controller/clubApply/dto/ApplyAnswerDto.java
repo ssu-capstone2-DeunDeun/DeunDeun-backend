@@ -12,20 +12,20 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Getter
 public class ApplyAnswerDto {
-    private String questionType;
-    private String content;
+    private QuestionType questionType;
+    private String question;
 
     public ClubApplyAnswer toClubApplyAnswer(ClubApply clubApply){
         return ClubApplyAnswer.builder()
                 .clubApply(clubApply)
-                .questionType(QuestionType.valueOf(questionType))
-                .answerContent(content)
+                .questionType(questionType)
+                .answerContent(question)
                 .build();
     }
 
     public static List<ApplyAnswerDto> ofList(List<ClubApplyAnswer> clubApplyAnswers){
         return clubApplyAnswers.stream()
-                .map(answer -> new ApplyAnswerDto(answer.getQuestionType().toString(), answer.getAnswerContent()))
+                .map(answer -> new ApplyAnswerDto(answer.getQuestionType(), answer.getAnswerContent()))
                 .collect(Collectors.toList());
     }
 }

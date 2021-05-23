@@ -47,6 +47,7 @@ public class ClubApply extends BaseEntity {
     public void update(ApplyRequestDto applyRequestDto) {
         AtomicInteger index = new AtomicInteger();
         this.clubApplyAnswers.forEach(clubApplyAnswer ->
-                clubApplyAnswer.updateAnswerContent(applyRequestDto.getApplyAnswers().get(index.getAndIncrement()).getContent()));
+                clubApplyAnswer.updateAnswer(applyRequestDto
+                        .getApplyAnswers().get(index.getAndIncrement())));
     }
 }

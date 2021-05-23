@@ -10,11 +10,16 @@ import kr.co.deundeun.groopy.domain.clubApply.ClubApply;
 import kr.co.deundeun.groopy.domain.clubApply.ClubApplyAnswer;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.user.User;
+import kr.co.deundeun.groopy.exception.BadRequestException;
 import kr.co.deundeun.groopy.exception.IdNotFoundException;
+import kr.co.deundeun.groopy.exception.LoginException;
+import kr.co.deundeun.groopy.helper.ApplyHelper;
+import kr.co.deundeun.groopy.helper.RecruitHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -30,33 +35,52 @@ public class ClubApplyService {
     private final ClubRecruitRepository clubRecruitRepository;
 
     @Transactional
-    public void apply(User user, ApplyRequestDto applyRequestDto){
+    public ApplyResponseDto apply(User user, ApplyRequestDto applyRequestDto) {
+        if (user.getId() == null) throw new LoginException();
+        if (applyRequestDto.getClubRecruitId() == null)
+            throw new IdNotFoundException("잘못된 모집 공고 ID 입니다.");
+
         ClubApply clubApply = applyRequestDto.toClubApply(user);
         clubApplyRepository.save(clubApply);
 
-        List<ClubApplyAnswer> clubApplyAnswers = applyRequestDto.getApplyAnswers().stream()
-                .map(answer -> answer.toClubApplyAnswer(clubApply)).collect(Collectors.toList());
+        ClubRecruit clubRecruit = RecruitHelper
+                .findById(clubRecruitRepository, applyRequestDto.getClubRecruitId());
+
+        int size = clubRecruit.getClubRecruitQuestions().size();
+
+        List<ClubApplyAnswer> clubApplyAnswers = Arrays.asList(new ClubApplyAnswer[size]);
+        clubApplyAnswers = clubApplyAnswers.stream()
+                .map(clubApplyAnswer -> ClubApplyAnswer.builder().clubApply(clubApply).build())
+                .collect(Collectors.toList());
         clubApplyAnswerRepository.saveAll(clubApplyAnswers);
+
+        return ApplyResponseDto.of(clubApply);
     }
 
     @Transactional(readOnly = true)
-    public List<ApplySummaryResponseDto> getApplies(User user){
+    public List<ApplySummaryResponseDto> getApplies(User user) {
+        if (user.getId() == null) throw new LoginException();
         List<ClubApply> clubApplies = clubApplyRepository.findAllByUser(user);
         List<ClubRecruit> clubRecruits = clubRecruitRepository.findAllById(
-                clubApplies.stream().map(ClubApply::getClubRecruitId).collect(Collectors.toList()));
+                clubApplies.stream()
+                        .map(ClubApply::getClubRecruitId)
+                        .collect(Collectors.toList()));
 
         return ApplySummaryResponseDto.listOf(clubApplies, clubRecruits);
     }
 
     @Transactional(readOnly = true)
     public ApplyResponseDto getApply(Long applyId) {
-        ClubApply clubApply = clubApplyRepository.findById(applyId).orElseThrow(() -> new IdNotFoundException("조회하려는 지원서가 존재하지 않습니다."));
+        ClubApply clubApply = ApplyHelper.findById(clubApplyRepository, applyId);
         return ApplyResponseDto.of(clubApply);
     }
 
     @Transactional
-    public void changeApply(Long applyId, ApplyRequestDto applyRequestDto) {
-        ClubApply clubApply = clubApplyRepository.findById(applyId).orElseThrow(() -> new IdNotFoundException("조회하려는 지원서가 존재하지 않습니다."));
+    public void updateApply(Long applyId, ApplyRequestDto applyRequestDto) {
+        ClubApply clubApply = ApplyHelper.findById(clubApplyRepository, applyId);
+        if (applyRequestDto.getApplyAnswers().size() != clubApply.getClubApplyAnswers().size())
+            throw new BadRequestException("작성하지 않은 질문이 있습니다.");
+
         clubApply.update(applyRequestDto);
         clubApplyRepository.save(clubApply);
     }

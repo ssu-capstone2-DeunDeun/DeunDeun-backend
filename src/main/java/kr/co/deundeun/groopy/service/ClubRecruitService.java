@@ -8,6 +8,8 @@ import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.exception.ClubNotFoundException;
 import kr.co.deundeun.groopy.exception.ClubRecruitNotFoundException;
+import kr.co.deundeun.groopy.helper.ClubHelper;
+import kr.co.deundeun.groopy.helper.RecruitHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,19 +32,20 @@ public class ClubRecruitService {
 
     @Transactional(readOnly = true)
     public List<RecruitResponseDto> getRecruits(String clubName){
-        Club club = clubRepository.findByClubName(clubName).orElseThrow(ClubNotFoundException::new);
-        return RecruitResponseDto.listOf(clubRecruitRepository.findAllByClub(club));
+        Club club = ClubHelper.findByClubName(clubRepository, clubName);
+        return RecruitResponseDto.listOf(clubRecruitRepository
+                .findAllByClubAndGenerationGreaterThan(club, 0));
     }
 
     @Transactional(readOnly = true)
     public RecruitResponseDto getRecruit(Long recruitId){
-        ClubRecruit clubRecruit = clubRecruitRepository.findById(recruitId).orElseThrow(ClubRecruitNotFoundException::new);
+        ClubRecruit clubRecruit = RecruitHelper.findById(clubRecruitRepository, recruitId);
         return new RecruitResponseDto(clubRecruit);
     }
 
     @Transactional
     public void updateRecruit(Long recruitId, RecruitRequestDto recruitRequestDto){
-        ClubRecruit clubRecruit = clubRecruitRepository.findById(recruitId).orElseThrow(ClubRecruitNotFoundException::new);
+        ClubRecruit clubRecruit = RecruitHelper.findById(clubRecruitRepository, recruitId);
         clubRecruit.update(recruitRequestDto);
         clubRecruitRepository.save(clubRecruit);
     }

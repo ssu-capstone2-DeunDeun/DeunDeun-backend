@@ -15,4 +15,8 @@ public class ErrorResponseDto {
         return new ErrorResponseDto(errorCode.getStatus(), errorCode.getMessage());
     }
 
+    public static ErrorResponseDto of(int code, String message){
+        return new ErrorResponseDto(code, message);
+    }
+
 }
