@@ -12,7 +12,7 @@ public class ApplyRequestDto {
 
     private Long clubRecruitId;
 
-    private List<ApplyAnswerDto> applyAnswers;
+    private List<String> applyAnswers;
 
     public ClubApply toClubApply(User user){
         return ClubApply.builder()

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.deundeun.groopy.config.DocumentationWithSecurity;
 import kr.co.deundeun.groopy.config.security.UserPrincipal;
 import kr.co.deundeun.groopy.config.security.oauth2.SocialProviderType;
-import kr.co.deundeun.groopy.controller.user.dto.SignupRequestDto;
+import kr.co.deundeun.groopy.controller.user.dto.UserRequestDto;
 import kr.co.deundeun.groopy.controller.user.dto.UserResponseDto;
 import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.service.UserService;
@@ -95,10 +95,10 @@ class UserControllerTest extends DocumentationWithSecurity {
     void registerUser() throws Exception {
         when(userService.signup(any(), any())).thenReturn(UserResponseDto.of(user));
 
-        SignupRequestDto signupRequestDto = new SignupRequestDto("이름이요", "닉네임12", "010-2232");
+        UserRequestDto userRequestDto = new UserRequestDto("이름이요", "닉네임12", "010-2232", "asdsad");
 
         mvc.perform(post("/users")
-                .content(new ObjectMapper().writeValueAsString(signupRequestDto))
+                .content(new ObjectMapper().writeValueAsString(userRequestDto))
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer USER_TOKEN"))
                 .andExpect(status().isOk())
