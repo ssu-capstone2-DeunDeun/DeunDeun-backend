@@ -1,5 +1,7 @@
 package kr.co.deundeun.groopy.domain.clubRecruit;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 
 import kr.co.deundeun.groopy.controller.clubRecruit.dto.RecruitRequestDto;
@@ -7,6 +9,7 @@ import kr.co.deundeun.groopy.controller.recruitQuestion.dto.RecruitQuestionReque
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.clubApply.ClubApply;
+import kr.co.deundeun.groopy.domain.clubRecruit.constant.ClubRecruitStatus;
 import kr.co.deundeun.groopy.domain.comment.Comment;
 import kr.co.deundeun.groopy.domain.image.ClubImage;
 import kr.co.deundeun.groopy.domain.image.ClubRecruitImage;
@@ -36,6 +39,9 @@ public class ClubRecruit extends BaseEntity {
 
     private String content;
 
+    @Enumerated(EnumType.STRING)
+    private ClubRecruitStatus clubRecruitStatus;
+
     private LocalDateTime submitStartDate;
 
     private LocalDateTime submitEndDate;
@@ -52,7 +58,9 @@ public class ClubRecruit extends BaseEntity {
 
     private LocalDateTime finalPassEndDate;
 
-    private int likeCount;
+    private int likeCount = 0;
+
+    private int applicantCount = 0;
 
     @OneToMany(mappedBy = "clubRecruit")
     private List<ClubRecruitImage> clubRecruitImages;
@@ -112,6 +120,16 @@ public class ClubRecruit extends BaseEntity {
     public void setClubRecruitImages(List<ClubRecruitImage> clubRecruitImages){
         if(this.clubRecruitImages == null) this.clubRecruitImages = new ArrayList<>();
         clubRecruitImages.forEach(this::setClubRecruitImage);
+    }
+
+    public void increaseApplicantCount(){
+        this.applicantCount += 1;
+    }
+
+    public void decreaseApplicantCount(){
+        if (this.applicantCount != 0) {
+            this.applicantCount -= 1;
+        }
     }
 
 }

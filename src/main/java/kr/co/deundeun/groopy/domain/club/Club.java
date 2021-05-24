@@ -1,9 +1,11 @@
 package kr.co.deundeun.groopy.domain.club;
 
+import java.util.Comparator;
 import kr.co.deundeun.groopy.controller.club.dto.ClubRequestDto;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.club.constant.CategoryType;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
+import kr.co.deundeun.groopy.domain.clubRecruit.constant.ClubRecruitStatus;
 import kr.co.deundeun.groopy.domain.hashtag.ClubHashtag;
 import kr.co.deundeun.groopy.domain.image.ClubImage;
 import kr.co.deundeun.groopy.domain.image.Image;
@@ -36,7 +38,7 @@ public class Club extends BaseEntity {
 
     private String backgroundImageUrl;
 
-    private int likeCount;
+    private int likeCount = 0;
 
     @OneToMany(mappedBy = "club")
     private List<ClubHashtag> clubHashtags;
@@ -53,8 +55,7 @@ public class Club extends BaseEntity {
     @Builder
     public Club(CategoryType categoryType, String clubName, int generation, String introduction,
                 String representImageUrl, String backgroundImageUrl, List<ClubHashtag> clubHashtags,
-                List<ClubImage> clubImages, List<Post> clubPosts, List<ClubRecruit> clubRecruits,
-                int likeCount){
+                List<ClubImage> clubImages, List<Post> clubPosts, List<ClubRecruit> clubRecruits){
 
         this.categoryType = categoryType;
         this.clubName = clubName;
@@ -66,7 +67,6 @@ public class Club extends BaseEntity {
         this.clubImages = clubImages;
         this.clubPosts = clubPosts;
         this.clubRecruits = clubRecruits;
-        this.likeCount = likeCount;
     }
 
     public Club update(ClubRequestDto clubRequestDto){
@@ -101,5 +101,13 @@ public class Club extends BaseEntity {
     public void decreaseLikeCount(){
         if(likeCount > 0) likeCount--;
         else likeCount = 0;
+    }
+
+    public boolean isRecruitingNow() {
+        return this.clubRecruits.stream()
+                                .max(Comparator.comparing(ClubRecruit::getGeneration))
+                                .filter(clubRecruit -> clubRecruit.getClubRecruitStatus()
+                                                                  .equals(ClubRecruitStatus.RECRUIT))
+                                .isPresent();
     }
 }

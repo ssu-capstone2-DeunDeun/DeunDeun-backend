@@ -11,14 +11,14 @@ public final class PageRequestDto {
 
     private int size;
 
-    private String property;
+    private Property property;
 
     private Sort.Direction direction;
 
     public PageRequestDto(){
         page = 1;
         size = DEFAULT_SIZE;
-        property = "createdAt";
+        property = Property.DATE;
         direction = Sort.Direction.DESC;
     }
 
@@ -31,7 +31,7 @@ public final class PageRequestDto {
         this.size = size > MAX_SIZE ? DEFAULT_SIZE : size;
     }
 
-    public void setProperty(String property){
+    public void setProperty(Property property){
         this.property = property;
     }
 
@@ -40,7 +40,7 @@ public final class PageRequestDto {
     }
 
     public PageRequest of(){
-        return PageRequest.of(page - 1, size, Sort.by(direction, property));
+        return PageRequest.of(page - 1, size, Sort.by(direction, property.getColumn()));
     }
 
 }

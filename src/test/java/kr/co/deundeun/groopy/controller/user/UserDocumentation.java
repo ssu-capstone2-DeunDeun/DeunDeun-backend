@@ -17,7 +17,8 @@ public class UserDocumentation {
                 requestFields(
                         fieldWithPath("name").type(JsonFieldType.STRING).description("이름"),
                         fieldWithPath("nickname").type(JsonFieldType.STRING).description("닉네임"),
-                        fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("전화번호")
+                        fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("전화번호"),
+                        fieldWithPath("userImageUrl").type(JsonFieldType.STRING).description("유저이미지url")
                 ),
                 requestHeaders(
                         headerWithName("Authorization").description("Bearer 인증 토큰"))

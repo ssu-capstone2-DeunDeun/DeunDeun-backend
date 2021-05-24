@@ -31,9 +31,13 @@ public class Post extends BaseEntity {
 
     private String content;
 
-    private int likeCount;
+    private String thumbnailImageUrl;
 
-    private int viewCount;
+    private int commentCount = 0;
+
+    private int likeCount = 0;
+
+    private int viewCount = 0;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostImage> postImages = new ArrayList<>();

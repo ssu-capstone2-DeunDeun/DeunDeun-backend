@@ -11,4 +11,5 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findTop3ByClubOrderByViewCount(Club club);
     Page<Post> findAllByClub(Club club, Pageable pageable);
+    List<Post> findTop4ByOrderByLikeCount();
 }
