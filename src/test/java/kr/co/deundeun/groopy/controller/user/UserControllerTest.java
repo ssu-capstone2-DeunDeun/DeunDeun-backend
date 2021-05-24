@@ -82,7 +82,7 @@ class UserControllerTest extends DocumentationWithSecurity {
 
         mvc.perform(
                 RestDocumentationRequestBuilders
-                        .get("/users")
+                        .get("/users/nickname")
                         .param("nickname", "test123"))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -109,8 +109,13 @@ class UserControllerTest extends DocumentationWithSecurity {
     @DisplayName("유저 닉네임을 변경한다.")
     @Test
     void updateNickname() throws Exception {
+
+        UserRequestDto userRequestDto = new UserRequestDto("이름이요", "닉네임12", "010-2232", "asdsad");
+
         mvc.perform(RestDocumentationRequestBuilders
-                .patch("/users/{nickname}", "새닉네임")
+                    .patch("/users/{nickname}/nickname", "새닉네임")
+                    .content(new ObjectMapper().writeValueAsString(userRequestDto))
+                    .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer USER_TOKEN"))
                 .andExpect(status().isOk())
                 .andDo(print())

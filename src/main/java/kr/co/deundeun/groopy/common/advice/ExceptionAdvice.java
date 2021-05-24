@@ -1,6 +1,6 @@
 package kr.co.deundeun.groopy.common.advice;
 
-import jogamp.nativewindow.x11.X11Util;
+
 import kr.co.deundeun.groopy.common.ErrorCode;
 import kr.co.deundeun.groopy.common.dto.ErrorResponseDto;
 import kr.co.deundeun.groopy.exception.*;
