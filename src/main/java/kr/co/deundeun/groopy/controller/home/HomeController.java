@@ -1,8 +1,13 @@
 package kr.co.deundeun.groopy.controller.home;
 
 
+import java.util.List;
+import kr.co.deundeun.groopy.config.Me;
 import kr.co.deundeun.groopy.controller.common.page.Property;
+import kr.co.deundeun.groopy.controller.home.dto.ClubByCategoryDto;
 import kr.co.deundeun.groopy.controller.home.dto.HomeResponseDto;
+import kr.co.deundeun.groopy.domain.club.constant.CategoryType;
+import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.service.HomeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +24,11 @@ public class HomeController {
   @GetMapping("/home")
   public ResponseEntity<HomeResponseDto> getHome(@RequestParam Property property){
     return ResponseEntity.ok(homeService.getHome(property));
+  }
+
+  @GetMapping("/clubs")
+  public ResponseEntity<List<ClubByCategoryDto>> getAllClubs(@Me User user, @RequestParam CategoryType categoryType){
+    return ResponseEntity.ok(homeService.getAllClubs(user, categoryType));
   }
 
 }
