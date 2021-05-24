@@ -39,6 +39,8 @@ public class ClubResponseDto {
 
     private boolean isAdmin;
 
+    private boolean isApproved;
+
     public static ClubResponseDto of(Club club, List<Post> posts, ClubRecruit clubRecruit, boolean isAdmin) {
         return ClubResponseDto.builder()
                 .club(club)
@@ -73,5 +75,6 @@ public class ClubResponseDto {
         this.postResponseDtos = PostResponseDto.listOf(posts);
         this.recruitResponseDto = RecruitResponseDto.of(clubRecruit);
         this.isAdmin = isAdmin;
+        this.isApproved = club.isApproved();
     }
 }

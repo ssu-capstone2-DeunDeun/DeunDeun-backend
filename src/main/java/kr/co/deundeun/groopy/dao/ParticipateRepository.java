@@ -10,4 +10,5 @@ import java.util.List;
 public interface ParticipateRepository extends JpaRepository<Participate, Long> {
     List<Participate> findAllByUser(User user);
     List<Participate> findAllByClubRecruit_Club(Club club);
+    Participate findByUser(User user);
 }
