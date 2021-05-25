@@ -36,7 +36,6 @@ public class ClubAdminService {
 
         Participate participate = participateRepository.findByUser(user);
         participate.setAdmin(true);
-        participateRepository.save(participate);
         clubAdminRepository.save(clubAdmin);
     }
 
@@ -72,7 +71,6 @@ public class ClubAdminService {
         Participate participate = participateRepository.findByUser(member);
         ClubPosition clubPosition = clubPositionRepository.findByClubAndPositionName(club, clubPositionRequestDto.getPositionName());
         participate.setClubPosition(clubPosition);
-        participateRepository.save(participate);
     }
 
     public void addPosition(User user, String clubName, ClubPositionRequestDto clubPositionRequestDto) {

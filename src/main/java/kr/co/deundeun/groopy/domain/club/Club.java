@@ -50,6 +50,7 @@ public class Club extends BaseEntity {
     @OneToMany(mappedBy = "club")
     private List<Post> clubPosts;
 
+    @OrderBy("createdAt desc")
     @OneToMany(mappedBy = "club")
     private List<ClubRecruit> clubRecruits;
 
