@@ -4,16 +4,13 @@ import kr.co.deundeun.groopy.controller.common.page.PageRequestDto;
 import kr.co.deundeun.groopy.controller.post.dto.PostRequestDto;
 import kr.co.deundeun.groopy.controller.post.dto.PostResponseDto;
 import kr.co.deundeun.groopy.dao.ClubRepository;
-import kr.co.deundeun.groopy.dao.PostImageRepository;
 import kr.co.deundeun.groopy.dao.PostLikeRepository;
 import kr.co.deundeun.groopy.dao.PostRepository;
 import kr.co.deundeun.groopy.domain.club.Club;
-import kr.co.deundeun.groopy.domain.image.PostImage;
 import kr.co.deundeun.groopy.domain.like.PostLike;
 import kr.co.deundeun.groopy.domain.post.Post;
 import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.helper.ClubHelper;
-import kr.co.deundeun.groopy.helper.LikeHelper;
 import kr.co.deundeun.groopy.helper.PostHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,8 +28,6 @@ public class PostService {
     private final PostRepository postRepository;
 
     private final ClubRepository clubRepository;
-
-    private final PostImageRepository postImageRepository;
 
     private final PostLikeRepository postLikeRepository;
 
@@ -61,18 +56,11 @@ public class PostService {
 
     public void updatePost(Long postId, PostRequestDto postRequestDto) {
         Post post = PostHelper.findById(postRepository, postId);
-        List<PostImage> postImages = post.updatePostImages(postRequestDto.getPostImageUrls());
         post.update(postRequestDto);
-
-        postImageRepository.saveAll(postImages);
-        postRepository.save(post);
     }
 
     private void createPost(String author, Club club, PostRequestDto postRequestDto) {
         Post post = postRequestDto.toPost(author, club);
-        List<PostImage> postImages = PostImage.ofList(postRequestDto.getPostImageUrls(), post);
-
-        postImageRepository.saveAll(postImages);
         postRepository.save(post);
     }
 
