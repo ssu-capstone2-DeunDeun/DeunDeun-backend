@@ -27,6 +27,9 @@ public class ClubRecruit extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Club club;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ClubApplyForm clubApplyForm;
+
     private int generation;
 
     private String title;

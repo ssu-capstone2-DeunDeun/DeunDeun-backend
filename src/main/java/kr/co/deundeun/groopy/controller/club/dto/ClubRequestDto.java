@@ -2,8 +2,6 @@ package kr.co.deundeun.groopy.controller.club.dto;
 
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.club.constant.CategoryType;
-import kr.co.deundeun.groopy.domain.hashtag.ClubHashtag;
-import kr.co.deundeun.groopy.domain.image.ClubImage;
 import lombok.Getter;
 
 import java.util.List;

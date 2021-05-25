@@ -21,34 +21,34 @@ public class PostController {
 
     private final PostService postService;
 
-    @PostMapping("/clubs/{clubName}/posts")
+    @PostMapping("/clubs/{clubName}/posts")  // 특정 클럽, 게시글 생성
     public ResponseEntity<Void> post(@Me User user, @PathVariable String clubName, @RequestBody PostRequestDto postRequestDto) {
         postService.post(user.getNickname(), clubName, postRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/posts/{postId}")
+    @GetMapping("/posts/{postId}")  // 게시글 상세보기
     public ResponseEntity<PostResponseDto> getPost(@PathVariable Long postId) {
         return ResponseEntity.ok(postService.getPost(postId));
     }
 
-    @PatchMapping("/posts/{postId}")
+    @PatchMapping("/posts/{postId}") // 게시글 수정하기
     public ResponseEntity<Void> updatePost(@PathVariable Long postId, @RequestBody PostRequestDto postRequestDto) {
         postService.updatePost(postId, postRequestDto);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/clubs/{clubName}/posts")
+    @GetMapping("/clubs/{clubName}/posts") // 특정 클럽, 게시글 전체보기
     public ResponseEntity<Page<PostResponseDto>> getClubPosts(@PathVariable String clubName, final PageRequestDto pageRequestDto) {
         return ResponseEntity.ok(postService.getClubPosts(clubName, pageRequestDto));
     }
 
-    @GetMapping("/posts")
+    @GetMapping("/posts")  // 모든 클럽의 게시글 전체보기
     public ResponseEntity<Page<PostResponseDto>> getPosts(final PageRequestDto pageRequestDto) {
         return ResponseEntity.ok(postService.getPosts(pageRequestDto));
     }
 
-    @GetMapping("/liked/posts")
+    @GetMapping("/liked/posts") // 내가 좋아요한 게시글 전체보기
     public ResponseEntity<List<PostResponseDto>> getLikedPosts(@Me User user) {
         return ResponseEntity.ok(postService.getLikedPosts(user));
     }

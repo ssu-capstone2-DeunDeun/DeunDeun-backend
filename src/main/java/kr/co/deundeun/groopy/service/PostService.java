@@ -7,7 +7,7 @@ import kr.co.deundeun.groopy.dao.ClubRepository;
 import kr.co.deundeun.groopy.dao.PostLikeRepository;
 import kr.co.deundeun.groopy.dao.PostRepository;
 import kr.co.deundeun.groopy.domain.club.Club;
-import kr.co.deundeun.groopy.domain.like.PostLike;
+import kr.co.deundeun.groopy.domain.post.PostLike;
 import kr.co.deundeun.groopy.domain.post.Post;
 import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.helper.ClubHelper;

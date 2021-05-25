@@ -1,6 +1,6 @@
 package kr.co.deundeun.groopy.dao;
 
-import kr.co.deundeun.groopy.domain.like.PostLike;
+import kr.co.deundeun.groopy.domain.post.PostLike;
 import kr.co.deundeun.groopy.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
