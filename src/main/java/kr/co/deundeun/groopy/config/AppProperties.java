@@ -15,6 +15,7 @@ public class AppProperties {
     private String secretKey;
     private long accessExpiresIn;
     private long refreshExpiresIn;
+    private String serverUrl;
 
     private final OAuth2 oauth2 = new OAuth2();
 

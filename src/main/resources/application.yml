@@ -2,5 +2,5 @@ spring:
   profiles:
     active: local
     group:
-      local: aws
-      prod: aws
+      local: aws, email
+      prod: aws, email
