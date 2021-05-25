@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import kr.co.deundeun.groopy.config.security.oauth2.SocialProviderType;
 import kr.co.deundeun.groopy.domain.BaseEntity;
+import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.hashtag.UserHashtag;
 import kr.co.deundeun.groopy.domain.like.ClubLike;
 import kr.co.deundeun.groopy.domain.like.PostLike;
@@ -74,6 +75,11 @@ public class User extends BaseEntity {
 
     public void changePhoneNumber(String phoneNumber){
         this.phoneNumber = phoneNumber;
+    }
+
+    public boolean isUserLikeClub(Club club){
+        return this.clubLikes.stream()
+                             .anyMatch(clubLike -> clubLike.getClub().equals(club));
     }
 
 }

@@ -24,4 +24,8 @@ public class ClubHashtag extends Hashtag {
     this.club = club;
     this.hashtagInfo = hashtagInfo;
   }
+
+  public String getHashtagName(){
+    return this.hashtagInfo.getName();
+  }
 }

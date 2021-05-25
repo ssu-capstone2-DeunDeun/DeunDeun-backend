@@ -11,6 +11,7 @@ import kr.co.deundeun.groopy.domain.hashtag.ClubHashtag;
 import kr.co.deundeun.groopy.domain.image.ClubImage;
 import kr.co.deundeun.groopy.domain.image.Image;
 import kr.co.deundeun.groopy.domain.post.Post;
+import kr.co.deundeun.groopy.exception.ClubRecruitNotFoundException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,17 +43,17 @@ public class Club extends BaseEntity {
     private int likeCount = 0;
 
     @OneToMany(mappedBy = "club")
-    private List<ClubHashtag> clubHashtags;
+    private List<ClubHashtag> clubHashtags = new ArrayList<>();
 
     @OneToMany(mappedBy = "club")
-    private List<ClubImage> clubImages;
+    private List<ClubImage> clubImages = new ArrayList<>();
 
     @OneToMany(mappedBy = "club")
-    private List<Post> clubPosts;
+    private List<Post> clubPosts = new ArrayList<>();
 
     @OrderBy("createdAt desc")
     @OneToMany(mappedBy = "club")
-    private List<ClubRecruit> clubRecruits;
+    private List<ClubRecruit> clubRecruits = new ArrayList<>();
 
     private boolean isApproved;
 
@@ -108,12 +109,16 @@ public class Club extends BaseEntity {
         else likeCount = 0;
     }
 
-    public boolean isRecruitingNow() {
+    public ClubRecruit getLastClubRecruit() {
         return this.clubRecruits.stream()
                 .max(Comparator.comparing(ClubRecruit::getGeneration))
-                .filter(clubRecruit -> clubRecruit.getClubRecruitStatus()
-                        .equals(ClubRecruitStatus.RECRUIT))
-                .isPresent();
+                .orElseThrow(ClubRecruitNotFoundException::new);
+    }
+
+    public boolean isRecruitingNow() {
+        return this.getLastClubRecruit()
+                   .getClubRecruitStatus()
+                   .equals(ClubRecruitStatus.RECRUIT);
     }
 
     public void setApproved(boolean isApproved){
