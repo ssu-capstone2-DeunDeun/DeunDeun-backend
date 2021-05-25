@@ -31,5 +31,6 @@ public class HomeController {
     return ResponseEntity.ok(homeService.getAllClubs(user, categoryType));
   }
 
+  // 인기 게시물 전체보기는 postController에서 GET /posts 의 좋아요 순 소팅 사용
 }
 
