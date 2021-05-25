@@ -2,7 +2,6 @@ package kr.co.deundeun.groopy.controller.clubRecruit.dto;
 
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
-import kr.co.deundeun.groopy.domain.image.ClubRecruitImage;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -32,8 +31,6 @@ public class RecruitRequestDto {
     private LocalDateTime finalPassStartDate;
 
     private LocalDateTime finalPassEndDate;
-
-    private List<String> recruitImageUrls;
 
     public ClubRecruit toClubRecruit(Club club){
         return ClubRecruit.builder()
