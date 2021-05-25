@@ -1,18 +1,9 @@
 package kr.co.deundeun.groopy.controller.like.dto;
 
-import kr.co.deundeun.groopy.controller.club.dto.ClubResponseDto;
-import kr.co.deundeun.groopy.controller.post.dto.PostResponseDto;
-import kr.co.deundeun.groopy.domain.club.Club;
-import kr.co.deundeun.groopy.domain.like.ClubLike;
-import kr.co.deundeun.groopy.domain.post.Post;
-import lombok.AllArgsConstructor;
+import kr.co.deundeun.groopy.domain.club.ClubLike;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @NoArgsConstructor
 @Getter

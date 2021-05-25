@@ -1,9 +1,9 @@
-package kr.co.deundeun.groopy.domain.image;
+package kr.co.deundeun.groopy.domain.club;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
-import kr.co.deundeun.groopy.domain.club.Club;
+import kr.co.deundeun.groopy.domain.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,9 +13,12 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor
 @Entity
-public class ClubImage extends Image{
+public class ClubImage extends BaseEntity {
+
   @ManyToOne(fetch = FetchType.LAZY)
   private Club club;
+
+  private String imageUrl;
 
   public ClubImage(String imageUrl){
     this.imageUrl = imageUrl;
@@ -33,5 +36,9 @@ public class ClubImage extends Image{
     return imageUrls.stream()
             .map(ClubImage::new)
             .collect(Collectors.toList());
+  }
+
+  public String toImageUrl(){
+    return imageUrl;
   }
 }

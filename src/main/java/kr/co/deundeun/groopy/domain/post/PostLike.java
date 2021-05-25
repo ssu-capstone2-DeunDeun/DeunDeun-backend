@@ -1,19 +1,17 @@
-package kr.co.deundeun.groopy.domain.like;
+package kr.co.deundeun.groopy.domain.post;
 
 import javax.persistence.*;
 
 import kr.co.deundeun.groopy.domain.BaseEntity;
-import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @Getter
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn
 @NoArgsConstructor
 @Entity
-public abstract class Likes extends BaseEntity {
+public class PostLike extends BaseEntity {
 
     @Column(nullable = false)
     protected boolean isLiked;
@@ -22,8 +20,10 @@ public abstract class Likes extends BaseEntity {
     @JoinColumn(nullable = false)
     protected User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Post post;
+
     public void updateLike(){
         isLiked = !isLiked;
     }
 }
-

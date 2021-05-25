@@ -8,8 +8,6 @@ import kr.co.deundeun.groopy.domain.club.constant.CategoryType;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.clubRecruit.constant.ClubRecruitStatus;
 import kr.co.deundeun.groopy.domain.hashtag.ClubHashtag;
-import kr.co.deundeun.groopy.domain.image.ClubImage;
-import kr.co.deundeun.groopy.domain.image.Image;
 import kr.co.deundeun.groopy.domain.post.Post;
 import kr.co.deundeun.groopy.exception.ClubRecruitNotFoundException;
 import lombok.Builder;
@@ -96,7 +94,7 @@ public class Club extends BaseEntity {
 
     public List<String> toImageUrls() {
         return this.clubImages.stream()
-                .map(Image::toImageUrl)
+                .map(ClubImage::toImageUrl)
                 .collect(Collectors.toList());
     }
 
