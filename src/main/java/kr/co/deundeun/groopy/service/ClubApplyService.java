@@ -7,22 +7,19 @@ import kr.co.deundeun.groopy.dao.ClubApplyAnswerRepository;
 import kr.co.deundeun.groopy.dao.ClubApplyRepository;
 import kr.co.deundeun.groopy.dao.ClubRecruitRepository;
 import kr.co.deundeun.groopy.domain.clubApply.ClubApply;
-import kr.co.deundeun.groopy.domain.clubApply.ClubApplyAnswer;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.exception.BadRequestException;
 import kr.co.deundeun.groopy.exception.IdNotFoundException;
 import kr.co.deundeun.groopy.exception.LoginException;
 import kr.co.deundeun.groopy.helper.ApplyHelper;
-import kr.co.deundeun.groopy.helper.RecruitHelper;
+import kr.co.deundeun.groopy.helper.ClubRecruitHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
 @Transactional
@@ -30,36 +27,33 @@ import java.util.stream.IntStream;
 public class ClubApplyService {
 
     private final ClubApplyRepository clubApplyRepository;
-
-    private final ClubApplyAnswerRepository clubApplyAnswerRepository;
-
     private final ClubRecruitRepository clubRecruitRepository;
 
-    public ApplyResponseDto apply(User user, ApplyRequestDto applyRequestDto) {
+    @Transactional
+    public void apply(User user, Long clubRecruitId, ApplyRequestDto applyRequestDto) {
+
+        // TODO 이 부분 Validation @NotNull? 로 처리, 수정해야함.
         if (user.getId() == null) throw new LoginException();
-        if (applyRequestDto.getClubRecruitId() == null)
+        if (clubRecruitId== null)
             throw new IdNotFoundException("잘못된 모집 공고 ID 입니다.");
 
-        ClubApply clubApply = clubApplyRepository
-                .findByUserAndClubRecruitId(user, applyRequestDto.getClubRecruitId());
-
-        ClubRecruit clubRecruit = RecruitHelper
-                .findById(clubRecruitRepository, applyRequestDto.getClubRecruitId());
-
-        if (clubApply == null) {
-            ClubApply newClubApply = applyRequestDto.toClubApply(user);
-            clubApplyRepository.save(newClubApply);
-
-            List<ClubApplyAnswer> clubApplyAnswers =
-                    Arrays.asList(new ClubApplyAnswer[clubRecruit.getQuestionSize()]);
-            clubApplyAnswers = clubApplyAnswers.stream()
-                    .map(clubApplyAnswer -> ClubApplyAnswer.builder().clubApply(newClubApply).build())
-                    .collect(Collectors.toList());
-            clubApplyAnswerRepository.saveAll(clubApplyAnswers);
-            return ApplyResponseDto.of(newClubApply, clubRecruit);
-        }
-
-        return ApplyResponseDto.of(clubApply, clubRecruit);
+        ClubRecruit clubRecruit = ClubRecruitHelper.findById(clubRecruitRepository, clubRecruitId);
+        ClubApply clubApply = applyRequestDto.toClubApply(user, clubRecruit);
+        clubApplyRepository.save(clubApply);
+//        if (clubApply == null) {
+//            ClubApply newClubApply = applyRequestDto.toClubApply(user);
+//            clubApplyRepository.save(newClubApply);
+//
+//            List<ClubApplyAnswer> clubApplyAnswers =
+//                    Arrays.asList(new ClubApplyAnswer[clubRecruit.getQuestionSize()]);
+//            clubApplyAnswers = clubApplyAnswers.stream()
+//                    .map(clubApplyAnswer -> ClubApplyAnswer.builder().clubApply(newClubApply).build())
+//                    .collect(Collectors.toList());
+//            clubApplyAnswerRepository.saveAll(clubApplyAnswers);
+//            return ApplyResponseDto.of(newClubApply, clubRecruit);
+//        }
+//
+//        return ApplyResponseDto.of(clubApply, clubRecruit);
     }
 
     @Transactional(readOnly = true)
@@ -77,13 +71,13 @@ public class ClubApplyService {
     @Transactional(readOnly = true)
     public ApplyResponseDto getApply(Long applyId) {
         ClubApply clubApply = ApplyHelper.findById(clubApplyRepository, applyId);
-        ClubRecruit clubRecruit = RecruitHelper.findById(clubRecruitRepository, clubApply.getClubRecruitId());
+        ClubRecruit clubRecruit = ClubRecruitHelper.findById(clubRecruitRepository, clubApply.getClubRecruitId());
         return ApplyResponseDto.of(clubApply, clubRecruit);
     }
 
     public void updateApply(Long applyId, ApplyRequestDto applyRequestDto) {
         ClubApply clubApply = ApplyHelper.findById(clubApplyRepository, applyId);
-        ClubRecruit clubRecruit = RecruitHelper
+        ClubRecruit clubRecruit = ClubRecruitHelper
                 .findById(clubRecruitRepository, applyRequestDto.getClubRecruitId());
 
         if (applyRequestDto.getApplyAnswers().size() != clubRecruit.getQuestionSize())

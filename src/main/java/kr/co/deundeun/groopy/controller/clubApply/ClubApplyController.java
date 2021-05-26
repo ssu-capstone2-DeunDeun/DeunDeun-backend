@@ -15,37 +15,36 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("/users/{userName}/applies")
+@RequestMapping("/club/recruit")
 @RestController
 public class ClubApplyController {
 
     private final ClubApplyService clubApplyService;
 
-    @PostMapping
-    public ResponseEntity<ApplyResponseDto> apply(@Me User user,
-                                                  @RequestBody ApplyRequestDto applyRequestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(clubApplyService.apply(user, applyRequestDto));
+    @PostMapping("/{recruitId}/applies")    // 특정 동아리 모집 공고에 지원서 작성
+    public ResponseEntity<ApplyResponseDto> apply(@Me User user, @PathVariable Long recruitId, @RequestBody ApplyRequestDto applyRequestDto) {
+        clubApplyService.apply(user, recruitId, applyRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PatchMapping("/{applyId}")
+    @PatchMapping("/{applyId}") // 특정 동아리 모집 공고에 작성했던 지원서 수정
     public ResponseEntity<Void> updateApply(@PathVariable Long applyId,
                                             @RequestBody ApplyRequestDto applyRequestDto) {
         clubApplyService.updateApply(applyId, applyRequestDto);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
+    @GetMapping                 // 유저가 그동안 작성 및 지원했던 지원서 리스트 조회
     public ResponseEntity<List<ApplySummaryResponseDto>> getApplies(@Me User user) {
         return ResponseEntity.ok(clubApplyService.getApplies(user));
     }
 
-    @GetMapping("/{applyId}")
+    @GetMapping("/{applyId}")   // 유저가 작성 및 지원했던 지원서 한 개 조회
     public ResponseEntity<ApplyResponseDto> getApply(@PathVariable Long applyId) {
         return ResponseEntity.ok(clubApplyService.getApply(applyId));
     }
 
-    @DeleteMapping("/{applyId}")
+    @DeleteMapping("/{applyId}")  // 유저가 작성 및 지원했던 지원서 삭제
     public ResponseEntity<Void> deleteApply(@PathVariable Long applyId) {
         clubApplyService.deleteApply(applyId);
         return ResponseEntity.ok().build();

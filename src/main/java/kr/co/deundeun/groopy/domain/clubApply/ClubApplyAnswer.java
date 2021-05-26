@@ -22,19 +22,19 @@ public class ClubApplyAnswer extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private ClubApply clubApply;
 
-    @Enumerated(EnumType.STRING)
-    private QuestionType questionType;
-    // 주관식은 글 쓰면 되고, 객괸식은 자료형만 바꿔서 저장
-    private String answerContent;
+    private String answer;
 
-    @Builder
-    public ClubApplyAnswer(ClubApply clubApply, QuestionType questionType, String answerContent){
-        this.clubApply = clubApply;
-        this.questionType = questionType;
-        this.answerContent = answerContent;
+    public ClubApplyAnswer(ClubApply clubApply, String answer){
+        this();
+        setClubApply(clubApply);
+        this.answer = answer;
     }
 
-    public void updateAnswer(String answerContent){
-        this.answerContent = answerContent;
+    public void setClubApply(ClubApply clubApply) {
+        if (this.clubApply != null){
+            this.clubApply.getClubApplyAnswers().remove(this);
+        }
+        this.clubApply = clubApply;
+        clubApply.getClubApplyAnswers().add(this);
     }
 }
