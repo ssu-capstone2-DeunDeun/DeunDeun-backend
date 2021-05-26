@@ -15,7 +15,6 @@ import kr.co.deundeun.groopy.helper.ClubHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @RequiredArgsConstructor
 @Service
@@ -37,6 +36,11 @@ public class ClubApplyFormService {
     List<ClubApplyForm> clubApplyForms = club.getClubApplyForms();
     return ApplyFormResponseDto.listOf(clubApplyForms);
   }
+
+  public ApplyFormResponseDto getApplyForm(Long clubApplyFormId) {
+    ClubApplyForm clubApplyForm = ClubApplyFormHelper.findByClubApplyFormId(clubApplyFormRepository, clubApplyFormId);
+    return new ApplyFormResponseDto(clubApplyForm);
+  }
   
   @Transactional
   public void deleteClubApplyForm(Long clubApplyFormId) {
@@ -46,7 +50,7 @@ public class ClubApplyFormService {
     if (hasApplicantToClubApplyForm){
       throw new BadRequestException("해당 지원 양식을 사용하는 모집 공고에 지원자가 존재합니다.");
     }
-    ClubApplyForm clubApplyForm = ClubApplyFormHelper.findClubApplyFormId(clubApplyFormRepository, clubApplyFormId);
+    ClubApplyForm clubApplyForm = ClubApplyFormHelper.findByClubApplyFormId(clubApplyFormRepository, clubApplyFormId);
     clubApplyFormRepository.delete(clubApplyForm);
   }
 }
