@@ -29,8 +29,13 @@ public class ClubApplyFormController {
   }
 
   @GetMapping  // 특정 동아리의 지원서 양식 리스트 조회
-  public ResponseEntity<List<ApplyFormResponseDto>> getApplyForm(@PathVariable String clubName){
+  public ResponseEntity<List<ApplyFormResponseDto>> getApplyForms(@PathVariable String clubName){
     return ResponseEntity.ok(clubApplyFormService.getApplyForms(clubName));
+  }
+
+  @GetMapping("/{clubApplyFormId}")   // 특정 동아리의 지원서 양식 한 개 조회
+  public ResponseEntity<ApplyFormResponseDto> getApplyForm(@PathVariable Long clubApplyFormId){
+    return ResponseEntity.ok(clubApplyFormService.getApplyForm(clubApplyFormId));
   }
 
   /*

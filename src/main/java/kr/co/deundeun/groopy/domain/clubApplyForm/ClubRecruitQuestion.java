@@ -2,6 +2,7 @@ package kr.co.deundeun.groopy.domain.clubApplyForm;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 
 import javax.persistence.OneToMany;
@@ -35,7 +36,7 @@ public class ClubRecruitQuestion extends BaseEntity {
     주관식인 경우 : 빈 리스트 저장
     객관식인 경우 : 선택지 저장
      */
-    @OneToMany(mappedBy = "clubRecruitQuestion")
+    @OneToMany(mappedBy = "clubRecruitQuestion", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("choiceNumber")
     private List<MultipleChoice> multipleChoices = new ArrayList<>();
 

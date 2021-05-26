@@ -6,7 +6,7 @@ import kr.co.deundeun.groopy.exception.IdNotFoundException;
 
 public class ClubApplyFormHelper {
 
-  public static ClubApplyForm findClubApplyFormId(ClubApplyFormRepository clubApplyFormRepository,
+  public static ClubApplyForm findByClubApplyFormId(ClubApplyFormRepository clubApplyFormRepository,
       Long id) {
     return clubApplyFormRepository.findById(id)
                                   .orElseThrow(
