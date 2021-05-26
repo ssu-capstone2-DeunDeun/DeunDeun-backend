@@ -33,19 +33,4 @@ public class ClubAdminController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/clubs/{clubName}/positions")
-    public ResponseEntity<Void> addPosition(@Me User user, @PathVariable String clubName,
-                                            @RequestBody ClubPositionRequestDto clubPositionRequestDto) {
-        clubAdminService.addPosition(user, clubName, clubPositionRequestDto);
-        return ResponseEntity.ok().build();
-    }
-
-
-    @PostMapping("/clubs/{clubName}/members/{memberId}/positions")
-    public ResponseEntity<Void> updatePosition(@Me User user, @PathVariable Long memberId,
-                                               @PathVariable String clubName, @RequestBody ClubPositionRequestDto clubPositionRequestDto) {
-        clubAdminService.updatePosition(user, clubName, memberId, clubPositionRequestDto);
-        return ResponseEntity.ok().build();
-    }
-
 }

@@ -23,4 +23,8 @@ public class ClubPosition extends BaseEntity {
         this.club = club;
         this.positionName = positionName;
     }
+
+    public void setPositionName(String positionName) {
+        this.positionName = positionName;
+    }
 }
