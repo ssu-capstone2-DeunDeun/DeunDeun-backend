@@ -51,7 +51,7 @@ public class ClubApplyService {
             clubApplyRepository.save(newClubApply);
 
             List<ClubApplyAnswer> clubApplyAnswers =
-                    Arrays.asList(new ClubApplyAnswer[getQuestionSize(clubRecruit)]);
+                    Arrays.asList(new ClubApplyAnswer[clubRecruit.getQuestionSize()]);
             clubApplyAnswers = clubApplyAnswers.stream()
                     .map(clubApplyAnswer -> ClubApplyAnswer.builder().clubApply(newClubApply).build())
                     .collect(Collectors.toList());
@@ -86,7 +86,7 @@ public class ClubApplyService {
         ClubRecruit clubRecruit = RecruitHelper
                 .findById(clubRecruitRepository, applyRequestDto.getClubRecruitId());
 
-        if (applyRequestDto.getApplyAnswers().size() != getQuestionSize(clubRecruit))
+        if (applyRequestDto.getApplyAnswers().size() != clubRecruit.getQuestionSize())
             throw new BadRequestException("작성하지 않은 질문이 있습니다.");
 
         clubApply.update(applyRequestDto);
@@ -95,9 +95,5 @@ public class ClubApplyService {
 
     public void deleteApply(Long applyId) {
         clubApplyRepository.deleteById(applyId);
-    }
-
-    public int getQuestionSize(ClubRecruit clubRecruit) {
-        return clubRecruit.getClubRecruitQuestions().size();
     }
 }

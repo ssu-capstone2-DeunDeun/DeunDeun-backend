@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ClubRecruitRepository extends JpaRepository<ClubRecruit, Long> {
-    List<ClubRecruit> findAllByClub(Club club);
     List<ClubRecruit> findAllByClubAndGenerationGreaterThan(Club club, int id);
     ClubRecruit findTopByClubAndGenerationGreaterThanOrderByCreatedAt(Club club, int generation);
     List<ClubRecruit> findTop5ByClubRecruitStatusEqualsOrderBySubmitStartDateDesc(ClubRecruitStatus clubRecruitStatus);
     List<ClubRecruit> findTop5ByClubRecruitStatusEqualsOrderByLikeCountDesc(ClubRecruitStatus clubRecruitStatus);
+    List<ClubRecruit> findAllByClubApplyFormId(Long applyFormId);
 
 }

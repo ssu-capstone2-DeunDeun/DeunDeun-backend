@@ -5,7 +5,7 @@ import java.util.Comparator;
 import kr.co.deundeun.groopy.controller.club.dto.ClubRequestDto;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.club.constant.CategoryType;
-import kr.co.deundeun.groopy.domain.clubRecruit.ClubApplyForm;
+import kr.co.deundeun.groopy.domain.clubApplyForm.ClubApplyForm;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.clubRecruit.constant.ClubRecruitStatus;
 import kr.co.deundeun.groopy.domain.hashtag.ClubHashtag;

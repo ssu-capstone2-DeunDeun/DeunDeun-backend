@@ -3,11 +3,9 @@ package kr.co.deundeun.groopy.domain.clubApply;
 import javax.persistence.*;
 
 import kr.co.deundeun.groopy.controller.clubApply.dto.ApplyRequestDto;
-import kr.co.deundeun.groopy.controller.clubApply.dto.ApplyResponseDto;
-import kr.co.deundeun.groopy.controller.clubApply.dto.ApplySummaryResponseDto;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.clubApply.constant.ClubApplyStatus;
-import kr.co.deundeun.groopy.domain.clubRecruit.ClubApplyForm;
+import kr.co.deundeun.groopy.domain.clubApplyForm.ClubApplyForm;
 import kr.co.deundeun.groopy.domain.comment.Comment;
 import kr.co.deundeun.groopy.domain.user.User;
 import lombok.Builder;
@@ -16,7 +14,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Getter
@@ -28,10 +25,10 @@ public class ClubApply extends BaseEntity {
 
     private Long clubRecruitId;
 
-    private ClubApplyStatus clubApplyStatus;
-
     @ManyToOne(fetch = FetchType.LAZY)
     private ClubApplyForm clubApplyForm;
+
+    private ClubApplyStatus clubApplyStatus;
 
     @OneToMany(mappedBy = "clubApply", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy
