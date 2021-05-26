@@ -7,6 +7,7 @@ import kr.co.deundeun.groopy.controller.clubApply.dto.ApplyResponseDto;
 import kr.co.deundeun.groopy.controller.clubApply.dto.ApplySummaryResponseDto;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.clubApply.constant.ClubApplyStatus;
+import kr.co.deundeun.groopy.domain.clubRecruit.ClubApplyForm;
 import kr.co.deundeun.groopy.domain.comment.Comment;
 import kr.co.deundeun.groopy.domain.user.User;
 import lombok.Builder;
@@ -22,12 +23,15 @@ import java.util.stream.Collectors;
 @Entity
 public class ClubApply extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     private Long clubRecruitId;
 
     private ClubApplyStatus clubApplyStatus;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ClubApplyForm clubApplyForm;
 
     @OneToMany(mappedBy = "clubApply", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy

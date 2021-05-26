@@ -35,9 +35,11 @@ public class RecruitQuestionService {
     @Transactional(readOnly = true)
     public List<RecruitQuestionResponseDto> getQuestions(Long recruitId) {
         ClubRecruit clubRecruit = RecruitHelper.findById(clubRecruitRepository, recruitId);
-        return clubRecruit.getClubRecruitQuestions().stream()
-                .map(RecruitQuestionResponseDto::of)
-                .collect(Collectors.toList());
+        return clubRecruit.getClubApplyForm()
+                          .getClubRecruitQuestions()
+                          .stream()
+                          .map(RecruitQuestionResponseDto::new)
+                          .collect(Collectors.toList());
     }
 
     @Transactional

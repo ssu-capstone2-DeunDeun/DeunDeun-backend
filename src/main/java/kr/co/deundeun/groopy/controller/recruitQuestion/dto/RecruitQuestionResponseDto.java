@@ -5,7 +5,6 @@ import kr.co.deundeun.groopy.domain.clubRecruit.constant.QuestionType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
 public class RecruitQuestionResponseDto {
 
@@ -13,7 +12,8 @@ public class RecruitQuestionResponseDto {
 
     private String questionContent;
 
-    public static RecruitQuestionResponseDto of(ClubRecruitQuestion question) {
-        return new RecruitQuestionResponseDto(question.getQuestionType(), question.getQuestionContent());
+    public RecruitQuestionResponseDto(ClubRecruitQuestion clubRecruitQuestion) {
+        this.questionType = clubRecruitQuestion.getQuestionType();
+        this.questionContent = clubRecruitQuestion.getQuestionContent();
     }
 }

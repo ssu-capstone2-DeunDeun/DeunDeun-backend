@@ -5,6 +5,7 @@ import java.util.Comparator;
 import kr.co.deundeun.groopy.controller.club.dto.ClubRequestDto;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.club.constant.CategoryType;
+import kr.co.deundeun.groopy.domain.clubRecruit.ClubApplyForm;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.clubRecruit.constant.ClubRecruitStatus;
 import kr.co.deundeun.groopy.domain.hashtag.ClubHashtag;
@@ -52,6 +53,9 @@ public class Club extends BaseEntity {
     @OrderBy("createdAt desc")
     @OneToMany(mappedBy = "club")
     private List<ClubRecruit> clubRecruits = new ArrayList<>();
+
+    @OneToMany(mappedBy = "club")
+    private List<ClubApplyForm> clubApplyForms = new ArrayList<>();
 
     private boolean isApproved;
 

@@ -62,9 +62,6 @@ public class ClubRecruit extends BaseEntity {
     @OneToMany(mappedBy = "clubRecruit")
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "clubRecruit")
-    private List<ClubRecruitQuestion> clubRecruitQuestions;
-
     @Builder
     public ClubRecruit(Club club, int generation,
                        String title, String content,
@@ -72,7 +69,7 @@ public class ClubRecruit extends BaseEntity {
                        LocalDateTime documentPassStartDate, LocalDateTime documentPassEndDate,
                        LocalDateTime interviewStartDate, LocalDateTime interviewEndDate,
                        LocalDateTime finalPassStartDate, LocalDateTime finalPassEndDate,
-                       List<Comment> comments, List<ClubRecruitQuestion> clubRecruitQuestions){
+                       List<Comment> comments){
         this.club = club;
         this.generation = generation;
         this.content = content;
@@ -86,7 +83,6 @@ public class ClubRecruit extends BaseEntity {
         this.finalPassStartDate = finalPassStartDate;
         this.finalPassEndDate = finalPassEndDate;
         this.comments = comments;
-        this.clubRecruitQuestions = clubRecruitQuestions;
     }
 
     public void update(RecruitRequestDto recruitRequestDto){
