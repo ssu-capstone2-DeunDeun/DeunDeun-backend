@@ -3,7 +3,7 @@ package kr.co.deundeun.groopy.controller.clubApply.dto;
 import kr.co.deundeun.groopy.domain.clubApply.ClubApply;
 import kr.co.deundeun.groopy.domain.clubApply.ClubApplyAnswer;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
-import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruitQuestion;
+import kr.co.deundeun.groopy.domain.clubApplyForm.ClubRecruitQuestion;
 import kr.co.deundeun.groopy.domain.clubRecruit.constant.QuestionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
