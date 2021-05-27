@@ -9,17 +9,10 @@ import lombok.Getter;
 public class AlarmResponseDto {
 
     private AlarmType alarmType;
-
     private String message;
 
-    @Builder
     public AlarmResponseDto(Alarm alarm){
         this.alarmType = alarm.getAlarmType();
         this.message = alarm.getMessage();
     }
-
-    public static AlarmResponseDto of(Alarm alarm){
-        return AlarmResponseDto.builder().alarm(alarm).build();
-    }
-
 }

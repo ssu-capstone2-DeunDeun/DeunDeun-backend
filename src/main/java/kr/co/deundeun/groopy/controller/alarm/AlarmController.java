@@ -20,11 +20,6 @@ public class AlarmController {
 
     private final AlarmService alarmService;
 
-    @PostMapping("/alarms")
-    public void sendAlarm(@Me User user, @RequestBody AlarmRequestDto alarmRequestDto){
-        alarmService.sendAlarm(user, alarmRequestDto);
-    }
-
     @GetMapping("/alarms")
     public ResponseEntity<List<AlarmResponseDto>> getAlarm(@Me User user){
         return ResponseEntity.ok(alarmService.getAlarm(user));

@@ -1,6 +1,5 @@
 package kr.co.deundeun.groopy.service;
 
-import kr.co.deundeun.groopy.controller.alarm.dto.AlarmRequestDto;
 import kr.co.deundeun.groopy.controller.alarm.dto.AlarmResponseDto;
 import kr.co.deundeun.groopy.dao.AlarmRepository;
 import kr.co.deundeun.groopy.domain.alarm.Alarm;
@@ -17,14 +16,10 @@ public class AlarmService {
 
     private final AlarmRepository alarmRepository;
 
-    public void sendAlarm(User user, AlarmRequestDto alarmRequestDto) {
-        Alarm alarm = alarmRequestDto.toAlarm();
-
-        alarmRepository.save(alarm);
-    }
-
     public List<AlarmResponseDto> getAlarm(User user) {
         List<Alarm> alarms = alarmRepository.findAllByUserId(user.getId());
-        return alarms.stream().map(AlarmResponseDto::of).collect(Collectors.toList());
+        return alarms.stream()
+                     .map(AlarmResponseDto::new)
+                     .collect(Collectors.toList());
     }
 }
