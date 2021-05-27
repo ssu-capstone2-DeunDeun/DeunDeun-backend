@@ -1,6 +1,7 @@
 package kr.co.deundeun.groopy.domain.clubApply;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.persistence.*;
 
@@ -11,6 +12,7 @@ import kr.co.deundeun.groopy.domain.clubApplyForm.ClubApplyForm;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.comment.Comment;
 import kr.co.deundeun.groopy.domain.user.User;
+import kr.co.deundeun.groopy.exception.BadRequestException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,11 +51,22 @@ public class ClubApply extends BaseEntity {
                                                 .collect(Collectors.toList());
     }
 
-    public void update(ApplyRequestDto applyRequestDto) {
-        AtomicInteger index = new AtomicInteger();
-        this.clubApplyAnswers.forEach(
-            clubApplyAnswer -> clubApplyAnswer.updateAnswer(applyRequestDto
-                .getApplyAnswers()
-                .get(index.getAndIncrement())));
+    public void updateAnswers(ApplyRequestDto applyRequestDto) {
+
+        List<String> newAnswers = applyRequestDto.getApplyAnswers();
+        validateSize(newAnswers);
+        for (int i = 0; i < this.clubApplyAnswers.size(); i++) {
+            clubApplyAnswers.get(i).updateAnswer(newAnswers.get(i));
+        }
+
     }
+
+    private void validateSize(List<String> newAnswers) {
+        if (newAnswers.size() < clubRecruit.getQuestionSize())
+            throw new BadRequestException("답변 수가 질문 수 보다 적습니다.");
+        if (newAnswers.size() > clubRecruit.getQuestionSize())
+            throw new BadRequestException("답변 수가 질문 수 보다 많습니다.");
+    }
+
+
 }

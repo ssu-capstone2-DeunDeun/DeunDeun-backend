@@ -37,4 +37,8 @@ public class ClubApplyAnswer extends BaseEntity {
         this.clubApply = clubApply;
         clubApply.getClubApplyAnswers().add(this);
     }
+
+    public void updateAnswer(String answer){
+        this.answer = answer;
+    }
 }

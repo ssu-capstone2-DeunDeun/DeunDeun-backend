@@ -3,7 +3,6 @@ package kr.co.deundeun.groopy.service;
 import kr.co.deundeun.groopy.controller.clubApply.dto.ApplyRequestDto;
 import kr.co.deundeun.groopy.controller.clubApply.dto.ApplyResponseDto;
 import kr.co.deundeun.groopy.controller.clubApply.dto.ApplySummaryResponseDto;
-import kr.co.deundeun.groopy.dao.ClubApplyAnswerRepository;
 import kr.co.deundeun.groopy.dao.ClubApplyRepository;
 import kr.co.deundeun.groopy.dao.ClubRecruitRepository;
 import kr.co.deundeun.groopy.domain.clubApply.ClubApply;
@@ -12,7 +11,7 @@ import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.exception.BadRequestException;
 import kr.co.deundeun.groopy.exception.IdNotFoundException;
 import kr.co.deundeun.groopy.exception.LoginException;
-import kr.co.deundeun.groopy.helper.ApplyHelper;
+import kr.co.deundeun.groopy.helper.ClubApplyHelper;
 import kr.co.deundeun.groopy.helper.ClubRecruitHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -61,30 +60,24 @@ public class ClubApplyService {
         if (user.getId() == null) throw new LoginException();
         List<ClubApply> clubApplies = clubApplyRepository.findAllByUser(user);
         List<ClubRecruit> clubRecruits = clubRecruitRepository.findAllById(
-                clubApplies.stream()
-                        .map(ClubApply::getClubRecruitId)
-                        .collect(Collectors.toList()));
+            clubApplies.stream()
+                       .map(ClubApply::getClubRecruitId)
+                       .collect(Collectors.toList()));
 
         return ApplySummaryResponseDto.listOf(clubApplies, clubRecruits);
     }
 
     @Transactional(readOnly = true)
     public ApplyResponseDto getApply(Long applyId) {
-        ClubApply clubApply = ApplyHelper.findById(clubApplyRepository, applyId);
+        ClubApply clubApply = ClubApplyHelper.findById(clubApplyRepository, applyId);
         ClubRecruit clubRecruit = ClubRecruitHelper.findById(clubRecruitRepository, clubApply.getClubRecruitId());
         return ApplyResponseDto.of(clubApply, clubRecruit);
     }
 
+    @Transactional
     public void updateApply(Long applyId, ApplyRequestDto applyRequestDto) {
-        ClubApply clubApply = ApplyHelper.findById(clubApplyRepository, applyId);
-        ClubRecruit clubRecruit = ClubRecruitHelper
-                .findById(clubRecruitRepository, applyRequestDto.getClubRecruitId());
-
-        if (applyRequestDto.getApplyAnswers().size() != clubRecruit.getQuestionSize())
-            throw new BadRequestException("작성하지 않은 질문이 있습니다.");
-
-        clubApply.update(applyRequestDto);
-        clubApplyRepository.save(clubApply);
+        ClubApply clubApply = ClubApplyHelper.findById(clubApplyRepository, applyId);
+        clubApply.updateAnswers(applyRequestDto);
     }
 
     public void deleteApply(Long applyId) {

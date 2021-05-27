@@ -27,13 +27,6 @@ public class ClubApplyController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PatchMapping("/{applyId}") // 특정 동아리 모집 공고에 작성했던 지원서 수정
-    public ResponseEntity<Void> updateApply(@PathVariable Long applyId,
-                                            @RequestBody ApplyRequestDto applyRequestDto) {
-        clubApplyService.updateApply(applyId, applyRequestDto);
-        return ResponseEntity.ok().build();
-    }
-
     @GetMapping                 // 유저가 그동안 작성 및 지원했던 지원서 리스트 조회
     public ResponseEntity<List<ApplySummaryResponseDto>> getApplies(@Me User user) {
         return ResponseEntity.ok(clubApplyService.getApplies(user));
@@ -42,6 +35,13 @@ public class ClubApplyController {
     @GetMapping("/{applyId}")   // 유저가 작성 및 지원했던 지원서 한 개 조회
     public ResponseEntity<ApplyResponseDto> getApply(@PathVariable Long applyId) {
         return ResponseEntity.ok(clubApplyService.getApply(applyId));
+    }
+
+    @PatchMapping("/apply/{applyId}") // 특정 동아리 모집 공고에 작성했던 지원서 수정
+    public ResponseEntity<Void> updateApply(@PathVariable Long applyId,
+        @RequestBody ApplyRequestDto applyRequestDto) {
+        clubApplyService.updateApply(applyId, applyRequestDto);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{applyId}")  // 유저가 작성 및 지원했던 지원서 삭제
