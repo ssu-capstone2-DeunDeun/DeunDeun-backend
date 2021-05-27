@@ -8,6 +8,7 @@ import kr.co.deundeun.groopy.controller.clubRecruit.dto.RecruitRequestDto;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.clubApplyForm.ClubApplyForm;
+import kr.co.deundeun.groopy.domain.clubApplyForm.ClubRecruitQuestion;
 import kr.co.deundeun.groopy.domain.clubRecruit.constant.ClubRecruitStatus;
 import kr.co.deundeun.groopy.domain.comment.Comment;
 import lombok.Builder;
@@ -115,5 +116,9 @@ public class ClubRecruit extends BaseEntity {
 
     public boolean hasApplicant(){
         return this.applicantCount != 0;
+    }
+
+    public List<ClubRecruitQuestion> getClubRecruitQuestions(){
+        return clubApplyForm.getClubRecruitQuestions();
     }
 }

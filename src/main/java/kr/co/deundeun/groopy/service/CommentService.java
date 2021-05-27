@@ -7,12 +7,10 @@ import kr.co.deundeun.groopy.dao.CommentRepository;
 import kr.co.deundeun.groopy.domain.clubApply.ClubApply;
 import kr.co.deundeun.groopy.domain.comment.Comment;
 import kr.co.deundeun.groopy.domain.user.User;
-import kr.co.deundeun.groopy.exception.AuthorizationException;
 import kr.co.deundeun.groopy.exception.LoginException;
-import kr.co.deundeun.groopy.helper.ApplyHelper;
+import kr.co.deundeun.groopy.helper.ClubApplyHelper;
 import kr.co.deundeun.groopy.helper.CommentHelper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +25,7 @@ public class CommentService {
 
     public void commentApply(User user, Long applyId, CommentRequestDto commentRequestDto) {
         if (user.getId() == null) throw new LoginException();
-        ClubApply clubApply = ApplyHelper.findById(clubApplyRepository, applyId);
+        ClubApply clubApply = ClubApplyHelper.findById(clubApplyRepository, applyId);
 
         Comment comment;
 
@@ -44,7 +42,7 @@ public class CommentService {
     }
 
     public List<CommentResponseDto> getApplyComments(Long applyId) {
-        ClubApply clubApply = ApplyHelper.findById(clubApplyRepository, applyId);
+        ClubApply clubApply = ClubApplyHelper.findById(clubApplyRepository, applyId);
         List<Comment> comments = commentRepository.findByClubApply(clubApply);
         return CommentResponseDto.ofList(comments);
     }

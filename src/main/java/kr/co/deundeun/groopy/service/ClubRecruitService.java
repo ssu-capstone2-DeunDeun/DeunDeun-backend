@@ -8,7 +8,7 @@ import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.exception.AuthorizationException;
 import kr.co.deundeun.groopy.helper.ClubHelper;
-import kr.co.deundeun.groopy.helper.RecruitHelper;
+import kr.co.deundeun.groopy.helper.ClubRecruitHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,13 +39,13 @@ public class ClubRecruitService {
 
     @Transactional(readOnly = true)
     public RecruitResponseDto getRecruit(Long recruitId) {
-        ClubRecruit clubRecruit = RecruitHelper.findById(clubRecruitRepository, recruitId);
+        ClubRecruit clubRecruit = ClubRecruitHelper.findById(clubRecruitRepository, recruitId);
         return new RecruitResponseDto(clubRecruit);
     }
 
     @Transactional
     public void updateRecruit(Long recruitId, RecruitRequestDto recruitRequestDto) {
-        ClubRecruit clubRecruit = RecruitHelper.findById(clubRecruitRepository, recruitId);
+        ClubRecruit clubRecruit = ClubRecruitHelper.findById(clubRecruitRepository, recruitId);
         clubRecruit.update(recruitRequestDto);
     }
 

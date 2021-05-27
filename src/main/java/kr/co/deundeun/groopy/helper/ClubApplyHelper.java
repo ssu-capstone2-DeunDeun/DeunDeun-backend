@@ -4,7 +4,7 @@ import kr.co.deundeun.groopy.dao.ClubApplyRepository;
 import kr.co.deundeun.groopy.domain.clubApply.ClubApply;
 import kr.co.deundeun.groopy.exception.IdNotFoundException;
 
-public class ApplyHelper {
+public class ClubApplyHelper {
 
     public static ClubApply findById(ClubApplyRepository clubApplyRepository, Long id) {
         return clubApplyRepository.findById(id)

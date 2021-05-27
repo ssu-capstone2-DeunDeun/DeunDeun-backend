@@ -1,7 +1,12 @@
 package kr.co.deundeun.groopy.controller.clubApply.dto;
 
+import java.util.Map;
+import kr.co.deundeun.groopy.controller.clubApplyForm.dto.RecruitQuestionResponseDto;
 import kr.co.deundeun.groopy.domain.clubApply.ClubApply;
+import kr.co.deundeun.groopy.domain.clubApply.ClubApplyAnswer;
 import kr.co.deundeun.groopy.domain.clubApply.constant.ClubApplyStatus;
+import kr.co.deundeun.groopy.domain.clubApplyForm.ClubApplyForm;
+import kr.co.deundeun.groopy.domain.clubApplyForm.ClubRecruitQuestion;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import lombok.*;
 
@@ -12,29 +17,29 @@ import java.util.List;
 @Getter
 public class ApplyResponseDto {
 
-    private Long applyId;
+    private String recruitTitle;
 
-    private Long recruitId;
+    private List<ApplyQAResponseDto> applyQAResponseDtos;
 
-    private ClubApplyStatus clubApplyStatus;
+    public ApplyResponseDto(ClubApply clubApply) {
 
-    private List<ApplyAnswerDto> applyAnswers;
+        ClubRecruit clubRecruit = clubApply.getClubRecruit();
+        this.recruitTitle = clubRecruit.getTitle();
 
-    @Builder
-    public ApplyResponseDto(ClubApply clubApply, ClubRecruit clubRecruit){
-        this.applyId = clubApply.getId();
-        this.recruitId = clubApply.getClubRecruitId();
-        this.clubApplyStatus = clubApply.getClubApplyStatus();
-        if(clubApply.getClubApplyAnswers() != null)
-            this.applyAnswers = ApplyAnswerDto
-                    .ofList(clubApply.getClubApplyAnswers(), clubRecruit);
+        List<ClubRecruitQuestion> clubRecruitQuestions = clubRecruit.getClubRecruitQuestions();
+        List<ClubApplyAnswer> clubApplyAnswers = clubApply.getClubApplyAnswers();
+        this.applyQAResponseDtos = ApplyQAResponseDto.listOf(clubRecruitQuestions, clubApplyAnswers);
     }
 
-    public static ApplyResponseDto of(ClubApply clubApply, ClubRecruit clubRecruit) {
-        return ApplyResponseDto.builder()
-                .clubApply(clubApply)
-                .clubRecruit(clubRecruit)
-                .build();
-    }
-
+    //    public ApplyResponseDto(ClubApply clubApply){
+//
+//        ClubRecruit clubRecruit = clubApply.getClubRecruit();
+//
+//        this.applyId = clubApply.getId();
+//        this.recruitId = clubRecruit.getId();
+//        this.clubApplyStatus = clubApply.getClubApplyStatus();
+//        if(clubApply.getClubApplyAnswers() != null)
+//            this.applyAnswers = ApplyAnswerResponseDto
+//                    .ofList(clubApply.getClubApplyAnswers(), clubRecruit);
+//    }
 }
