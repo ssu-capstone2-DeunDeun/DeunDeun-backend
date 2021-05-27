@@ -10,6 +10,7 @@ import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.hashtag.UserHashtag;
 import kr.co.deundeun.groopy.domain.club.ClubLike;
 import kr.co.deundeun.groopy.domain.post.PostLike;
+import kr.co.deundeun.groopy.dto.user.UserRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -59,10 +60,10 @@ public class User extends BaseEntity {
         this.email = email;
     }
 
-    public void saveSignupInfo(String nickname, String name, String phoneNumber){
-        this.nickname = nickname;
-        this.name = name;
-        this.phoneNumber = phoneNumber;
+    public void saveSignupInfo(UserRequestDto userRequestDto){
+        this.nickname = userRequestDto.getNickname();
+        this.name = userRequestDto.getName();
+        this.phoneNumber = userRequestDto.getPhoneNumber();
     }
 
     public void changeNickname(String nickname){

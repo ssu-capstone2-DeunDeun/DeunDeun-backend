@@ -4,18 +4,19 @@ import kr.co.deundeun.groopy.config.Me;
 import kr.co.deundeun.groopy.controller.club.dto.ClubResponseDto;
 import kr.co.deundeun.groopy.controller.hashtag.dto.HashtagResponseDto;
 import kr.co.deundeun.groopy.controller.user.dto.LikeListResponseDto;
-import kr.co.deundeun.groopy.controller.user.dto.UserRequestDto;
-import kr.co.deundeun.groopy.controller.user.dto.UserResponseDto;
+import kr.co.deundeun.groopy.dto.user.UserRequestDto;
+import kr.co.deundeun.groopy.dto.user.UserResponseDto;
 import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("/users")
+@RequestMapping("/user")
 @RestController
 public class UserController {
 
@@ -28,48 +29,53 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponseDto> registerUser(@Me User user,
-                                                        @RequestBody UserRequestDto userRequestDto) {
+                                                        @Valid @RequestBody UserRequestDto userRequestDto) {
         UserResponseDto userResponseDto = userService.signup(user, userRequestDto);
         return ResponseEntity.ok(userResponseDto);
     }
 
-    @GetMapping("/{nickname}")
+    @GetMapping
     public ResponseEntity<UserResponseDto> getUserInfo(@Me User user) {
         return ResponseEntity.ok(userService.getUserInfo(user));
     }
 
-    @PatchMapping("/{nickname}/nickname")
-    public ResponseEntity<Void> updateNickname(@Me User user, @RequestBody UserRequestDto userRequestDto) {
+    @PatchMapping("/nickname")
+    public ResponseEntity<Void> updateNickname(@Me User user,
+                                               @Valid @RequestBody UserRequestDto userRequestDto) {
         userService.updateNickname(user, userRequestDto.getNickname());
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/{nickname}/image")
+    @PutMapping("/image")
     public ResponseEntity<Void> updateUserImageUrl(@Me User user, @RequestBody UserRequestDto userRequestDto) {
         userService.updateUserImageUrl(user, userRequestDto.getUserImageUrl());
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{nickname}/hashtags")
+    @PostMapping("/hashtags")
     public ResponseEntity<Void> addHashtags(@Me User user, @RequestBody List<String> hashtags) {
         userService.updateHashtags(user, hashtags);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{nickname}/hashtags")
+    @GetMapping("/hashtags")
     public ResponseEntity<List<HashtagResponseDto>> getHashtags(@Me User user) {
         return ResponseEntity.ok(userService.getHashtags(user));
     }
 
-    @GetMapping("/{nickname}/likes")
+    @GetMapping("/likes")
     public ResponseEntity<LikeListResponseDto> getLikes(@Me User user){
         return ResponseEntity.ok(userService.getLikes(user));
     }
 
-    @GetMapping("/{nickname}/clubs")
+    @GetMapping("/clubs")
     public ResponseEntity<List<ClubResponseDto>> getClubs(@Me User user){
         return ResponseEntity.ok(userService.getClubs(user));
     }
 
-
+    @DeleteMapping
+    public ResponseEntity<String> deleteUser(@Me User user){
+        userService.deleteUser(user);
+        return ResponseEntity.ok("회원이 탈퇴했습니다.");
+    }
 }

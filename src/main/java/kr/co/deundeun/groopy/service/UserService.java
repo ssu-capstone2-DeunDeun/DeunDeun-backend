@@ -3,8 +3,8 @@ package kr.co.deundeun.groopy.service;
 import kr.co.deundeun.groopy.controller.club.dto.ClubResponseDto;
 import kr.co.deundeun.groopy.controller.hashtag.dto.HashtagResponseDto;
 import kr.co.deundeun.groopy.controller.user.dto.LikeListResponseDto;
-import kr.co.deundeun.groopy.controller.user.dto.UserRequestDto;
-import kr.co.deundeun.groopy.controller.user.dto.UserResponseDto;
+import kr.co.deundeun.groopy.dto.user.UserRequestDto;
+import kr.co.deundeun.groopy.dto.user.UserResponseDto;
 import kr.co.deundeun.groopy.dao.*;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.club.ClubLike;
@@ -41,15 +41,15 @@ public class UserService {
 
     public UserResponseDto signup(User user, UserRequestDto userRequestDto) {
         if(user.getNickname() != null) throw new NameDuplicateException("이미 등록된 회원입니다.");
-        user.saveSignupInfo(userRequestDto.getNickname(), userRequestDto.getName(), userRequestDto.getPhoneNumber());
+        user.saveSignupInfo(userRequestDto);
 
         userRepository.save(user);
-        return UserResponseDto.of(user);
+        return new UserResponseDto(user);
     }
 
     @Transactional(readOnly = true)
     public UserResponseDto getUserInfo(User user) {
-        return UserResponseDto.of(user);
+        return new UserResponseDto(user);
     }
 
     public void updateNickname(User user, String nickname) {
@@ -94,5 +94,9 @@ public class UserService {
                 .map(participate -> participate.getClubRecruit().getClub())
                 .collect(Collectors.toList());
         return ClubResponseDto.listOf(clubs);
+    }
+
+    public void deleteUser(User user) {
+        userRepository.delete(user);
     }
 }
