@@ -24,7 +24,6 @@ public class ClubLike extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Club club;
 
-    @Builder
     public ClubLike(Club club, User user){
         this.club = club;
         this.user = user;

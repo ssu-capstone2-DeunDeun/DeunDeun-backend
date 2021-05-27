@@ -1,6 +1,6 @@
 package kr.co.deundeun.groopy.service;
 
-import kr.co.deundeun.groopy.controller.alarm.dto.AlarmResponseDto;
+import kr.co.deundeun.groopy.dto.alarm.AlarmResponseDto;
 import kr.co.deundeun.groopy.dao.AlarmRepository;
 import kr.co.deundeun.groopy.domain.alarm.Alarm;
 import kr.co.deundeun.groopy.domain.user.User;

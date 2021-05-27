@@ -1,7 +1,7 @@
 package kr.co.deundeun.groopy.service;
 
 import kr.co.deundeun.groopy.config.security.JwtTokenProvider;
-import kr.co.deundeun.groopy.controller.jwt.dto.JwtRefreshResponseDto;
+import kr.co.deundeun.groopy.dto.common.jwt.JwtRefreshResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -7,8 +7,8 @@ import javax.persistence.FetchType;
 
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
-import kr.co.deundeun.groopy.controller.clubApplyForm.dto.MultipleChoiceRequestDto;
-import kr.co.deundeun.groopy.controller.clubApplyForm.dto.RecruitQuestionRequestDto;
+import kr.co.deundeun.groopy.dto.clubApplyForm.MultipleChoiceRequestDto;
+import kr.co.deundeun.groopy.dto.clubApplyForm.RecruitQuestionRequestDto;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.clubRecruit.constant.QuestionType;
 import lombok.Getter;

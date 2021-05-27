@@ -26,4 +26,10 @@ public class PostLike extends BaseEntity {
     public void updateLike(){
         isLiked = !isLiked;
     }
+
+    public PostLike(Post post, User user){
+        this.post = post;
+        this.user = user;
+        this.isLiked = true;
+    }
 }

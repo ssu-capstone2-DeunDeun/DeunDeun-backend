@@ -2,7 +2,7 @@ package kr.co.deundeun.groopy.domain.post;
 
 import javax.persistence.*;
 
-import kr.co.deundeun.groopy.controller.post.dto.PostRequestDto;
+import kr.co.deundeun.groopy.dto.post.PostRequestDto;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.comment.Comment;
@@ -37,13 +37,17 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 
+    public Post(PostRequestDto postRequestDto){
+        this.title = postRequestDto.getTitle();
+        this.content = postRequestDto.getContent();
+        this.thumbnailImageUrl = postRequestDto.getThumbnailUrl();
+    }
+
     @Builder
-    public Post(Club club, String title, String author, String content, List<Comment> comments) {
+    public Post(Club club, String author, PostRequestDto postRequestDto) {
+        this(postRequestDto);
         this.club = club;
-        this.title = title;
         this.author = author;
-        this.content = content;
-        this.comments = comments;
     }
 
     public void increaseViewCount() {
@@ -53,6 +57,15 @@ public class Post extends BaseEntity {
     public void update(PostRequestDto postRequestDto) {
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
+    }
+
+    public void increaseLikeCount() {
+        likeCount++;
+    }
+
+    public void decreaseLikeCount() {
+        if (likeCount > 0) likeCount--;
+        else likeCount = 0;
     }
 
 }

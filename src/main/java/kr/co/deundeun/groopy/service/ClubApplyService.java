@@ -1,8 +1,8 @@
 package kr.co.deundeun.groopy.service;
 
-import kr.co.deundeun.groopy.controller.clubApply.dto.ApplyRequestDto;
-import kr.co.deundeun.groopy.controller.clubApply.dto.ApplyResponseDto;
-import kr.co.deundeun.groopy.controller.clubApply.dto.ApplySummaryResponseDto;
+import kr.co.deundeun.groopy.dto.clubApply.ApplyRequestDto;
+import kr.co.deundeun.groopy.dto.clubApply.ApplyResponseDto;
+import kr.co.deundeun.groopy.dto.clubApply.ApplySummaryResponseDto;
 import kr.co.deundeun.groopy.dao.ClubApplyRepository;
 import kr.co.deundeun.groopy.dao.ClubRecruitRepository;
 import kr.co.deundeun.groopy.domain.clubApply.ClubApply;

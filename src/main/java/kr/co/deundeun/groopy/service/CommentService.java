@@ -1,7 +1,7 @@
 package kr.co.deundeun.groopy.service;
 
-import kr.co.deundeun.groopy.controller.comment.dto.CommentRequestDto;
-import kr.co.deundeun.groopy.controller.comment.dto.CommentResponseDto;
+import kr.co.deundeun.groopy.dto.comment.CommentRequestDto;
+import kr.co.deundeun.groopy.dto.comment.CommentResponseDto;
 import kr.co.deundeun.groopy.dao.ClubApplyRepository;
 import kr.co.deundeun.groopy.dao.CommentRepository;
 import kr.co.deundeun.groopy.domain.clubApply.ClubApply;

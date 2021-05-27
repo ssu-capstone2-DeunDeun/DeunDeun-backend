@@ -2,7 +2,7 @@ package kr.co.deundeun.groopy.domain.club;
 
 import java.util.Comparator;
 
-import kr.co.deundeun.groopy.controller.club.dto.ClubRequestDto;
+import kr.co.deundeun.groopy.dto.club.ClubRequestDto;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.club.constant.CategoryType;
 import kr.co.deundeun.groopy.domain.clubApplyForm.ClubApplyForm;

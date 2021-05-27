@@ -2,10 +2,10 @@ package kr.co.deundeun.groopy.service;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
-import kr.co.deundeun.groopy.controller.common.page.Property;
-import kr.co.deundeun.groopy.controller.home.dto.ClubByCategoryDto;
-import kr.co.deundeun.groopy.controller.home.dto.HomeResponseDto;
+
+import kr.co.deundeun.groopy.dto.common.page.Property;
+import kr.co.deundeun.groopy.dto.home.ClubByCategoryDto;
+import kr.co.deundeun.groopy.dto.home.HomeResponseDto;
 import kr.co.deundeun.groopy.dao.ClubRecruitRepository;
 import kr.co.deundeun.groopy.dao.ClubRepository;
 import kr.co.deundeun.groopy.dao.PostRepository;

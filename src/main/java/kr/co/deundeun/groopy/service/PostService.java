@@ -1,8 +1,8 @@
 package kr.co.deundeun.groopy.service;
 
-import kr.co.deundeun.groopy.controller.common.page.PageRequestDto;
-import kr.co.deundeun.groopy.controller.post.dto.PostRequestDto;
-import kr.co.deundeun.groopy.controller.post.dto.PostResponseDto;
+import kr.co.deundeun.groopy.dto.common.page.PageRequestDto;
+import kr.co.deundeun.groopy.dto.post.PostRequestDto;
+import kr.co.deundeun.groopy.dto.post.PostResponseDto;
 import kr.co.deundeun.groopy.dao.ClubRepository;
 import kr.co.deundeun.groopy.dao.PostLikeRepository;
 import kr.co.deundeun.groopy.dao.PostRepository;
@@ -31,8 +31,8 @@ public class PostService {
 
     private final PostLikeRepository postLikeRepository;
 
-    public void post(String author, String clubName, PostRequestDto postRequestDto) {
-        Club club = ClubHelper.findByClubName(clubRepository, clubName);
+    public void post(String author, Long clubId, PostRequestDto postRequestDto) {
+        Club club = ClubHelper.findClubById(clubRepository, clubId);
         createPost(author, club, postRequestDto);
     }
 
@@ -44,8 +44,8 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public Page<PostResponseDto> getClubPosts(String clubName, PageRequestDto pageRequestDto) {
-        Club club = ClubHelper.findByClubName(clubRepository, clubName);
+    public Page<PostResponseDto> getClubPosts(Long clubId, PageRequestDto pageRequestDto) {
+        Club club = ClubHelper.findClubById(clubRepository, clubId);
         return postRepository.findAllByClub(club, pageRequestDto.of()).map(PostResponseDto::of);
     }
 
@@ -68,5 +68,9 @@ public class PostService {
         List<PostLike> postLikes = postLikeRepository.findAllByUser(user);
         List<Post> posts = postLikes.stream().map(PostLike::getPost).collect(Collectors.toList());
         return PostResponseDto.listOf(posts);
+    }
+
+    public void deletePost(Long postId) {
+        postRepository.deleteById(postId);
     }
 }

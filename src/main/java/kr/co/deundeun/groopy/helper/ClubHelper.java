@@ -9,4 +9,8 @@ public class ClubHelper {
     public static Club findByClubName(ClubRepository clubRepository, String clubName){
         return clubRepository.findByClubName(clubName).orElseThrow(ClubNotFoundException::new);
     }
+
+    public static Club findClubById(ClubRepository clubRepository, Long clubId){
+        return clubRepository.findById(clubId).orElseThrow(ClubNotFoundException::new);
+    }
 }

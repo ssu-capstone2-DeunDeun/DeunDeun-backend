@@ -1,6 +1,9 @@
 package kr.co.deundeun.groopy.service;
 
-import kr.co.deundeun.groopy.controller.like.dto.LikeResponseDto;
+import kr.co.deundeun.groopy.dao.PostRepository;
+import kr.co.deundeun.groopy.domain.post.Post;
+import kr.co.deundeun.groopy.domain.post.PostLike;
+import kr.co.deundeun.groopy.dto.like.LikeResponseDto;
 import kr.co.deundeun.groopy.dao.ClubLikeRepository;
 import kr.co.deundeun.groopy.dao.ClubRepository;
 import kr.co.deundeun.groopy.dao.PostLikeRepository;
@@ -9,6 +12,7 @@ import kr.co.deundeun.groopy.domain.club.ClubLike;
 import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.exception.LoginException;
 import kr.co.deundeun.groopy.helper.ClubHelper;
+import kr.co.deundeun.groopy.helper.PostHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,36 +25,67 @@ public class LikeService {
 
     private final PostLikeRepository postLikeRepository;
 
+    private final PostRepository postRepository;
+
     private final ClubRepository clubRepository;
 
     @Transactional
-    public void likeClub(User user, String clubName) {
-        if(user.getId() == null) throw new LoginException();
+    public void likeClub(User user, Long clubId) {
+        if (user.getId() == null) throw new LoginException();
 
-        Club club = ClubHelper.findByClubName(clubRepository, clubName);
+        Club club = ClubHelper.findClubById(clubRepository, clubId);
 
         ClubLike clubLike = clubLikeRepository.findByClubAndUser(club, user);
 
-        if(clubLike == null) {
-            clubLike = ClubLike.builder().club(club).user(user).build();
+        if (clubLike == null) {
+            clubLike = new ClubLike(club, user);
             club.increaseLikeCount();
         } else {
-            if(clubLike.isLiked())
+            if (clubLike.isLiked())
                 club.decreaseLikeCount();
             else
                 club.increaseLikeCount();
             clubLike.updateLike();
         }
-        clubRepository.save(club);
         clubLikeRepository.save(clubLike);
     }
 
-    public LikeResponseDto getClubLike(User user, String clubName) {
-        if(user.getId() == null) return new LikeResponseDto();
+    public LikeResponseDto getClubLike(User user, Long clubId) {
+        if (user.getId() == null) return new LikeResponseDto();
 
-        Club club = ClubHelper.findByClubName(clubRepository, clubName);
-        if (clubLikeRepository.existsByClubAndUser(club, user))
-            return LikeResponseDto.of(clubLikeRepository.findByClubAndUser(club, user));
+        Club club = ClubHelper.findClubById(clubRepository, clubId);
+        ClubLike clubLike = clubLikeRepository.findByClubAndUser(club, user);
+        if (clubLike != null) return new LikeResponseDto(user, clubLike);
+        return new LikeResponseDto();
+    }
+
+    public void likePost(User user, Long postId) {
+        if (user.getId() == null) throw new LoginException();
+
+        Post post = PostHelper.findById(postRepository, postId);
+
+        PostLike postLike = postLikeRepository.findByPostAndUser(post, user);
+
+        if (postLike == null) {
+            postLike = new PostLike(post, user);
+            post.increaseLikeCount();
+        } else {
+            if (postLike.isLiked())
+                post.decreaseLikeCount();
+            else
+                post.increaseLikeCount();
+            postLike.updateLike();
+        }
+
+        postLikeRepository.save(postLike);
+    }
+
+    public LikeResponseDto getPostLike(User user, Long postId) {
+        if (user.getId() == null) return new LikeResponseDto();
+
+        Post post = PostHelper.findById(postRepository, postId);
+        PostLike postLike = postLikeRepository.findByPostAndUser(post, user);
+        if (postLike != null) return new LikeResponseDto(user, postLike);
         return new LikeResponseDto();
     }
 }

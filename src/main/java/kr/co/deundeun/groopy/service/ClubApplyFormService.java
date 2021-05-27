@@ -1,8 +1,8 @@
 package kr.co.deundeun.groopy.service;
 
 import java.util.List;
-import kr.co.deundeun.groopy.controller.clubApplyForm.dto.ApplyFormRequestDto;
-import kr.co.deundeun.groopy.controller.clubApplyForm.dto.ApplyFormResponseDto;
+import kr.co.deundeun.groopy.dto.clubApplyForm.ApplyFormRequestDto;
+import kr.co.deundeun.groopy.dto.clubApplyForm.ApplyFormResponseDto;
 import kr.co.deundeun.groopy.dao.ClubApplyFormRepository;
 import kr.co.deundeun.groopy.dao.ClubRecruitRepository;
 import kr.co.deundeun.groopy.dao.ClubRepository;

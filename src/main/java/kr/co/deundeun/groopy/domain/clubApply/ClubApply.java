@@ -1,14 +1,12 @@
 package kr.co.deundeun.groopy.domain.clubApply;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.persistence.*;
 
-import kr.co.deundeun.groopy.controller.clubApply.dto.ApplyRequestDto;
+import kr.co.deundeun.groopy.dto.clubApply.ApplyRequestDto;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.clubApply.constant.ClubApplyStatus;
-import kr.co.deundeun.groopy.domain.clubApplyForm.ClubApplyForm;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.comment.Comment;
 import kr.co.deundeun.groopy.domain.user.User;
@@ -18,7 +16,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @NoArgsConstructor
 @Getter

@@ -1,7 +1,7 @@
 package kr.co.deundeun.groopy.service;
 
-import kr.co.deundeun.groopy.controller.clubRecruit.dto.RecruitRequestDto;
-import kr.co.deundeun.groopy.controller.clubRecruit.dto.RecruitResponseDto;
+import kr.co.deundeun.groopy.dto.clubRecruit.ClubRecruitRequestDto;
+import kr.co.deundeun.groopy.dto.clubRecruit.ClubRecruitResponseDto;
 import kr.co.deundeun.groopy.dao.ClubRecruitRepository;
 import kr.co.deundeun.groopy.dao.ClubRepository;
 import kr.co.deundeun.groopy.domain.club.Club;
@@ -23,30 +23,30 @@ public class ClubRecruitService {
 
     private final ClubRepository clubRepository;
 
-    public void addRecruit(String clubName, RecruitRequestDto recruitRequestDto) {
+    public void addRecruit(String clubName, ClubRecruitRequestDto clubRecruitRequestDto) {
         Club club = ClubHelper.findByClubName(clubRepository, clubName);
         if (!club.isApproved()) throw new AuthorizationException("동아리 등록 승인이 필요합니다.");
-        ClubRecruit clubRecruit = recruitRequestDto.toClubRecruit(club);
+        ClubRecruit clubRecruit = clubRecruitRequestDto.toClubRecruit(club);
         clubRecruitRepository.save(clubRecruit);
     }
 
     @Transactional(readOnly = true)
-    public List<RecruitResponseDto> getRecruits(String clubName) {
+    public List<ClubRecruitResponseDto> getRecruits(String clubName) {
         Club club = ClubHelper.findByClubName(clubRepository, clubName);
-        return RecruitResponseDto.listOf(clubRecruitRepository
+        return ClubRecruitResponseDto.listOf(clubRecruitRepository
                 .findAllByClubAndGenerationGreaterThan(club, 0));
     }
 
     @Transactional(readOnly = true)
-    public RecruitResponseDto getRecruit(Long recruitId) {
+    public ClubRecruitResponseDto getRecruit(Long recruitId) {
         ClubRecruit clubRecruit = ClubRecruitHelper.findById(clubRecruitRepository, recruitId);
-        return new RecruitResponseDto(clubRecruit);
+        return new ClubRecruitResponseDto(clubRecruit);
     }
 
     @Transactional
-    public void updateRecruit(Long recruitId, RecruitRequestDto recruitRequestDto) {
+    public void updateRecruit(Long recruitId, ClubRecruitRequestDto clubRecruitRequestDto) {
         ClubRecruit clubRecruit = ClubRecruitHelper.findById(clubRecruitRepository, recruitId);
-        clubRecruit.update(recruitRequestDto);
+        clubRecruit.update(clubRecruitRequestDto);
     }
 
     @Transactional

@@ -10,5 +10,4 @@ import java.util.List;
 public interface ClubLikeRepository extends JpaRepository<ClubLike, Long> {
     List<ClubLike> findAllByUser(User user);
     ClubLike findByClubAndUser(Club club, User user);
-    boolean existsByClubAndUser(Club club, User user);
 }

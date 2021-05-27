@@ -1,9 +1,9 @@
 package kr.co.deundeun.groopy.service;
 
 import kr.co.deundeun.groopy.config.AppProperties;
-import kr.co.deundeun.groopy.controller.club.dto.ClubRequestDto;
-import kr.co.deundeun.groopy.controller.club.dto.ClubResponseDto;
-import kr.co.deundeun.groopy.controller.common.mail.MailRequestDto;
+import kr.co.deundeun.groopy.dto.club.ClubRequestDto;
+import kr.co.deundeun.groopy.dto.club.ClubResponseDto;
+import kr.co.deundeun.groopy.dto.common.mail.MailRequestDto;
 import kr.co.deundeun.groopy.dao.*;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.club.ClubAdmin;

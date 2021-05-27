@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
-import kr.co.deundeun.groopy.controller.alarm.dto.AlarmRequestDto;
+import kr.co.deundeun.groopy.dto.alarm.AlarmRequestDto;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.alarm.constant.AlarmType;
 import kr.co.deundeun.groopy.domain.user.User;

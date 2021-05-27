@@ -1,6 +1,6 @@
 package kr.co.deundeun.groopy.service;
 
-import kr.co.deundeun.groopy.controller.club.dto.ClubAdminResponseDto;
+import kr.co.deundeun.groopy.dto.clubAdmin.ClubAdminResponseDto;
 import kr.co.deundeun.groopy.dao.*;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.club.ClubAdmin;

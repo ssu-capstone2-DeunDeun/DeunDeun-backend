@@ -4,7 +4,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 
-import kr.co.deundeun.groopy.controller.clubRecruit.dto.RecruitRequestDto;
+import kr.co.deundeun.groopy.dto.clubRecruit.ClubRecruitRequestDto;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.clubApplyForm.ClubApplyForm;
@@ -87,18 +87,18 @@ public class ClubRecruit extends BaseEntity {
         this.comments = comments;
     }
 
-    public void update(RecruitRequestDto recruitRequestDto){
-        this.generation = recruitRequestDto.getGeneration();
-        this.content = recruitRequestDto.getContent();
-        this.title = recruitRequestDto.getTitle();
-        this.submitStartDate = recruitRequestDto.getSubmitStartDate();
-        this.submitEndDate = recruitRequestDto.getSubmitEndDate();
-        this.documentPassStartDate = recruitRequestDto.getDocumentPassStartDate();
-        this.documentPassEndDate = recruitRequestDto.getDocumentPassEndDate();
-        this.interviewStartDate = recruitRequestDto.getInterviewStartDate();
-        this.interviewEndDate = recruitRequestDto.getInterviewEndDate();
-        this.finalPassStartDate = recruitRequestDto.getFinalPassStartDate();
-        this.finalPassEndDate = recruitRequestDto.getFinalPassEndDate();
+    public void update(ClubRecruitRequestDto clubRecruitRequestDto){
+        this.generation = clubRecruitRequestDto.getGeneration();
+        this.content = clubRecruitRequestDto.getContent();
+        this.title = clubRecruitRequestDto.getTitle();
+        this.submitStartDate = clubRecruitRequestDto.getSubmitStartDate();
+        this.submitEndDate = clubRecruitRequestDto.getSubmitEndDate();
+        this.documentPassStartDate = clubRecruitRequestDto.getDocumentPassStartDate();
+        this.documentPassEndDate = clubRecruitRequestDto.getDocumentPassEndDate();
+        this.interviewStartDate = clubRecruitRequestDto.getInterviewStartDate();
+        this.interviewEndDate = clubRecruitRequestDto.getInterviewEndDate();
+        this.finalPassStartDate = clubRecruitRequestDto.getFinalPassStartDate();
+        this.finalPassEndDate = clubRecruitRequestDto.getFinalPassEndDate();
     }
 
     public void increaseApplicantCount(){

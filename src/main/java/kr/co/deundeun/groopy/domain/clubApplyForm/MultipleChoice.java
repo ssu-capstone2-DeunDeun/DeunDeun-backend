@@ -4,7 +4,7 @@ package kr.co.deundeun.groopy.domain.clubApplyForm;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
-import kr.co.deundeun.groopy.controller.clubApplyForm.dto.MultipleChoiceRequestDto;
+import kr.co.deundeun.groopy.dto.clubApplyForm.MultipleChoiceRequestDto;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
