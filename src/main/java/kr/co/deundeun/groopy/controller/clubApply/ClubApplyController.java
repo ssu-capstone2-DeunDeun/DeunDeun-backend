@@ -4,7 +4,6 @@ import kr.co.deundeun.groopy.config.Me;
 import kr.co.deundeun.groopy.controller.clubApply.dto.ApplyRequestDto;
 import kr.co.deundeun.groopy.controller.clubApply.dto.ApplyResponseDto;
 import kr.co.deundeun.groopy.controller.clubApply.dto.ApplySummaryResponseDto;
-import kr.co.deundeun.groopy.domain.clubRecruit.constant.QuestionType;
 import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.service.ClubApplyService;
 import lombok.RequiredArgsConstructor;
@@ -27,12 +26,12 @@ public class ClubApplyController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/applies")                 // 유저가 그동안 작성 및 지원했던 지원서 리스트 조회
+    @GetMapping("/applies")              // 유저가 그동안 작성 및 지원했던 지원서 리스트 조회
     public ResponseEntity<List<ApplySummaryResponseDto>> getApplies(@Me User user) {
         return ResponseEntity.ok(clubApplyService.getApplies(user));
     }
 
-    @GetMapping("/{applyId}")   // 유저가 작성 및 지원했던 지원서 한 개 조회
+    @GetMapping("/applies/{applyId}")   // 유저가 작성 및 지원했던 지원서 한 개 조회 OR 관리자가 조회
     public ResponseEntity<ApplyResponseDto> getApply(@PathVariable Long applyId) {
         return ResponseEntity.ok(clubApplyService.getApply(applyId));
     }

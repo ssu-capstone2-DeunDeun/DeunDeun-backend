@@ -8,7 +8,6 @@ import kr.co.deundeun.groopy.dao.ClubRecruitRepository;
 import kr.co.deundeun.groopy.domain.clubApply.ClubApply;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.user.User;
-import kr.co.deundeun.groopy.exception.BadRequestException;
 import kr.co.deundeun.groopy.exception.IdNotFoundException;
 import kr.co.deundeun.groopy.exception.LoginException;
 import kr.co.deundeun.groopy.helper.ClubApplyHelper;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
@@ -66,8 +64,7 @@ public class ClubApplyService {
     @Transactional(readOnly = true)
     public ApplyResponseDto getApply(Long applyId) {
         ClubApply clubApply = ClubApplyHelper.findById(clubApplyRepository, applyId);
-        ClubRecruit clubRecruit = ClubRecruitHelper.findById(clubRecruitRepository, clubApply.getClubRecruitId());
-        return ApplyResponseDto.of(clubApply, clubRecruit);
+        return new ApplyResponseDto(clubApply);
     }
 
     @Transactional
