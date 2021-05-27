@@ -26,7 +26,6 @@ public class ClubApplyService {
     private final ClubApplyRepository clubApplyRepository;
     private final ClubRecruitRepository clubRecruitRepository;
 
-    @Transactional
     public void apply(User user, Long clubRecruitId, ApplyRequestDto applyRequestDto) {
 
         // TODO 이 부분 Validation @NotNull? 로 처리, 수정해야함.
@@ -53,7 +52,6 @@ public class ClubApplyService {
 //        return ApplyResponseDto.of(clubApply, clubRecruit);
     }
 
-    @Transactional(readOnly = true)
     public List<ApplySummaryResponseDto> getApplies(User user) {
 
         if (user.getId() == null) throw new LoginException();
@@ -61,13 +59,12 @@ public class ClubApplyService {
         return ApplySummaryResponseDto.listOf(clubApplies);
     }
 
-    @Transactional(readOnly = true)
+
     public ApplyResponseDto getApply(Long applyId) {
         ClubApply clubApply = ClubApplyHelper.findById(clubApplyRepository, applyId);
         return new ApplyResponseDto(clubApply);
     }
 
-    @Transactional
     public void updateApply(Long applyId, ApplyRequestDto applyRequestDto) {
         ClubApply clubApply = ClubApplyHelper.findById(clubApplyRepository, applyId);
         clubApply.updateAnswers(applyRequestDto);

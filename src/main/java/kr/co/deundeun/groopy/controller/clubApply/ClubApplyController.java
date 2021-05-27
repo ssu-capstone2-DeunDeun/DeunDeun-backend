@@ -36,7 +36,7 @@ public class ClubApplyController {
         return ResponseEntity.ok(clubApplyService.getApply(applyId));
     }
 
-    @PatchMapping("/apply/{applyId}") // 특정 동아리 모집 공고에 작성했던 지원서 수정
+    @PatchMapping("/applies/{applyId}") // 특정 동아리 모집 공고에 작성했던 지원서 수정
     public ResponseEntity<Void> updateApply(@PathVariable Long applyId,
         @RequestBody ApplyRequestDto applyRequestDto) {
         clubApplyService.updateApply(applyId, applyRequestDto);
