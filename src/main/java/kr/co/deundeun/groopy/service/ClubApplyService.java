@@ -57,14 +57,10 @@ public class ClubApplyService {
 
     @Transactional(readOnly = true)
     public List<ApplySummaryResponseDto> getApplies(User user) {
+
         if (user.getId() == null) throw new LoginException();
         List<ClubApply> clubApplies = clubApplyRepository.findAllByUser(user);
-        List<ClubRecruit> clubRecruits = clubRecruitRepository.findAllById(
-            clubApplies.stream()
-                       .map(ClubApply::getClubRecruitId)
-                       .collect(Collectors.toList()));
-
-        return ApplySummaryResponseDto.listOf(clubApplies, clubRecruits);
+        return ApplySummaryResponseDto.listOf(clubApplies);
     }
 
     @Transactional(readOnly = true)

@@ -27,7 +27,7 @@ public class ClubApplyController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping                 // 유저가 그동안 작성 및 지원했던 지원서 리스트 조회
+    @GetMapping("/applies")                 // 유저가 그동안 작성 및 지원했던 지원서 리스트 조회
     public ResponseEntity<List<ApplySummaryResponseDto>> getApplies(@Me User user) {
         return ResponseEntity.ok(clubApplyService.getApplies(user));
     }
