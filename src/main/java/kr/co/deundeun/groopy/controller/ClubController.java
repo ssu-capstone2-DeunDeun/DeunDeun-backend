@@ -10,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @RestController
 public class ClubController {
@@ -25,8 +23,8 @@ public class ClubController {
     }
 
     @GetMapping("/clubs/{clubId}/approve")
-    public ResponseEntity<String> approveClub(@PathVariable String clubName) {
-        clubService.approveClub(clubName);
+    public ResponseEntity<String> approveClub(@PathVariable Long clubId) {
+        clubService.approveClub(clubId);
         return ResponseEntity.ok("동아리 등록이 승인되었습니다");
     }
 
@@ -38,15 +36,16 @@ public class ClubController {
             return ResponseEntity.ok(clubService.getClubInfo(user, clubName));
     }
 
-    @PatchMapping("/clubs/{clubName}")
-    public ResponseEntity<Void> updateClub(@PathVariable String clubName, @RequestBody ClubRequestDto clubRequestDto) {
-        clubService.updateClub(clubName, clubRequestDto);
+    @PatchMapping("/clubs/{clubId}")
+    public ResponseEntity<Void> updateClub(@PathVariable Long clubId, @RequestBody ClubRequestDto clubRequestDto) {
+        clubService.updateClub(clubId, clubRequestDto);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/liked/clubs")
-    public ResponseEntity<List<ClubResponseDto>> getLikedClubs(@Me User user) {
-        return ResponseEntity.ok(clubService.getLikedClubs(user));
+    @DeleteMapping("/clubs/{clubId}")
+    public ResponseEntity<Void> deleteClub(@PathVariable Long clubId) {
+        clubService.deleteClub(clubId);
+        return ResponseEntity.ok().build();
     }
 
 }

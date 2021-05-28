@@ -64,12 +64,6 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public List<PostResponseDto> getLikedPosts(User user) {
-        List<PostLike> postLikes = postLikeRepository.findAllByUser(user);
-        List<Post> posts = postLikes.stream().map(PostLike::getPost).collect(Collectors.toList());
-        return PostResponseDto.listOf(posts);
-    }
-
     public void deletePost(Long postId) {
         postRepository.deleteById(postId);
     }
