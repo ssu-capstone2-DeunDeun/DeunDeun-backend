@@ -7,10 +7,7 @@ import kr.co.deundeun.groopy.dto.club.ClubResponseDto;
 import kr.co.deundeun.groopy.dto.common.mail.MailRequestDto;
 import kr.co.deundeun.groopy.dao.*;
 import kr.co.deundeun.groopy.domain.club.Club;
-import kr.co.deundeun.groopy.domain.club.ClubPosition;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
-import kr.co.deundeun.groopy.domain.club.ClubImage;
-import kr.co.deundeun.groopy.domain.club.ClubLike;
 import kr.co.deundeun.groopy.domain.post.Post;
 import kr.co.deundeun.groopy.domain.user.Participate;
 import kr.co.deundeun.groopy.domain.user.User;
@@ -21,13 +18,11 @@ import kr.co.deundeun.groopy.exception.NameDuplicateException;
 import kr.co.deundeun.groopy.helper.ClubHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
@@ -43,8 +38,6 @@ public class ClubService {
     private final PostRepository postRepository;
 
     private final HashtagService hashtagService;
-
-    private final ClubLikeRepository clubLikeRepository;
 
     private final JavaMailSender javaMailSender;
 
@@ -82,9 +75,10 @@ public class ClubService {
         return ClubResponseDto.of(club, posts, clubRecruit, isAdmin);
     }
 
-    public void updateClub(String name, ClubRequestDto clubRequestDto) {
-        Club club = clubRepository.findByClubName(name).orElseThrow(ClubNotFoundException::new);
-        if (isDuplicatedName(name)) throw new DuplicateResourceException("닉네임 중복");
+    public void updateClub(Long clubId, ClubRequestDto clubRequestDto) {
+        Club club = ClubHelper.findClubById(clubRepository, clubId);
+        if (isDuplicatedName(clubRequestDto.getName()))
+            throw new DuplicateResourceException("닉네임 중복");
         clubRepository.save(club.update(clubRequestDto));
     }
 
@@ -92,16 +86,13 @@ public class ClubService {
         return clubRepository.existsByClubName(clubName);
     }
 
-    public List<ClubResponseDto> getLikedClubs(User user) {
-        if (user.getId() == null) throw new LoginException();
-        List<ClubLike> clubLikes = clubLikeRepository.findAllByUser(user);
-        List<Club> clubs = clubLikes.stream().map(ClubLike::getClub).collect(Collectors.toList());
-        return ClubResponseDto.listOf(clubs);
-    }
-
-    public void approveClub(String clubName) {
-        Club club = ClubHelper.findByClubName(clubRepository, clubName);
+    public void approveClub(Long clubId) {
+        Club club = ClubHelper.findClubById(clubRepository, clubId);
         club.setApproved(true);
         clubRepository.save(club);
+    }
+
+    public void deleteClub(Long clubId) {
+        clubRepository.deleteById(clubId);
     }
 }

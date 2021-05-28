@@ -12,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @RestController
 public class PostController {
@@ -53,8 +51,4 @@ public class PostController {
         return ResponseEntity.ok(postService.getPosts(pageRequestDto));
     }
 
-    @GetMapping("/liked/posts") // 내가 좋아요한 게시글 전체보기
-    public ResponseEntity<List<PostResponseDto>> getLikedPosts(@Me User user) {
-        return ResponseEntity.ok(postService.getLikedPosts(user));
-    }
 }
