@@ -65,6 +65,7 @@ public class Club extends BaseEntity {
 
     public Club(ClubRequestDto clubRequestDto, List<HashtagInfo> hashtagInfos) {
         this.categoryType = clubRequestDto.getCategoryType();
+        this.generation = clubRequestDto.getGeneration();
         this.clubName = clubRequestDto.getName();
         this.introduction = clubRequestDto.getIntroduction();
         this.representImageUrl = clubRequestDto.getRepresentImageUrl();

@@ -6,6 +6,9 @@ import lombok.Getter;
 
 @Getter
 public class ClubPositionRequestDto {
+
+    private Long clubId;
+
     private String positionName;
 
     public ClubPosition toClubPosition(Club club){

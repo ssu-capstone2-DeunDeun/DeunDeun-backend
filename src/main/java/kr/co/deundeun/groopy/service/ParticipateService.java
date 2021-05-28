@@ -53,7 +53,12 @@ public class ParticipateService {
         participateRepository.save(participate);
     }
 
-    public void deleteParticipation(Long participateId) {
+    public void deleteParticipate(Long participateId) {
         participateRepository.deleteById(participateId);
+    }
+
+    public void quitAdminRole(Long participateId) {
+        Participate participate = ParticipateHelper.findParticipateById(participateRepository, participateId);
+        participate.setAdmin(false);
     }
 }

@@ -2,9 +2,8 @@ package kr.co.deundeun.groopy.controller;
 
 import kr.co.deundeun.groopy.config.Me;
 import kr.co.deundeun.groopy.dto.club.ClubResponseDto;
-import kr.co.deundeun.groopy.dto.hashtag.HashtagRequestDto;
 import kr.co.deundeun.groopy.dto.hashtag.HashtagResponseDto;
-import kr.co.deundeun.groopy.dto.liked.LikeListResponseDto;
+import kr.co.deundeun.groopy.dto.like.liked.LikeListResponseDto;
 import kr.co.deundeun.groopy.dto.user.UserRequestDto;
 import kr.co.deundeun.groopy.dto.user.UserResponseDto;
 import kr.co.deundeun.groopy.domain.user.User;
