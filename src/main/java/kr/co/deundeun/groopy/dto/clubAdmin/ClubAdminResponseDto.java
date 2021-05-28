@@ -25,7 +25,7 @@ public class ClubAdminResponseDto {
         this.name = user.getName();
         this.phoneNumber = user.getPhoneNumber();
         this.email = user.getEmail();
-        this.generation = participate.getClubRecruit().getGeneration();
+        this.generation = participate.getGeneration();
         if (participate.getClubPosition() == null)
             this.positionName = "미정";
         else

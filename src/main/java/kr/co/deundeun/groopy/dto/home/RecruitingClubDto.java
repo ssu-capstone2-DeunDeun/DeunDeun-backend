@@ -25,7 +25,7 @@ public class RecruitingClubDto {
 
   public RecruitingClubDto(ClubRecruit clubRecruit) {
     this.clubRecruitId = clubRecruit.getId();
-    this.generation = clubRecruit.getGeneration();
+    this.generation = clubRecruit.getRecruitGeneration();
     this.title = clubRecruit.getTitle();
     this.content = clubRecruit.getContent();
     this.dDay = Duration.between(LocalDateTime.now(), clubRecruit.getSubmitEndDate()).toDays();

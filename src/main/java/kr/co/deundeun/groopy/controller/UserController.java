@@ -2,6 +2,7 @@ package kr.co.deundeun.groopy.controller;
 
 import kr.co.deundeun.groopy.config.Me;
 import kr.co.deundeun.groopy.dto.club.ClubResponseDto;
+import kr.co.deundeun.groopy.dto.hashtag.HashtagRequestDto;
 import kr.co.deundeun.groopy.dto.hashtag.HashtagResponseDto;
 import kr.co.deundeun.groopy.dto.liked.LikeListResponseDto;
 import kr.co.deundeun.groopy.dto.user.UserRequestDto;
@@ -53,8 +54,8 @@ public class UserController {
     }
 
     @PostMapping("/hashtags")
-    public ResponseEntity<Void> addHashtags(@Me User user, @RequestBody List<String> hashtags) {
-        userService.updateHashtags(user, hashtags);
+    public ResponseEntity<Void> addHashtags(@Me User user, @RequestBody List<Long> hashtagInfoIds) {
+        userService.updateHashtags(user, hashtagInfoIds);
         return ResponseEntity.ok().build();
     }
 

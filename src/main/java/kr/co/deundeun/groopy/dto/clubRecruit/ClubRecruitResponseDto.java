@@ -51,7 +51,7 @@ public class ClubRecruitResponseDto {
         this.id = clubRecruit.getId();
         this.title = clubRecruit.getTitle();
         this.content = clubRecruit.getContent();
-        this.generation = clubRecruit.getGeneration();
+        this.generation = clubRecruit.getRecruitGeneration();
         this.submitStartDate = clubRecruit.getSubmitStartDate();
         this.submitEndDate = clubRecruit.getSubmitEndDate();
         this.documentPassStartDate = clubRecruit.getDocumentPassStartDate();

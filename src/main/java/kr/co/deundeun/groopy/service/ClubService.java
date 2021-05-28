@@ -1,12 +1,12 @@
 package kr.co.deundeun.groopy.service;
 
 import kr.co.deundeun.groopy.config.AppProperties;
+import kr.co.deundeun.groopy.domain.hashtag.HashtagInfo;
 import kr.co.deundeun.groopy.dto.club.ClubRequestDto;
 import kr.co.deundeun.groopy.dto.club.ClubResponseDto;
 import kr.co.deundeun.groopy.dto.common.mail.MailRequestDto;
 import kr.co.deundeun.groopy.dao.*;
 import kr.co.deundeun.groopy.domain.club.Club;
-import kr.co.deundeun.groopy.domain.club.ClubAdmin;
 import kr.co.deundeun.groopy.domain.club.ClubPosition;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.club.ClubImage;
@@ -21,6 +21,7 @@ import kr.co.deundeun.groopy.exception.NameDuplicateException;
 import kr.co.deundeun.groopy.helper.ClubHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -39,17 +40,11 @@ public class ClubService {
 
     private final ParticipateRepository participateRepository;
 
-    private final ClubAdminRepository clubAdminRepository;
-
     private final PostRepository postRepository;
 
     private final HashtagService hashtagService;
 
-    private final ClubImageRepository clubImageRepository;
-
     private final ClubLikeRepository clubLikeRepository;
-
-    private final ClubPositionRepository clubPositionRepository;
 
     private final JavaMailSender javaMailSender;
 
@@ -57,40 +52,17 @@ public class ClubService {
 
     public void registerClub(User user, ClubRequestDto clubRequestDto) {
         if (user.getId() == null) throw new LoginException();
-        if (isDuplicatedName(clubRequestDto.getName())) throw new NameDuplicateException("동아리 이름이 존재합니다.");
+        if (isDuplicatedName(clubRequestDto.getName()))
+            throw new NameDuplicateException("동아리 이름이 존재합니다.");
 
-        Club club = createClub(clubRequestDto);
+        List<HashtagInfo> hashtagInfos =
+                hashtagService.getHashtagInfos(clubRequestDto.getHashtagInfoIds());
 
-        ClubRecruit clubRecruit = ClubRecruit.builder()
-                .club(club)
-                .generation(0)
-                .build();
-        clubRecruitRepository.save(clubRecruit);
+        Club club = new Club(clubRequestDto, hashtagInfos);
+        clubRepository.save(club);
 
-        ClubPosition manager = ClubPosition.builder()
-                .club(club)
-                .positionName("운영진")
-                .build();
-
-        ClubPosition member = ClubPosition.builder()
-                .club(club)
-                .positionName("회원")
-                .build();
-        clubPositionRepository.save(member);
-
-        Participate participate = Participate.builder()
-                .user(user)
-                .clubRecruit(clubRecruit)
-                .clubPosition(manager)
-                .isAdmin(true)
-                .build();
+        Participate participate = new Participate(user, club, true);
         participateRepository.save(participate);
-
-        ClubAdmin clubAdmin = ClubAdmin.builder()
-                .userId(user.getId())
-                .club(club)
-                .build();
-        clubAdminRepository.save(clubAdmin);
 
         MailRequestDto.sendRegisterClub(javaMailSender, appProperties, user, club);
     }
@@ -98,7 +70,7 @@ public class ClubService {
     @Transactional(readOnly = true)
     public ClubResponseDto getClubInfo(User user, String name) {
         Club club = clubRepository.findByClubName(name).orElseThrow(ClubNotFoundException::new);
-        boolean isAdmin = clubAdminRepository.existsByUserIdAndClub(user.getId(), club);
+        boolean isAdmin = participateRepository.findByUserAndClub(user, club).isAdmin();
         return getClubInfo(isAdmin, name);
     }
 
@@ -106,7 +78,7 @@ public class ClubService {
     public ClubResponseDto getClubInfo(boolean isAdmin, String name) {
         Club club = clubRepository.findByClubName(name).orElseThrow(ClubNotFoundException::new);
         List<Post> posts = postRepository.findTop3ByClubOrderByViewCount(club);
-        ClubRecruit clubRecruit = clubRecruitRepository.findTopByClubAndGenerationGreaterThanOrderByCreatedAt(club, 0);
+        ClubRecruit clubRecruit = clubRecruitRepository.findTopByClubOrderByCreatedAt(club);
         return ClubResponseDto.of(club, posts, clubRecruit, isAdmin);
     }
 
@@ -114,15 +86,6 @@ public class ClubService {
         Club club = clubRepository.findByClubName(name).orElseThrow(ClubNotFoundException::new);
         if (isDuplicatedName(name)) throw new DuplicateResourceException("닉네임 중복");
         clubRepository.save(club.update(clubRequestDto));
-    }
-
-    private Club createClub(ClubRequestDto clubRequestDto) {
-        List<ClubImage> clubImages = ClubImage.ofList(clubRequestDto.getClubImages());
-        Club club = clubRequestDto.toClub();
-        club.setClubImages(clubImages);
-        hashtagService.registerClubHashtags(club, clubRequestDto.getClubHashtags());
-        clubImageRepository.saveAll(clubImages);
-        return clubRepository.save(club);
     }
 
     private boolean isDuplicatedName(String clubName) {

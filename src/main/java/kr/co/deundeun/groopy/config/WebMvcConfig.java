@@ -1,7 +1,6 @@
 package kr.co.deundeun.groopy.config;
 
 import kr.co.deundeun.groopy.config.security.GroupInterceptor;
-import kr.co.deundeun.groopy.dao.ClubAdminRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

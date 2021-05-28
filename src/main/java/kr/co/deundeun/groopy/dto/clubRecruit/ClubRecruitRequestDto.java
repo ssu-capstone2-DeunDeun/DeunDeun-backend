@@ -37,7 +37,6 @@ public class ClubRecruitRequestDto {
                 .club(club)
                 .title(title)
                 .content(content)
-                .generation(generation)
                 .submitStartDate(submitStartDate)
                 .submitEndDate(submitEndDate)
                 .documentPassStartDate(documentPassStartDate)

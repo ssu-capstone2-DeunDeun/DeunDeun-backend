@@ -1,5 +1,7 @@
 package kr.co.deundeun.groopy.service;
 
+import kr.co.deundeun.groopy.domain.hashtag.HashtagInfo;
+import kr.co.deundeun.groopy.domain.hashtag.UserHashtag;
 import kr.co.deundeun.groopy.dto.club.ClubResponseDto;
 import kr.co.deundeun.groopy.dto.hashtag.HashtagResponseDto;
 import kr.co.deundeun.groopy.dto.liked.LikeListResponseDto;
@@ -40,7 +42,7 @@ public class UserService {
     }
 
     public UserResponseDto signup(User user, UserRequestDto userRequestDto) {
-        if(user.getNickname() != null) throw new NameDuplicateException("이미 등록된 회원입니다.");
+        if (user.getNickname() != null) throw new NameDuplicateException("이미 등록된 회원입니다.");
         user.saveSignupInfo(userRequestDto);
 
         userRepository.save(user);
@@ -56,7 +58,7 @@ public class UserService {
         if (isDuplicatedNickname(nickname))
             throw new DuplicateResourceException("중복된 닉네임입니다.");
 
-        user.changeNickname(nickname);
+        user.updateNickname(nickname);
         userRepository.save(user);
     }
 
@@ -65,15 +67,22 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void updateHashtags(User user, List<String> hashtags) {
-        if (hashtags.size() < 3)
+    public void updateHashtags(User user, List<Long> hashtagInfoIds) {
+        if (hashtagInfoIds.size() < 3)
             throw new IllegalArgumentException("해시태그는 3개 이상 등록해야 합니다.");
 
-        hashtagService.registerUserHashtags(user, hashtags);
+        List<HashtagInfo> hashtagInfos = hashtagService.getHashtagInfos(hashtagInfoIds);
+        user.setUserHashtags(hashtagInfos);
     }
 
     public List<HashtagResponseDto> getHashtags(User user) {
-        return HashtagResponseDto.ofList(userHashtagRepository.findAllByUser(user));
+        List<HashtagInfo> hashtagInfos = userHashtagRepository
+                .findAllByUser(user)
+                .stream()
+                .map(UserHashtag::getHashtagInfo)
+                .collect(Collectors.toList());
+
+        return HashtagResponseDto.ofList(hashtagInfos);
     }
 
     public LikeListResponseDto getLikes(User user) {
@@ -91,7 +100,7 @@ public class UserService {
     public List<ClubResponseDto> getClubs(User user) {
         List<Participate> participates = participateRepository.findAllByUser(user);
         List<Club> clubs = participates.stream()
-                .map(participate -> participate.getClubRecruit().getClub())
+                .map(Participate::getClub)
                 .collect(Collectors.toList());
         return ClubResponseDto.listOf(clubs);
     }

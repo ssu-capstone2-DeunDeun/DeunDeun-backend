@@ -58,7 +58,7 @@ public class ClubPositionService {
 
     public void giveClubPosition(Long participateId, ClubPositionRequestDto clubPositionRequestDto) {
         Participate participate = ParticipateHelper.findParticipateById(participateRepository, participateId);
-        Club club = participate.getClubRecruit().getClub();
+        Club club = participate.getClub();
         ClubPosition clubPosition = clubPositionRepository.findByClubAndPositionName(club, clubPositionRequestDto.getPositionName());
         participate.setClubPosition(clubPosition);
     }

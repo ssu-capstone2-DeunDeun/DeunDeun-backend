@@ -3,6 +3,7 @@ package kr.co.deundeun.groopy.domain.club;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,30 +16,32 @@ import java.util.stream.Collectors;
 @Entity
 public class ClubImage extends BaseEntity {
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  private Club club;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Club club;
 
-  private String imageUrl;
+    private String imageUrl;
 
-  public ClubImage(String imageUrl){
-    this.imageUrl = imageUrl;
-  }
+    public ClubImage(Club club, String imageUrl) {
+        this();
+        setClub(club);
+        this.imageUrl = imageUrl;
+    }
 
-  public void setClub(Club club){
-    if(this.club != null)
-      this.club.getClubImages().remove(this);
+    public void setClub(Club club) {
+        if (this.club != null) {
+            this.club.getClubImages().remove(this);
+        }
+        this.club = club;
+        club.getClubImages().add(this);
+    }
 
-    this.club = club;
-    club.getClubImages().add(this);
-  }
+    public static List<ClubImage> ofList(Club club, List<String> imageUrls) {
+        return imageUrls.stream()
+                .map(imageUrl -> new ClubImage(club, imageUrl))
+                .collect(Collectors.toList());
+    }
 
-  public static List<ClubImage> ofList(List<String> imageUrls){
-    return imageUrls.stream()
-            .map(ClubImage::new)
-            .collect(Collectors.toList());
-  }
-
-  public String toImageUrl(){
-    return imageUrl;
-  }
+    public String toImageUrl() {
+        return imageUrl;
+    }
 }
