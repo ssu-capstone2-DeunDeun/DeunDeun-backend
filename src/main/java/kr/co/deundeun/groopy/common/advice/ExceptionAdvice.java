@@ -75,4 +75,10 @@ public class ExceptionAdvice {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponseDto.of(HttpStatus.NOT_FOUND.value(), e.getMessage()));
     }
+
+    @ExceptionHandler(DuplicateResourceException.class)
+    protected ResponseEntity<ErrorResponseDto> duplicateResourceException(DuplicateResourceException e){
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ErrorResponseDto.of(HttpStatus.CONFLICT.value(), e.getMessage()));
+    }
 }
