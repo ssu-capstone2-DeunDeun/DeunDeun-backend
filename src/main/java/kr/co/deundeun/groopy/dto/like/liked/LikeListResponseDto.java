@@ -1,4 +1,4 @@
-package kr.co.deundeun.groopy.dto.liked;
+package kr.co.deundeun.groopy.dto.like.liked;
 
 import kr.co.deundeun.groopy.dto.club.ClubResponseDto;
 import kr.co.deundeun.groopy.dto.post.PostResponseDto;

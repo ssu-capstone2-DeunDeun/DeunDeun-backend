@@ -17,8 +17,13 @@ public class ParticipateController {
     private final ParticipateService participateService;
 
     @PostMapping("/{participateId}/admins")
-    public void giveAdminRole(@PathVariable Long participateId) {
+    public void assignAdminRole(@PathVariable Long participateId) {
         participateService.giveAdminRole(participateId);
+    }
+
+    @PatchMapping("/{participateId}/admins")
+    public void quitAdminRole(@PathVariable Long participateId) {
+        participateService.quitAdminRole(participateId);
     }
 
     @PostMapping
@@ -40,7 +45,7 @@ public class ParticipateController {
 
     @DeleteMapping("/{participateId}")
     public ResponseEntity<Void> kickOut(@PathVariable Long participateId) {
-        participateService.deleteParticipation(participateId);
+        participateService.deleteParticipate(participateId);
         return ResponseEntity.ok().build();
     }
 

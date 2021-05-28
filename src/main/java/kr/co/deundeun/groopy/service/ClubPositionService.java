@@ -9,6 +9,7 @@ import kr.co.deundeun.groopy.dao.UserRepository;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.club.ClubPosition;
 import kr.co.deundeun.groopy.domain.user.Participate;
+import kr.co.deundeun.groopy.dto.clubPosition.participates.PositionChangeDto;
 import kr.co.deundeun.groopy.helper.ClubHelper;
 import kr.co.deundeun.groopy.helper.ClubPositionHelper;
 import kr.co.deundeun.groopy.helper.ParticipateHelper;
@@ -18,13 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
 @Service
 public class ClubPositionService {
-
-    private final UserRepository userRepository;
 
     private final ClubRepository clubRepository;
 
@@ -40,8 +40,8 @@ public class ClubPositionService {
         return ClubPositionResponseDto.listOf(clubPositions);
     }
 
-    public void addClubPosition(String clubName, ClubPositionRequestDto clubPositionRequestDto) {
-        Club club = ClubHelper.findByClubName(clubRepository, clubName);
+    public void addClubPosition(ClubPositionRequestDto clubPositionRequestDto) {
+        Club club = ClubHelper.findClubById(clubRepository, clubPositionRequestDto.getClubId());
         ClubPosition clubPosition = clubPositionRequestDto.toClubPosition(club);
         clubPositionRepository.save(clubPosition);
     }
@@ -53,13 +53,22 @@ public class ClubPositionService {
 
     public void deleteClubPosition(Long positionId) {
         ClubPosition clubPosition = ClubPositionHelper.findClubPositionById(clubPositionRepository, positionId);
+        List<Participate> participates = participateRepository.findAllByClubPosition(clubPosition);
+        participates.forEach(participate -> participate.setClubPosition(null));
         clubPositionRepository.delete(clubPosition);
     }
 
-    public void giveClubPosition(Long participateId, ClubPositionRequestDto clubPositionRequestDto) {
-        Participate participate = ParticipateHelper.findParticipateById(participateRepository, participateId);
-        Club club = participate.getClub();
-        ClubPosition clubPosition = clubPositionRepository.findByClubAndPositionName(club, clubPositionRequestDto.getPositionName());
-        participate.setClubPosition(clubPosition);
+    public void giveClubPosition(PositionChangeDto positionChangeDto) {
+        List<Participate> participates =
+                ParticipateHelper.findAllParticipateById(participateRepository, positionChangeDto.getParticipateIds());
+
+        ClubPosition clubPosition = ClubPositionHelper.findClubPositionById(clubPositionRepository, positionChangeDto.getPositionId());
+        participates.forEach(participate -> participate.setClubPosition(clubPosition));
+    }
+
+    public void deleteParticipateClubPosition(PositionChangeDto positionChangeDto) {
+        List<Participate> participates =
+                ParticipateHelper.findAllParticipateById(participateRepository, positionChangeDto.getParticipateIds());
+        participates.forEach(participate -> participate.setClubPosition(null));
     }
 }

@@ -4,7 +4,7 @@ import kr.co.deundeun.groopy.domain.hashtag.HashtagInfo;
 import kr.co.deundeun.groopy.domain.hashtag.UserHashtag;
 import kr.co.deundeun.groopy.dto.club.ClubResponseDto;
 import kr.co.deundeun.groopy.dto.hashtag.HashtagResponseDto;
-import kr.co.deundeun.groopy.dto.liked.LikeListResponseDto;
+import kr.co.deundeun.groopy.dto.like.liked.LikeListResponseDto;
 import kr.co.deundeun.groopy.dto.user.UserRequestDto;
 import kr.co.deundeun.groopy.dto.user.UserResponseDto;
 import kr.co.deundeun.groopy.dao.*;

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -80,5 +81,11 @@ public class ExceptionAdvice {
     protected ResponseEntity<ErrorResponseDto> duplicateResourceException(DuplicateResourceException e){
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ErrorResponseDto.of(HttpStatus.CONFLICT.value(), e.getMessage()));
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    protected ResponseEntity<ErrorResponseDto> missingParameterException(MissingServletRequestParameterException e){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ErrorResponseDto.of(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
     }
 }
