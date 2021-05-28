@@ -1,4 +1,4 @@
-package kr.co.deundeun.groopy.dto.clubAdmin;
+package kr.co.deundeun.groopy.dto.participate;
 
 import kr.co.deundeun.groopy.domain.user.Participate;
 import kr.co.deundeun.groopy.domain.user.User;
@@ -6,9 +6,10 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class ClubAdminResponseDto {
+public class ParticipateResponseDto {
 
     private Long id;
+    private Long userId;
     private String nickname;
     private String name;
     private String phoneNumber;
@@ -18,9 +19,10 @@ public class ClubAdminResponseDto {
     private boolean isAdmin;
 
     @Builder
-    public ClubAdminResponseDto(Participate participate) {
+    public ParticipateResponseDto(Participate participate) {
         User user = participate.getUser();
         this.id = participate.getId();
+        this.userId = user.getId();
         this.nickname = user.getNickname();
         this.name = user.getName();
         this.phoneNumber = user.getPhoneNumber();
@@ -33,8 +35,8 @@ public class ClubAdminResponseDto {
         this.isAdmin = participate.isAdmin();
     }
 
-    public static ClubAdminResponseDto of(Participate participate) {
-        return ClubAdminResponseDto.builder().participate(participate).build();
+    public static ParticipateResponseDto of(Participate participate) {
+        return ParticipateResponseDto.builder().participate(participate).build();
     }
 
 }
