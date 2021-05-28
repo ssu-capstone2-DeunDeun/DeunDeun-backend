@@ -1,5 +1,6 @@
 package kr.co.deundeun.groopy.controller;
 
+import kr.co.deundeun.groopy.dto.hashtag.HashtagResponseDto;
 import kr.co.deundeun.groopy.service.HashtagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ public class HashtagController {
     private final HashtagService hashtagService;
 
     @GetMapping("/hashtags")
-    public ResponseEntity<List<String>> getHashtags(){
-        return ResponseEntity.ok(hashtagService.getHashtagNames());
+    public ResponseEntity<List<HashtagResponseDto>> getHashtags(){
+        return ResponseEntity.ok(hashtagService.getAllHashtagInfos());
     }
 }

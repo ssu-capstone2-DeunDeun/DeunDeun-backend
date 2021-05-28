@@ -3,8 +3,6 @@ package kr.co.deundeun.groopy.domain.club;
 
 import javax.persistence.*;
 import kr.co.deundeun.groopy.domain.BaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,10 +16,15 @@ public class ClubPosition extends BaseEntity {
 
     private String positionName;
 
-    @Builder
     public ClubPosition(Club club, String positionName){
-        this.club = club;
+        this();
+        setClub(club);
         this.positionName = positionName;
+    }
+
+    public void setClub(Club club){
+        this.club = club;
+        club.getClubPositions().add(this);
     }
 
     public void setPositionName(String positionName) {

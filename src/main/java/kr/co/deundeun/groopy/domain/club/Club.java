@@ -2,6 +2,7 @@ package kr.co.deundeun.groopy.domain.club;
 
 import java.util.Comparator;
 
+import kr.co.deundeun.groopy.domain.hashtag.HashtagInfo;
 import kr.co.deundeun.groopy.dto.club.ClubRequestDto;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.club.constant.CategoryType;
@@ -31,7 +32,7 @@ public class Club extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String clubName;
 
-    private int generation;
+    private int generation = 0;
 
     private String introduction;
 
@@ -41,40 +42,35 @@ public class Club extends BaseEntity {
 
     private int likeCount = 0;
 
-    @OneToMany(mappedBy = "club")
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ClubHashtag> clubHashtags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "club")
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ClubImage> clubImages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "club")
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> clubPosts = new ArrayList<>();
 
     @OrderBy("createdAt desc")
-    @OneToMany(mappedBy = "club")
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ClubRecruit> clubRecruits = new ArrayList<>();
 
-    @OneToMany(mappedBy = "club")
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ClubApplyForm> clubApplyForms = new ArrayList<>();
+
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ClubPosition> clubPositions = new ArrayList<>();
 
     private boolean isApproved;
 
-    @Builder
-    public Club(CategoryType categoryType, String clubName, int generation, String introduction,
-                String representImageUrl, String backgroundImageUrl, boolean isApproved,
-                List<ClubHashtag> clubHashtags, List<ClubImage> clubImages, List<Post> clubPosts,
-                List<ClubRecruit> clubRecruits) {
-        this.categoryType = categoryType;
-        this.clubName = clubName;
-        this.generation = generation;
-        this.introduction = introduction;
-        this.representImageUrl = representImageUrl;
-        this.backgroundImageUrl = backgroundImageUrl;
-        this.clubHashtags = clubHashtags;
-        this.clubImages = clubImages;
-        this.clubPosts = clubPosts;
-        this.clubRecruits = clubRecruits;
-        this.isApproved = isApproved;
+    public Club(ClubRequestDto clubRequestDto, List<HashtagInfo> hashtagInfos) {
+        this.categoryType = clubRequestDto.getCategoryType();
+        this.clubName = clubRequestDto.getName();
+        this.introduction = clubRequestDto.getIntroduction();
+        this.representImageUrl = clubRequestDto.getRepresentImageUrl();
+        this.backgroundImageUrl = clubRequestDto.getBackgroundImageUrl();
+        this.clubHashtags = ClubHashtag.ofList(this, hashtagInfos);
+        this.clubImages = ClubImage.ofList(this, clubRequestDto.getClubImages());
     }
 
     public Club update(ClubRequestDto clubRequestDto) {
@@ -113,17 +109,17 @@ public class Club extends BaseEntity {
 
     public ClubRecruit getLastClubRecruit() {
         return this.clubRecruits.stream()
-                .max(Comparator.comparing(ClubRecruit::getGeneration))
+                .max(Comparator.comparing(ClubRecruit::getRecruitGeneration))
                 .orElseThrow(ClubRecruitNotFoundException::new);
     }
 
     public boolean isRecruitingNow() {
         return this.getLastClubRecruit()
-                   .getClubRecruitStatus()
-                   .equals(ClubRecruitStatus.RECRUIT);
+                .getClubRecruitStatus()
+                .equals(ClubRecruitStatus.RECRUIT);
     }
 
-    public void setApproved(boolean isApproved){
+    public void setApproved(boolean isApproved) {
         this.isApproved = isApproved;
     }
 }

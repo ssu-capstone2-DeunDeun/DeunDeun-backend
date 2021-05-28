@@ -10,7 +10,8 @@ import java.util.List;
 
 public interface ParticipateRepository extends JpaRepository<Participate, Long> {
     List<Participate> findAllByUser(User user);
-    List<Participate> findAllByClubRecruit_Club(Club club);
+    List<Participate> findAllByClub(Club club);
     Participate findByUser(User user);
+    Participate findByUserAndClub(User user, Club club);
     List<Participate> findAllByClubPosition(ClubPosition clubPosition);
 }

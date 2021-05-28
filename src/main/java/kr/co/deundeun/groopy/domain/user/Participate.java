@@ -3,9 +3,8 @@ package kr.co.deundeun.groopy.domain.user;
 import javax.persistence.*;
 
 import kr.co.deundeun.groopy.domain.BaseEntity;
+import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.club.ClubPosition;
-import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,18 +19,19 @@ public class Participate extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
-    private ClubRecruit clubRecruit;
+    private Club club;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private ClubPosition clubPosition;
 
+    private int generation;
+
     private boolean isAdmin;
 
-    @Builder
-    public Participate(User user, ClubRecruit clubRecruit, ClubPosition clubPosition, boolean isAdmin) {
+    public Participate(User user, Club club, boolean isAdmin) {
         this.user = user;
-        this.clubRecruit = clubRecruit;
-        this.clubPosition = clubPosition;
+        this.club = club;
+        this.generation = club.getGeneration();
         this.isAdmin = isAdmin;
     }
 
@@ -39,7 +39,7 @@ public class Participate extends BaseEntity {
         this.clubPosition = clubPosition;
     }
 
-    public void setAdmin(boolean isAdmin){
+    public void setAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
 }

@@ -1,12 +1,14 @@
 package kr.co.deundeun.groopy.domain.user;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import kr.co.deundeun.groopy.config.security.oauth2.SocialProviderType;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.club.Club;
+import kr.co.deundeun.groopy.domain.hashtag.HashtagInfo;
 import kr.co.deundeun.groopy.domain.hashtag.UserHashtag;
 import kr.co.deundeun.groopy.domain.club.ClubLike;
 import kr.co.deundeun.groopy.domain.post.PostLike;
@@ -41,9 +43,6 @@ public class User extends BaseEntity {
 
     private String userImageUrl;
 
-    @OneToMany(mappedBy = "user")
-    private Set<Participate> participates = new HashSet<>();
-
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<UserHashtag> userHashtags = new HashSet<>();
 
@@ -66,7 +65,7 @@ public class User extends BaseEntity {
         this.phoneNumber = userRequestDto.getPhoneNumber();
     }
 
-    public void changeNickname(String nickname){
+    public void updateNickname(String nickname){
         this.nickname = nickname;
     }
 
@@ -74,8 +73,13 @@ public class User extends BaseEntity {
         this.userImageUrl = userImageUrl;
     }
 
-    public void changePhoneNumber(String phoneNumber){
+    public void setPhoneNumber(String phoneNumber){
         this.phoneNumber = phoneNumber;
+    }
+
+    public void setUserHashtags(List<HashtagInfo> hashtagInfos){
+        List<UserHashtag> userHashtags = UserHashtag.ofList(this, hashtagInfos);
+        this.getUserHashtags().addAll(userHashtags);
     }
 
     public boolean isUserLikeClub(Club club){

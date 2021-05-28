@@ -9,9 +9,6 @@ public class ClubPositionRequestDto {
     private String positionName;
 
     public ClubPosition toClubPosition(Club club){
-        return ClubPosition.builder()
-                .club(club)
-                .positionName(positionName)
-                .build();
+        return new ClubPosition(club, positionName);
     }
 }

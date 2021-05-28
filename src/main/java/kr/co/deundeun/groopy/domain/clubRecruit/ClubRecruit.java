@@ -32,7 +32,7 @@ public class ClubRecruit extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private ClubApplyForm clubApplyForm;
 
-    private int generation;
+    private int recruitGeneration;
 
     private String title;
 
@@ -65,7 +65,7 @@ public class ClubRecruit extends BaseEntity {
     private List<Comment> comments;
 
     @Builder
-    public ClubRecruit(Club club, int generation,
+    public ClubRecruit(Club club,
                        String title, String content,
                        LocalDateTime submitStartDate, LocalDateTime submitEndDate,
                        LocalDateTime documentPassStartDate, LocalDateTime documentPassEndDate,
@@ -73,7 +73,7 @@ public class ClubRecruit extends BaseEntity {
                        LocalDateTime finalPassStartDate, LocalDateTime finalPassEndDate,
                        List<Comment> comments){
         this.club = club;
-        this.generation = generation;
+        this.recruitGeneration = club.getGeneration() + 1;
         this.content = content;
         this.title = title;
         this.submitStartDate = submitStartDate;
@@ -88,7 +88,7 @@ public class ClubRecruit extends BaseEntity {
     }
 
     public void update(ClubRecruitRequestDto clubRecruitRequestDto){
-        this.generation = clubRecruitRequestDto.getGeneration();
+        this.recruitGeneration = clubRecruitRequestDto.getGeneration();
         this.content = clubRecruitRequestDto.getContent();
         this.title = clubRecruitRequestDto.getTitle();
         this.submitStartDate = clubRecruitRequestDto.getSubmitStartDate();

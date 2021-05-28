@@ -33,8 +33,7 @@ public class ClubRecruitService {
     @Transactional(readOnly = true)
     public List<ClubRecruitResponseDto> getRecruits(String clubName) {
         Club club = ClubHelper.findByClubName(clubRepository, clubName);
-        return ClubRecruitResponseDto.listOf(clubRecruitRepository
-                .findAllByClubAndGenerationGreaterThan(club, 0));
+        return ClubRecruitResponseDto.listOf(clubRecruitRepository.findAllByClub(club));
     }
 
     @Transactional(readOnly = true)
