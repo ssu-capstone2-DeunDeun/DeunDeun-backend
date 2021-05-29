@@ -1,4 +1,4 @@
-package kr.co.deundeun.groopy.controller;
+package kr.co.deundeun.groopy.controller.clubPosition;
 
 import kr.co.deundeun.groopy.dao.ParticipateRepository;
 import kr.co.deundeun.groopy.domain.user.Participate;

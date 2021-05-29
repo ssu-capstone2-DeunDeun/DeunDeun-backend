@@ -1,4 +1,4 @@
-package kr.co.deundeun.groopy.controller;
+package kr.co.deundeun.groopy.controller.like;
 
 import kr.co.deundeun.groopy.config.Me;
 import kr.co.deundeun.groopy.dto.club.ClubResponseDto;

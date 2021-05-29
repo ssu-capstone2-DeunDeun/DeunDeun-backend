@@ -1,4 +1,4 @@
-package kr.co.deundeun.groopy.controller;
+package kr.co.deundeun.groopy.controller.clubApply;
 
 import kr.co.deundeun.groopy.config.Me;
 import kr.co.deundeun.groopy.dto.clubApply.ApplyRequestDto;

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class ClubRecruitService {
 
@@ -42,13 +43,11 @@ public class ClubRecruitService {
         return new ClubRecruitResponseDto(clubRecruit);
     }
 
-    @Transactional
     public void updateRecruit(Long recruitId, ClubRecruitRequestDto clubRecruitRequestDto) {
         ClubRecruit clubRecruit = ClubRecruitHelper.findById(clubRecruitRepository, recruitId);
         clubRecruit.update(clubRecruitRequestDto);
     }
 
-    @Transactional
     public void deleteRecruit(Long recruitId) {
         clubRecruitRepository.deleteById(recruitId);
     }

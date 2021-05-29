@@ -1,4 +1,4 @@
-package kr.co.deundeun.groopy.controller;
+package kr.co.deundeun.groopy.controller.participate;
 
 import kr.co.deundeun.groopy.dto.participate.ParticipateRequestDto;
 import kr.co.deundeun.groopy.dto.participate.ParticipateResponseDto;

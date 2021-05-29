@@ -38,6 +38,8 @@ public class SwaggerConfig {
     private static final String LIKE_PACKAGE = setPackageName(".like");
     private static final String POST_PACKAGE = setPackageName(".post");
     private static final String USER_PACKAGE = setPackageName(".user");
+    private static final String PARTICIPATE_PACKAGE = setPackageName(".participate");
+    private static final String CLUB_POSITION = setPackageName(".clubPosition");
 
     private String groupName;
 
@@ -163,4 +165,15 @@ public class SwaggerConfig {
         return getDocket(groupName, USER_PACKAGE);
     }
 
+    @Bean
+    public Docket participateApiDocket() {
+        groupName = "PARTICIPATE";
+        return getDocket(groupName, PARTICIPATE_PACKAGE);
+    }
+
+    @Bean
+    public Docket clubPositionApiDocket() {
+        groupName = "CLUB_POSITION";
+        return getDocket(groupName, CLUB_RECRUIT_PACKAGE);
+    }
 }
