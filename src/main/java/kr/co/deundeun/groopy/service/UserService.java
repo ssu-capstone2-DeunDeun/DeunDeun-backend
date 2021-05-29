@@ -72,7 +72,7 @@ public class UserService {
             throw new IllegalArgumentException("해시태그는 3개 이상 등록해야 합니다.");
 
         List<HashtagInfo> hashtagInfos = hashtagService.getHashtagInfos(hashtagInfoIds);
-        user.setUserHashtags(hashtagInfos);
+        user.setUserHashtags(userHashtagRepository, hashtagInfos);
     }
 
     public List<HashtagResponseDto> getHashtags(User user) {

@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+
 import kr.co.deundeun.groopy.config.security.oauth2.SocialProviderType;
+import kr.co.deundeun.groopy.dao.UserHashtagRepository;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.hashtag.HashtagInfo;
@@ -43,48 +45,49 @@ public class User extends BaseEntity {
 
     private String userImageUrl;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserHashtag> userHashtags = new HashSet<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ClubLike> clubLikes = new HashSet<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<PostLike> postLikes = new HashSet<>();
 
     @Builder
-    public User(String socialId, SocialProviderType socialProvider, String email){
+    public User(String socialId, SocialProviderType socialProvider, String email) {
         this.socialId = socialId;
         this.socialProvider = socialProvider;
         this.email = email;
     }
 
-    public void saveSignupInfo(UserRequestDto userRequestDto){
+    public void saveSignupInfo(UserRequestDto userRequestDto) {
         this.nickname = userRequestDto.getNickname();
         this.name = userRequestDto.getName();
         this.phoneNumber = userRequestDto.getPhoneNumber();
     }
 
-    public void updateNickname(String nickname){
+    public void updateNickname(String nickname) {
         this.nickname = nickname;
     }
 
-    public void updateUserImageUrl(String userImageUrl){
+    public void updateUserImageUrl(String userImageUrl) {
         this.userImageUrl = userImageUrl;
     }
 
-    public void setPhoneNumber(String phoneNumber){
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setUserHashtags(List<HashtagInfo> hashtagInfos){
+    public void setUserHashtags(UserHashtagRepository userHashtagRepository, List<HashtagInfo> hashtagInfos) {
         List<UserHashtag> userHashtags = UserHashtag.ofList(this, hashtagInfos);
         this.getUserHashtags().addAll(userHashtags);
+        userHashtagRepository.saveAll(userHashtags);
     }
 
-    public boolean isUserLikeClub(Club club){
+    public boolean isUserLikeClub(Club club) {
         return this.clubLikes.stream()
-                             .anyMatch(clubLike -> clubLike.getClub().equals(club));
+                .anyMatch(clubLike -> clubLike.getClub().equals(club));
     }
 
 }
