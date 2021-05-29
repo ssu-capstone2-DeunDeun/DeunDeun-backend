@@ -1,4 +1,4 @@
-package kr.co.deundeun.groopy.controller;
+package kr.co.deundeun.groopy.controller.alarm;
 
 import kr.co.deundeun.groopy.config.Me;
 import kr.co.deundeun.groopy.dto.alarm.AlarmResponseDto;

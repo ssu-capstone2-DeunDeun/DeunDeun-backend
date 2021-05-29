@@ -1,4 +1,4 @@
-package kr.co.deundeun.groopy.controller;
+package kr.co.deundeun.groopy.controller.clubApplyForm;
 
 import java.util.List;
 import kr.co.deundeun.groopy.dto.clubApplyForm.ApplyFormRequestDto;

@@ -1,4 +1,4 @@
-package kr.co.deundeun.groopy.controller;
+package kr.co.deundeun.groopy.controller.clubRecruit;
 
 import kr.co.deundeun.groopy.dto.clubRecruit.ClubRecruitRequestDto;
 import kr.co.deundeun.groopy.dto.clubRecruit.ClubRecruitResponseDto;

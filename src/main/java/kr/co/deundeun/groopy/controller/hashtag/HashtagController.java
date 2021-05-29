@@ -1,4 +1,4 @@
-package kr.co.deundeun.groopy.controller;
+package kr.co.deundeun.groopy.controller.hashtag;
 
 import kr.co.deundeun.groopy.dto.hashtag.HashtagResponseDto;
 import kr.co.deundeun.groopy.service.HashtagService;

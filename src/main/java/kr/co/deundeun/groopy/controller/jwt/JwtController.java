@@ -1,4 +1,4 @@
-package kr.co.deundeun.groopy.controller;
+package kr.co.deundeun.groopy.controller.jwt;
 
 import kr.co.deundeun.groopy.dto.common.jwt.JwtRefreshResponseDto;
 import kr.co.deundeun.groopy.service.JwtService;

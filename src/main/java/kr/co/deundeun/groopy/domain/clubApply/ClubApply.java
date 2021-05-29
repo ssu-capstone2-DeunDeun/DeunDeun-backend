@@ -65,5 +65,8 @@ public class ClubApply extends BaseEntity {
             throw new BadRequestException("답변 수가 질문 수 보다 많습니다.");
     }
 
+    public void setClubApplyStatus(ClubApplyStatus clubApplyStatus){
+        this.clubApplyStatus = clubApplyStatus;
+    }
 
 }
