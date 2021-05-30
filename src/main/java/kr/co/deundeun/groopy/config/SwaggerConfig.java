@@ -40,6 +40,7 @@ public class SwaggerConfig {
     private static final String USER_PACKAGE = setPackageName(".user");
     private static final String PARTICIPATE_PACKAGE = setPackageName(".participate");
     private static final String CLUB_POSITION = setPackageName(".clubPosition");
+    private static final String EVALUATION = setPackageName(".evaluation");
 
     private String groupName;
 
@@ -174,6 +175,12 @@ public class SwaggerConfig {
     @Bean
     public Docket clubPositionApiDocket() {
         groupName = "CLUB_POSITION";
-        return getDocket(groupName, CLUB_RECRUIT_PACKAGE);
+        return getDocket(groupName, CLUB_POSITION);
+    }
+
+    @Bean
+    public Docket evaluationApiDocket() {
+        groupName = "EVALUATION";
+        return getDocket(groupName, EVALUATION);
     }
 }

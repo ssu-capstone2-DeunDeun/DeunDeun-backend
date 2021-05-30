@@ -32,7 +32,7 @@ public class MailRequestDto {
         body.append("<h2> 소개글 </h2>");
         body.append("<p>").append(club.getIntroduction()).append("</p>");
         body.append("<h2> 승인링크 </h2>");
-        body.append(appProperties.getServerUrl()).append("/clubs/").append(club.getClubName()).append("/approve");
+        body.append(appProperties.getServerUrl()).append("/clubs/").append(club.getId()).append("/approve");
 
         try {
             MimeMessage message = javaMailSender.createMimeMessage();

@@ -18,7 +18,4 @@ public class UserRequestDto {
     @Size(min = 2, max = 8)
     private String nickname;
 
-    private String phoneNumber;
-
-    private String userImageUrl;
 }

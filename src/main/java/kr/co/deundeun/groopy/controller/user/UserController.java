@@ -40,15 +40,13 @@ public class UserController {
     }
 
     @PatchMapping("/nickname")
-    public ResponseEntity<Void> updateNickname(@Me User user,
-                                               @Valid @RequestBody UserRequestDto userRequestDto) {
-        userService.updateNickname(user, userRequestDto.getNickname());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> updateNickname(@Me User user, @RequestParam String nickname) {
+        return ResponseEntity.ok(userService.updateNickname(user, nickname));
     }
 
     @PutMapping("/image")
-    public ResponseEntity<Void> updateUserImageUrl(@Me User user, @RequestBody UserRequestDto userRequestDto) {
-        userService.updateUserImageUrl(user, userRequestDto.getUserImageUrl());
+    public ResponseEntity<Void> updateUserImageUrl(@Me User user, @RequestParam String userImageUrl) {
+        userService.updateUserImageUrl(user, userImageUrl);
         return ResponseEntity.ok().build();
     }
 

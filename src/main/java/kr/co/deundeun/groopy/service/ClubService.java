@@ -82,7 +82,9 @@ public class ClubService {
         clubRepository.save(club.update(clubRequestDto));
     }
 
-    private boolean isDuplicatedName(String clubName) {
+
+
+    public boolean isDuplicatedName(String clubName) {
         return clubRepository.existsByClubName(clubName);
     }
 

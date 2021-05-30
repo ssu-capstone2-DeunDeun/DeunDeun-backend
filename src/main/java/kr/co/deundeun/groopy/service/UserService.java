@@ -54,12 +54,13 @@ public class UserService {
         return new UserResponseDto(user);
     }
 
-    public void updateNickname(User user, String nickname) {
+    public String updateNickname(User user, String nickname) {
         if (isDuplicatedNickname(nickname))
             throw new DuplicateResourceException("중복된 닉네임입니다.");
 
         user.updateNickname(nickname);
         userRepository.save(user);
+        return user.getNickname();
     }
 
     public void updateUserImageUrl(User user, String userImageUrl) {

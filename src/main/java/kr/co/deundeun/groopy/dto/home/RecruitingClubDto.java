@@ -19,20 +19,17 @@ public class RecruitingClubDto {
   private String content;
   private String representImageUrl;
   private CategoryType categoryType;
-  private long dDay;
-
-
+  private boolean isRecruitingNow;
 
   public RecruitingClubDto(ClubRecruit clubRecruit) {
     this.clubRecruitId = clubRecruit.getId();
     this.generation = clubRecruit.getRecruitGeneration();
     this.title = clubRecruit.getTitle();
     this.content = clubRecruit.getContent();
-    this.dDay = Duration.between(LocalDateTime.now(), clubRecruit.getSubmitEndDate()).toDays();
-
     Club club = clubRecruit.getClub();
     this.representImageUrl = club.getRepresentImageUrl();
     this.categoryType = club.getCategoryType();
+    this.isRecruitingNow = club.isRecruitingNow();
   }
 
   public static List<RecruitingClubDto> listOf(List<ClubRecruit> clubRecruits) {

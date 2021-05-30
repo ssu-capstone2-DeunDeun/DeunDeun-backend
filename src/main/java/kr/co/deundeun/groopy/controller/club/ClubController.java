@@ -22,6 +22,12 @@ public class ClubController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @GetMapping("/clubs/check")
+    public ResponseEntity<Boolean> checkClubName(@RequestParam String clubName) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(clubService.isDuplicatedName(clubName));
+    }
+
+
     @GetMapping("/clubs/{clubId}/approve")
     public ResponseEntity<String> approveClub(@PathVariable Long clubId) {
         clubService.approveClub(clubId);

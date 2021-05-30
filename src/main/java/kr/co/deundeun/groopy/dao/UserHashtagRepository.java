@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface UserHashtagRepository extends JpaRepository<UserHashtag, Long> {
     List<UserHashtag> findAllByUser(User user);
+
+    void deleteAllByUser(User user);
 }

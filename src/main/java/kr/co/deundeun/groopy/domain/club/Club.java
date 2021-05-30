@@ -115,6 +115,9 @@ public class Club extends BaseEntity {
     }
 
     public boolean isRecruitingNow() {
+        if(this.clubRecruits.size() == 0)
+            return false;
+
         return this.getLastClubRecruit()
                 .getClubRecruitStatus()
                 .equals(ClubRecruitStatus.RECRUIT);

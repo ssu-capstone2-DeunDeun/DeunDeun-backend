@@ -64,7 +64,6 @@ public class User extends BaseEntity {
     public void saveSignupInfo(UserRequestDto userRequestDto) {
         this.nickname = userRequestDto.getNickname();
         this.name = userRequestDto.getName();
-        this.phoneNumber = userRequestDto.getPhoneNumber();
     }
 
     public void updateNickname(String nickname) {
@@ -80,6 +79,7 @@ public class User extends BaseEntity {
     }
 
     public void setUserHashtags(UserHashtagRepository userHashtagRepository, List<HashtagInfo> hashtagInfos) {
+        userHashtagRepository.deleteAllByUser(this);
         List<UserHashtag> userHashtags = UserHashtag.ofList(this, hashtagInfos);
         this.getUserHashtags().addAll(userHashtags);
         userHashtagRepository.saveAll(userHashtags);

@@ -4,6 +4,8 @@ import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import lombok.Getter;
 
+import javax.validation.constraints.Future;
+import javax.validation.constraints.FutureOrPresent;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,20 +18,28 @@ public class ClubRecruitRequestDto {
 
     private int generation;
 
+    @Future
     private LocalDateTime submitStartDate;
 
+    @Future
     private LocalDateTime submitEndDate;
 
+    @Future
     private LocalDateTime documentPassStartDate;
 
+    @Future
     private LocalDateTime documentPassEndDate;
 
+    @Future
     private LocalDateTime interviewStartDate;
 
+    @Future
     private LocalDateTime interviewEndDate;
 
+    @Future
     private LocalDateTime finalPassStartDate;
 
+    @Future
     private LocalDateTime finalPassEndDate;
 
     public ClubRecruit toClubRecruit(Club club){
