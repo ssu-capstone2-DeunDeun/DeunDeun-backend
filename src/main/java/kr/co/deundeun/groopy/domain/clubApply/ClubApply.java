@@ -37,6 +37,8 @@ public class ClubApply extends BaseEntity {
     @OneToMany(mappedBy = "clubApply")
     private List<Comment> comments = new ArrayList<>();
 
+    private int commentCount = 0;
+
     @Builder
     public ClubApply(User user, ClubRecruit clubRecruit, List<String> clubApplyAnswers) {
         this();
@@ -67,6 +69,17 @@ public class ClubApply extends BaseEntity {
 
     public void setClubApplyStatus(ClubApplyStatus clubApplyStatus){
         this.clubApplyStatus = clubApplyStatus;
+    }
+
+    public void increaseCommentCount(){
+        this.commentCount += 1;
+    }
+
+    public void decreaseCommentCount(){
+        if (this.commentCount <= 0){
+            return;
+        }
+        this.commentCount -= 1;
     }
 
 }

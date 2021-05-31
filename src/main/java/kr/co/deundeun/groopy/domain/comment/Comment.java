@@ -1,5 +1,6 @@
 package kr.co.deundeun.groopy.domain.comment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import kr.co.deundeun.groopy.dto.comment.CommentRequestDto;
@@ -32,7 +33,7 @@ public class Comment extends BaseEntity {
   private Comment parentComment;
 
   @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL)
-  private List<Comment> childComment;
+  private List<Comment> childComments = new ArrayList<>();
 
   @ManyToOne
   private ClubRecruit clubRecruit;
@@ -49,13 +50,87 @@ public class Comment extends BaseEntity {
     this.commentType = commentType;
     this.user = user;
     this.comment = comment;
-    this.parentComment = parentComment;
-    this.clubRecruit = clubRecruit;
-    this.clubApply = clubApply;
-    this.post = post;
+    initParentComment(parentComment);
+    initClubRecruit(clubRecruit);
+    initClubApply(clubApply);
+    initPost(post);
   }
 
-  public void update(CommentRequestDto commentRequestDto){
+  private void initParentComment(Comment parentComment) {
+    if (parentComment == null) {
+      this.parentComment = null;
+      return;
+    }
+    this.parentComment = parentComment;
+    parentComment.getChildComments().add(this);
+  }
+
+  private void initClubApply(ClubApply clubApply){
+    this.clubApply = clubApply;
+    clubApply.getComments().add(this);
+  }
+
+  private void initClubRecruit(ClubRecruit clubRecruit){
+    this.clubRecruit = clubRecruit;
+    clubRecruit.getComments().add(this);
+  }
+
+  private void initPost(Post post){
+    this.post = post;
+    post.getComments().add(this);
+  }
+
+  public void updateComment(CommentRequestDto commentRequestDto){
     this.comment = commentRequestDto.getComment();
+  }
+
+  public void deleteRelationship(){
+    deleteParentComment();
+    switch (this.commentType){
+      case APPLY_COMMENT:
+        this.clubApply.decreaseCommentCount();
+        deleteClubApply();
+        break;
+      case  RECRUIT_COMMENT:
+        this.clubRecruit.decreaseCommentCount();
+        deleteClubRecruit();
+        break;
+      case POST_COMMENT:
+        this.post.decreaseCommentCount();
+        deletePost();
+        break;
+    }
+  }
+
+  private void deleteParentComment(){
+    if (this.parentComment == null){
+      return;
+    }
+    this.parentComment.getChildComments().remove(this);
+    this.parentComment = null;
+  }
+
+  private void deleteClubApply(){
+    if(this.clubApply == null){
+      return;
+    }
+    this.clubApply.getComments().remove(this);
+    this.clubApply = null;
+  }
+
+  private void deleteClubRecruit(){
+    if(this.clubRecruit == null){
+      return;
+    }
+    this.clubRecruit.getComments().remove(this);
+    this.clubRecruit = null;
+  }
+
+  private void deletePost(){
+    if(this.post == null){
+      return;
+    }
+    this.post.getComments().remove(this);
+    this.post = null;
   }
 }
