@@ -1,8 +1,10 @@
 package kr.co.deundeun.groopy.dto.comment;
 
 import kr.co.deundeun.groopy.domain.clubApply.ClubApply;
+import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.comment.Comment;
 import kr.co.deundeun.groopy.domain.comment.constant.CommentType;
+import kr.co.deundeun.groopy.domain.post.Post;
 import kr.co.deundeun.groopy.domain.user.User;
 import lombok.Getter;
 
@@ -19,22 +21,36 @@ public class CommentRequestDto {
 
     private Long parentCommentId;
 
-    public Comment toComment(User user, ClubApply clubApply) {
+    public Comment toClubApplyComment(User user, ClubApply clubApply, Comment parentComment) {
+        clubApply.increaseCommentCount();
         return Comment.builder()
-                .user(user)
-                .commentType(commentType)
-                .comment(comment)
-                .clubApply(clubApply)
-                .build();
+                      .commentType(commentType)
+                      .user(user)
+                      .comment(comment)
+                      .clubApply(clubApply)
+                      .parentComment(parentComment)
+                      .build();
     }
 
-    public Comment toComment(User user, ClubApply clubApply, Comment parentComment) {
+    public Comment toPostComment(User user, Post post, Comment parentComment) {
+        post.increaseCommentCount();
         return Comment.builder()
-                .user(user)
-                .commentType(commentType)
-                .comment(comment)
-                .clubApply(clubApply)
-                .parentComment(parentComment)
-                .build();
+                      .commentType(commentType)
+                      .user(user)
+                      .comment(comment)
+                      .post(post)
+                      .parentComment(parentComment)
+                      .build();
+    }
+
+    public Comment toClubRecruitComment(User user, ClubRecruit clubRecruit, Comment parentComment) {
+        clubRecruit.increaseCommentCount();
+        return Comment.builder()
+                      .commentType(commentType)
+                      .user(user)
+                      .comment(comment)
+                      .clubRecruit(clubRecruit)
+                      .parentComment(parentComment)
+                      .build();
     }
 }

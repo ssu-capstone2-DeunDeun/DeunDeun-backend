@@ -23,19 +23,25 @@ public class CommentResponseDto {
 
     private LocalDateTime createdAt;
 
-    public static List<CommentResponseDto> ofList(List<Comment> comments){
-        return comments.stream()
-                .map(CommentResponseDto::new)
-                .collect(Collectors.toList());
-    }
-
     public CommentResponseDto(Comment comment){
         this.id = comment.getId();
         this.commentType = comment.getCommentType();
         this.comment = comment.getComment();
         this.author = comment.getUser().getNickname();
-        if(comment.getParentComment() != null)
-        this.parentCommentId = comment.getParentComment().getId();
+        this.parentCommentId = getParentCommentId(comment);
         this.createdAt = comment.getCreatedAt();
+    }
+
+    private Long getParentCommentId(Comment comment) {
+        if (comment.getParentComment() == null) {
+            return -1L;
+        }
+        return comment.getParentComment().getId();
+    }
+
+    public static List<CommentResponseDto> ofList(List<Comment> comments){
+        return comments.stream()
+                       .map(CommentResponseDto::new)
+                       .collect(Collectors.toList());
     }
 }

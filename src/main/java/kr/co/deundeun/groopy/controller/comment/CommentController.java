@@ -19,16 +19,15 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/applies/{applyId}/comments")
-    public ResponseEntity<Void> CommentApply(@Me User user, @PathVariable Long applyId,
-                                             @Valid @RequestBody CommentRequestDto commentRequestDto) {
-        commentService.commentApply(user, applyId, commentRequestDto);
-
+    public ResponseEntity<Void> commentClubApply(@Me User user, @PathVariable Long applyId,
+                                                 @Valid @RequestBody CommentRequestDto commentRequestDto) {
+        commentService.commentClubApply(user, applyId, commentRequestDto);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/applies/{applyId}/comments")
-    public ResponseEntity<List<CommentResponseDto>> getComments(@PathVariable Long applyId) {
-        return ResponseEntity.ok(commentService.getApplyComments(applyId));
+    public ResponseEntity<List<CommentResponseDto>> getClubApplyComments(@PathVariable Long applyId) {
+        return ResponseEntity.ok(commentService.getClubApplyComments(applyId));
     }
 
     @PatchMapping("/comments/{commentId}")
@@ -42,5 +41,29 @@ public class CommentController {
     public ResponseEntity<Void> deleteComment(@Me User user, @PathVariable Long commentId) {
         commentService.deleteComment(user, commentId);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/posts/{postId}/comments")
+    public ResponseEntity<Void> commentPost(@Me User user, @PathVariable Long postId,
+                                             @Valid @RequestBody CommentRequestDto commentRequestDto) {
+        commentService.commentPost(user, postId, commentRequestDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/posts/{postId}/comments")
+    public ResponseEntity<List<CommentResponseDto>> getPostComments(@PathVariable Long postId) {
+        return ResponseEntity.ok(commentService.getPostComments(postId));
+    }
+
+    @PostMapping("/recruits/{recruitId}/comments")
+    public ResponseEntity<Void> commentClubRecruit(@Me User user, @PathVariable Long recruitId,
+                                            @Valid @RequestBody CommentRequestDto commentRequestDto) {
+        commentService.commentClubRecruit(user, recruitId, commentRequestDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/recruits/{recruitId}/comments")
+    public ResponseEntity<List<CommentResponseDto>> getClubRecruitComments(@PathVariable Long recruitId) {
+        return ResponseEntity.ok(commentService.getClubRecruitComments(recruitId));
     }
 }

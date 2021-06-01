@@ -9,14 +9,13 @@ import kr.co.deundeun.groopy.exception.IdNotFoundException;
 
 public class CommentHelper {
 
-    public static Comment findById(CommentRepository commentRepository, Long id, User user) {
-        Comment comment = findById(commentRepository, id);
-        if (!user.equals(comment.getUser())) throw new AuthorizationException();
-        return comment;
-    }
-
     public static Comment findById(CommentRepository commentRepository, Long id) {
         return commentRepository.findById(id)
                 .orElseThrow(() -> new IdNotFoundException("존재하지 않는 댓글 ID 입니다."));
+    }
+
+    public static Comment findParentCommentById(CommentRepository commentRepository, Long parentCommentId){
+        if (parentCommentId == -1L) return null;
+        return commentRepository.findById(parentCommentId).orElse(null);
     }
 }

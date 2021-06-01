@@ -59,6 +59,8 @@ public class ClubRecruit extends BaseEntity {
 
     private int likeCount = 0;
 
+    private int commentCount = 0;
+
     private int applicantCount = 0;
 
     @OneToMany(mappedBy = "clubRecruit")
@@ -106,10 +108,23 @@ public class ClubRecruit extends BaseEntity {
     }
 
     public void decreaseApplicantCount(){
-        if (this.applicantCount != 0) {
-            this.applicantCount -= 1;
+        if (this.applicantCount <= 0) {
+            return;
         }
+        this.applicantCount -= 1;
     }
+
+    public void increaseCommentCount(){
+        this.commentCount += 1;
+    }
+
+    public void decreaseCommentCount(){
+        if (this.commentCount <= 0){
+            return;
+        }
+        this.commentCount -= 1;
+    }
+
     public int getQuestionSize(){
         return this.getClubApplyForm().getClubRecruitQuestions().size();
     }

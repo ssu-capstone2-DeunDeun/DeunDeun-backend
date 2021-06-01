@@ -1,5 +1,6 @@
 package kr.co.deundeun.groopy.domain.post;
 
+import java.util.ArrayList;
 import javax.persistence.*;
 
 import kr.co.deundeun.groopy.dto.post.PostRequestDto;
@@ -35,7 +36,7 @@ public class Post extends BaseEntity {
     private int viewCount = 0;
 
     @OneToMany(mappedBy = "post")
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     public Post(PostRequestDto postRequestDto){
         this.title = postRequestDto.getTitle();
@@ -68,4 +69,14 @@ public class Post extends BaseEntity {
         else likeCount = 0;
     }
 
+    public void increaseCommentCount(){
+        this.commentCount += 1;
+    }
+
+    public void decreaseCommentCount(){
+        if (commentCount <= 0 ) {
+            return;
+        }
+        this.commentCount -= 1;
+    }
 }
