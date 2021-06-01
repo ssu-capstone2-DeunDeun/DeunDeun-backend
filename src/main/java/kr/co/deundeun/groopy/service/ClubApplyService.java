@@ -1,5 +1,7 @@
 package kr.co.deundeun.groopy.service;
 
+import kr.co.deundeun.groopy.dao.CommentRepository;
+import kr.co.deundeun.groopy.domain.comment.Comment;
 import kr.co.deundeun.groopy.dto.clubApply.ApplyRequestDto;
 import kr.co.deundeun.groopy.dto.clubApply.ApplyResponseDto;
 import kr.co.deundeun.groopy.dto.clubApply.ApplySummaryResponseDto;
@@ -25,6 +27,7 @@ public class ClubApplyService {
 
     private final ClubApplyRepository clubApplyRepository;
     private final ClubRecruitRepository clubRecruitRepository;
+    private final CommentRepository commentRepository;
 
     public void apply(User user, Long clubRecruitId, ApplyRequestDto applyRequestDto) {
 
@@ -71,6 +74,16 @@ public class ClubApplyService {
     }
 
     public void deleteApply(Long applyId) {
+
+        ClubApply clubApply = ClubApplyHelper.findById(clubApplyRepository, applyId);
+
+        List<Comment> comments = clubApply.getComments();
+        comments.forEach(Comment::deleteRelationship);
+        commentRepository.deleteAll(comments);
+
+        ClubRecruit clubRecruit = clubApply.getClubRecruit();
+        clubRecruit.decreaseApplicantCount();
+
         clubApplyRepository.deleteById(applyId);
     }
 }

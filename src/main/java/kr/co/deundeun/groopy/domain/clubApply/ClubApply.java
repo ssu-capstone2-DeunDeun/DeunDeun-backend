@@ -81,5 +81,4 @@ public class ClubApply extends BaseEntity {
         }
         this.commentCount -= 1;
     }
-
 }
