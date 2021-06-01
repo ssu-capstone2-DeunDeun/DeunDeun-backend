@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.deundeun.groopy.config.SmsProperties;
 import kr.co.deundeun.groopy.dto.message.*;
+import kr.co.deundeun.groopy.exception.BadRequestException;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -84,7 +85,7 @@ public class MessageService {
         try {
             body = objectMapper.writeValueAsString(smsRequestDto); // body 생성
         } catch (JsonProcessingException ex) {
-            ex.printStackTrace();
+            throw new BadRequestException("메시지 전송 정보가 잘못되었습니다.");
         }
         return body;
     }
