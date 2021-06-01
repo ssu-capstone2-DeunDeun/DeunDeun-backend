@@ -73,6 +73,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .socialProvider(SocialProviderType.valueOf(registrationId))
                 .socialId(oAuth2UserInfo.getId())
                 .email(oAuth2UserInfo.getEmail())
+                .phoneNumber(oAuth2UserInfo.getPhoneNumber())
                 .build();
 
         return userRepository.save(user);

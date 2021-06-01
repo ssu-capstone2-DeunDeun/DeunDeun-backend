@@ -19,8 +19,7 @@ public class OAuth2UserInfoFactory {
         if (registrationId.equalsIgnoreCase(SocialProviderType.google.toString())) {
             return new GoogleOAuth2UserInfo(attributes);
         } else if (registrationId.equalsIgnoreCase(SocialProviderType.naver.toString())){
-//            return new NaverOAuth2UserInfo(attributes);
-            return null;
+            return new NaverOAuth2UserInfo(attributes);
         }
         else {
             throw new OAuth2AuthenticationProcessingException(registrationId + "는 인증되지 않은 소셜 로그인입니다.");

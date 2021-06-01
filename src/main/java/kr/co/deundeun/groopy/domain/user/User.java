@@ -55,10 +55,11 @@ public class User extends BaseEntity {
     private Set<PostLike> postLikes = new HashSet<>();
 
     @Builder
-    public User(String socialId, SocialProviderType socialProvider, String email) {
+    public User(String socialId, SocialProviderType socialProvider, String email, String phoneNumber) {
         this.socialId = socialId;
         this.socialProvider = socialProvider;
         this.email = email;
+        this.phoneNumber = phoneNumber;
     }
 
     public void saveSignupInfo(UserRequestDto userRequestDto) {
