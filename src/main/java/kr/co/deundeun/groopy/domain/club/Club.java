@@ -1,45 +1,141 @@
 package kr.co.deundeun.groopy.domain.club;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Comparator;
+
+import kr.co.deundeun.groopy.domain.hashtag.HashtagInfo;
+import kr.co.deundeun.groopy.dto.club.ClubRequestDto;
 import kr.co.deundeun.groopy.domain.BaseEntity;
+import kr.co.deundeun.groopy.domain.club.constant.CategoryType;
+import kr.co.deundeun.groopy.domain.clubApplyForm.ClubApplyForm;
+import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
+import kr.co.deundeun.groopy.domain.clubRecruit.constant.ClubRecruitStatus;
 import kr.co.deundeun.groopy.domain.hashtag.ClubHashtag;
-import kr.co.deundeun.groopy.domain.image.ClubImage;
-import kr.co.deundeun.groopy.domain.like.UserClubLike;
-import kr.co.deundeun.groopy.domain.post.ClubPost;
-import kr.co.deundeun.groopy.domain.user.UserClub;
+import kr.co.deundeun.groopy.domain.post.Post;
+import kr.co.deundeun.groopy.exception.ClubRecruitNotFoundException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Getter
 @Entity
 public class Club extends BaseEntity {
 
+    @Enumerated(EnumType.STRING)
+    private CategoryType categoryType;
+
+    @Column(nullable = false, unique = true)
     private String clubName;
 
-    private int generation;
+    private int generation = 0;
 
     private String introduction;
 
-    @OneToMany(mappedBy = "club")
-    private List<UserClub> memberList;
+    private String representImageUrl;
 
-    @OneToMany(mappedBy = "club")
-    private List<ClubHashtag> clubHashtagList;
+    private String backgroundImageUrl;
 
-    @OneToMany(mappedBy = "club")
-    private List<UserClubLike> userClubLikeList;
+    private int likeCount = 0;
 
-    @OneToMany(mappedBy = "club")
-    private List<ClubImage> clubImageList;
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ClubHashtag> clubHashtags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "club")
-    private List<ClubPost> clubPostList;
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ClubImage> clubImages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "club")
-    private List<ClubRecruit> clubRecruitList;
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Post> clubPosts = new ArrayList<>();
 
+    @OrderBy("createdAt desc")
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ClubRecruit> clubRecruits = new ArrayList<>();
+
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ClubApplyForm> clubApplyForms = new ArrayList<>();
+
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ClubPosition> clubPositions = new ArrayList<>();
+
+    private boolean isApproved;
+
+    public Club(ClubRequestDto clubRequestDto, List<HashtagInfo> hashtagInfos) {
+        this.categoryType = clubRequestDto.getCategoryType();
+        this.generation = clubRequestDto.getGeneration();
+        this.clubName = clubRequestDto.getName();
+        this.introduction = clubRequestDto.getIntroduction();
+        this.representImageUrl = clubRequestDto.getRepresentImageUrl();
+        this.backgroundImageUrl = clubRequestDto.getBackgroundImageUrl();
+        this.clubHashtags = ClubHashtag.ofList(this, hashtagInfos);
+        this.clubImages = ClubImage.ofList(this, clubRequestDto.getClubImages());
+    }
+
+    public Club update(ClubRequestDto clubRequestDto) {
+        this.clubName = clubRequestDto.getName();
+        this.introduction = clubRequestDto.getIntroduction();
+        this.representImageUrl = clubRequestDto.getRepresentImageUrl();
+        return this;
+    }
+
+    public void setClubImage(ClubImage clubImage) {
+        if (clubImages.stream().anyMatch(image -> image.toImageUrl()
+                .equals(clubImage.getImageUrl()))) return;
+        this.clubImages.add(clubImage);
+        clubImage.setClub(this);
+    }
+
+    public void setClubImages(List<ClubImage> clubImages) {
+        if (this.clubImages == null) clubImages = new ArrayList<>();
+        clubImages.forEach(this::setClubImage);
+    }
+
+    public List<String> toImageUrls() {
+        return this.clubImages.stream()
+                .map(ClubImage::toImageUrl)
+                .collect(Collectors.toList());
+    }
+
+    public void increaseLikeCount() {
+        likeCount++;
+    }
+
+    public void decreaseLikeCount() {
+        if (likeCount > 0) likeCount--;
+        else likeCount = 0;
+    }
+
+    public ClubRecruit getLastClubRecruit() {
+        return this.clubRecruits.stream()
+                .max(Comparator.comparing(ClubRecruit::getRecruitGeneration))
+                .orElseThrow(ClubRecruitNotFoundException::new);
+    }
+
+    public boolean isRecruitingNow() {
+        if(this.clubRecruits.size() == 0)
+            return false;
+
+        return this.getLastClubRecruit()
+                .getClubRecruitStatus()
+                .equals(ClubRecruitStatus.RECRUIT);
+    }
+
+    public void setApproved(boolean isApproved) {
+        this.isApproved = isApproved;
+    }
+
+    public long getdDay(){
+        long dDay = -1L;
+        if(this.isRecruitingNow()) {
+            ClubRecruit clubRecruit = this.getLastClubRecruit();
+            long duration = Duration.between(LocalDateTime.now(), clubRecruit.getSubmitEndDate()).toDays();
+            if(duration >= 0)
+                dDay = duration;
+        }
+        return dDay;
+    }
 }

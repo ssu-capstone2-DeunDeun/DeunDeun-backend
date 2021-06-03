@@ -1,20 +1,82 @@
 package kr.co.deundeun.groopy.domain.post;
 
-import kr.co.deundeun.groopy.domain.BaseEntity;
-import kr.co.deundeun.groopy.domain.club.Club;
-import kr.co.deundeun.groopy.domain.user.User;
-import lombok.Getter;
-
+import java.util.ArrayList;
 import javax.persistence.*;
 
-@MappedSuperclass
+import kr.co.deundeun.groopy.dto.post.PostRequestDto;
+import kr.co.deundeun.groopy.domain.BaseEntity;
+import kr.co.deundeun.groopy.domain.club.Club;
+import kr.co.deundeun.groopy.domain.comment.Comment;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@NoArgsConstructor
 @Getter
-public abstract class Post extends BaseEntity {
+@Entity
+public class Post extends BaseEntity {
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Club club;
 
     private String title;
 
+    private String author;
+
     private String content;
 
-    @OneToOne
-    private User author;
+    private String thumbnailImageUrl;
+
+    private int commentCount = 0;
+
+    private int likeCount = 0;
+
+    private int viewCount = 0;
+
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments = new ArrayList<>();
+
+    public Post(PostRequestDto postRequestDto){
+        this.title = postRequestDto.getTitle();
+        this.content = postRequestDto.getContent();
+        this.thumbnailImageUrl = postRequestDto.getThumbnailUrl();
+    }
+
+    @Builder
+    public Post(Club club, String author, PostRequestDto postRequestDto) {
+        this(postRequestDto);
+        this.club = club;
+        this.author = author;
+    }
+
+    public void increaseViewCount() {
+        viewCount++;
+    }
+
+    public void update(PostRequestDto postRequestDto) {
+        this.title = postRequestDto.getTitle();
+        this.content = postRequestDto.getContent();
+    }
+
+    public void increaseLikeCount() {
+        likeCount++;
+    }
+
+    public void decreaseLikeCount() {
+        if (likeCount > 0) likeCount--;
+        else likeCount = 0;
+    }
+
+    public void increaseCommentCount(){
+        this.commentCount += 1;
+    }
+
+    public void decreaseCommentCount(){
+        if (commentCount <= 0 ) {
+            return;
+        }
+        this.commentCount -= 1;
+    }
 }
