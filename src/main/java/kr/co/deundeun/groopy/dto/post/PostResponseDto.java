@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Getter
 public class PostResponseDto {
 
-    private Long id;
+    private Long postId;
     private String title;
     private String content;
     private String author;
@@ -21,7 +21,7 @@ public class PostResponseDto {
     private LocalDateTime modifiedAt;
 
     public PostResponseDto(Post post) {
-        this.id = post.getId();
+        this.postId = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.author = post.getAuthor();

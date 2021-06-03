@@ -43,14 +43,14 @@ public class ParticipateService {
         return ParticipateResponseDto.of(participate);
     }
 
-    public void invite(ParticipateRequestDto participateRequestDto) {
+    public ParticipateResponseDto invite(ParticipateRequestDto participateRequestDto) {
         User user = UserHelper.findUserByEmail(userRepository, participateRequestDto.getEmail());
         Club club = ClubHelper.findByClubName(clubRepository, participateRequestDto.getClubName());
 
         if (participateRepository.existsByUserAndClub(user, club))
             throw new DuplicateResourceException("이미 등록된 회원입니다.");
         Participate participate = new Participate(user, club, false);
-        participateRepository.save(participate);
+        return ParticipateResponseDto.of(participateRepository.save(participate));
     }
 
     public void deleteParticipate(Long participateId) {

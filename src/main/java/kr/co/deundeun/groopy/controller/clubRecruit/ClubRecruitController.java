@@ -39,8 +39,8 @@ public class ClubRecruitController {
     }
 
     @DeleteMapping("recruits/{recruitId}") // 동아리 모집공고 삭제하기
-    public ResponseEntity<Void> deleteRecruit(@PathVariable Long recruitId){
+    public ResponseEntity<String> deleteRecruit(@PathVariable Long recruitId){
         clubRecruitService.deleteRecruit(recruitId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("모집 공고가 삭제되었습니다.");
     }
 }

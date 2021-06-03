@@ -14,6 +14,7 @@ import kr.co.deundeun.groopy.domain.post.PostLike;
 import kr.co.deundeun.groopy.domain.post.Post;
 import kr.co.deundeun.groopy.domain.user.Participate;
 import kr.co.deundeun.groopy.domain.user.User;
+import kr.co.deundeun.groopy.dto.user.userClub.UserClubDto;
 import kr.co.deundeun.groopy.exception.DuplicateResourceException;
 import kr.co.deundeun.groopy.exception.NameDuplicateException;
 import lombok.RequiredArgsConstructor;
@@ -98,12 +99,9 @@ public class UserService {
         return LikeListResponseDto.of(clubs, posts);
     }
 
-    public List<ClubResponseDto> getClubs(User user) {
+    public List<UserClubDto> getClubs(User user) {
         List<Participate> participates = participateRepository.findAllByUser(user);
-        List<Club> clubs = participates.stream()
-                .map(Participate::getClub)
-                .collect(Collectors.toList());
-        return ClubResponseDto.listOf(clubs);
+        return UserClubDto.ofList(participates);
     }
 
     public void deleteUser(User user) {

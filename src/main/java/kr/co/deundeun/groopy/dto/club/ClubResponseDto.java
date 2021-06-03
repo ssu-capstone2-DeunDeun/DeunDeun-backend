@@ -1,11 +1,9 @@
 package kr.co.deundeun.groopy.dto.club;
 
-import kr.co.deundeun.groopy.dto.clubRecruit.ClubRecruitResponseDto;
-import kr.co.deundeun.groopy.dto.post.PostResponseDto;
+import kr.co.deundeun.groopy.domain.hashtag.ClubHashtag;
+import kr.co.deundeun.groopy.dto.hashtag.HashtagResponseDto;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.club.constant.CategoryType;
-import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
-import kr.co.deundeun.groopy.domain.post.Post;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,15 +13,13 @@ import java.util.stream.Collectors;
 @Getter
 public class ClubResponseDto {
 
-    private Long id;
-
-    private String clubName;
+    private Long clubId;
 
     private CategoryType categoryType;
 
-    private int generation;
+    private String clubName;
 
-    private int likeCount;
+    private int generation = 0;
 
     private String introduction;
 
@@ -31,23 +27,13 @@ public class ClubResponseDto {
 
     private String backgroundImageUrl;
 
+    private int likeCount = 0;
+
     private List<String> clubImageUrls;
 
-    private List<PostResponseDto> postResponseDtos;
-
-    private ClubRecruitResponseDto clubRecruitResponseDto;
-
-    private boolean isAdmin;
+    private List<HashtagResponseDto> clubHashtags;
 
     private boolean isApproved;
-
-    public static ClubResponseDto of(Club club, List<Post> posts, ClubRecruit clubRecruit, boolean isAdmin) {
-        return ClubResponseDto.builder()
-                .club(club)
-                .posts(posts)
-                .clubRecruit(clubRecruit)
-                .isAdmin(isAdmin).build();
-    }
 
     public static ClubResponseDto of(Club club) {
         return ClubResponseDto.builder()
@@ -55,15 +41,16 @@ public class ClubResponseDto {
                 .build();
     }
 
-    public static List<ClubResponseDto> listOf(List<Club> clubs){
+    public static List<ClubResponseDto> listOf(List<Club> clubs) {
         return clubs.stream()
                 .map(ClubResponseDto::of)
                 .collect(Collectors.toList());
     }
 
+
     @Builder
-    public ClubResponseDto(Club club, List<Post> posts, ClubRecruit clubRecruit, boolean isAdmin) {
-        this.id = club.getId();
+    public ClubResponseDto(Club club) {
+        this.clubId = club.getId();
         this.clubName = club.getClubName();
         this.categoryType = club.getCategoryType();
         this.generation = club.getGeneration();
@@ -72,9 +59,9 @@ public class ClubResponseDto {
         this.representImageUrl = club.getRepresentImageUrl();
         this.backgroundImageUrl = club.getBackgroundImageUrl();
         this.clubImageUrls = club.toImageUrls();
-        this.postResponseDtos = PostResponseDto.listOf(posts);
-        this.clubRecruitResponseDto = ClubRecruitResponseDto.of(clubRecruit);
-        this.isAdmin = isAdmin;
+        this.clubHashtags = HashtagResponseDto.ofList(club.getClubHashtags().stream().map(ClubHashtag::getHashtagInfo).collect(Collectors.toList()));
         this.isApproved = club.isApproved();
     }
+
+
 }

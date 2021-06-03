@@ -27,9 +27,8 @@ public class ParticipateController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> invite(@RequestBody ParticipateRequestDto participateRequestDto) {
-        participateService.invite(participateRequestDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ParticipateResponseDto> invite(@RequestBody ParticipateRequestDto participateRequestDto) {
+        return ResponseEntity.ok(participateService.invite(participateRequestDto));
     }
 
     @GetMapping("/club") // 동아리 기준으로 참여자 찾기

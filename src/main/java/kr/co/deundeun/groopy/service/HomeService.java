@@ -1,5 +1,7 @@
 package kr.co.deundeun.groopy.service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
@@ -15,11 +17,9 @@ import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.clubRecruit.constant.ClubRecruitStatus;
 import kr.co.deundeun.groopy.domain.post.Post;
 import kr.co.deundeun.groopy.domain.user.User;
-import kr.co.deundeun.groopy.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @RequiredArgsConstructor
@@ -48,11 +48,13 @@ public class HomeService {
         clubRecruits = clubRecruitRepository.findTop5ByClubRecruitStatusEqualsOrderByLikeCountDesc(ClubRecruitStatus.RECRUIT);
         break;
       default:
-        throw new BadRequestException("유효하지 않은 정렬 방식입니다.");
+        clubRecruits = clubRecruitRepository.findTop5ByClubRecruitStatusEqualsOrderByLikeCountDesc(ClubRecruitStatus.RECRUIT);
+        //throw new BadRequestException("유효하지 않은 정렬 방식입니다.");
     }
     return clubRecruits;
   }
 
+  @Transactional(readOnly = true)
   public List<ClubByCategoryDto> getAllClubs(User user, CategoryType categoryType) {
     List<Club> clubs;
     if (categoryType == null) { // null이 전체 조회
@@ -63,4 +65,5 @@ public class HomeService {
     clubs.sort(Comparator.comparing(Club::getLikeCount));
     return ClubByCategoryDto.listOf(clubs, user);
   }
+
 }

@@ -19,6 +19,7 @@ public class ClubByCategoryDto {
   private List<String> hashtagNames;
   private boolean isLiked;
   private boolean isRecruiting;
+  private long dDay;
 
   public ClubByCategoryDto(Club club, User user) {
     this.clubId = club.getId();
@@ -32,6 +33,7 @@ public class ClubByCategoryDto {
                             .collect(Collectors.toList());
     this.isLiked = user.isUserLikeClub(club);
     this.isRecruiting = club.isRecruitingNow();
+    this.dDay = club.getdDay();
   }
 
   public static List<ClubByCategoryDto> listOf(List<Club> clubs, User user) {

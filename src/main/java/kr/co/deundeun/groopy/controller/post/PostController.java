@@ -19,9 +19,8 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/clubs/{clubId}/posts")  // 특정 클럽, 게시글 생성
-    public ResponseEntity<Void> post(@Me User user, @PathVariable Long clubId, @RequestBody PostRequestDto postRequestDto) {
-        postService.post(user.getNickname(), clubId, postRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<PostResponseDto> post(@Me User user, @PathVariable Long clubId, @RequestBody PostRequestDto postRequestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(postService.post(user.getNickname(), clubId, postRequestDto));
     }
 
     @GetMapping("/posts/{postId}")  // 게시글 상세보기
@@ -30,13 +29,12 @@ public class PostController {
     }
 
     @PatchMapping("/posts/{postId}") // 게시글 수정하기
-    public ResponseEntity<Void> updatePost(@PathVariable Long postId, @RequestBody PostRequestDto postRequestDto) {
-        postService.updatePost(postId, postRequestDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long postId, @RequestBody PostRequestDto postRequestDto) {
+        return ResponseEntity.ok().body(postService.updatePost(postId, postRequestDto));
     }
 
     @DeleteMapping("/posts/{postId}") // 게시글 삭제하기
-    public ResponseEntity<String> deletePost(@PathVariable Long postId){
+    public ResponseEntity<String> deletePost(@PathVariable Long postId) {
         postService.deletePost(postId);
         return ResponseEntity.ok("게시글이 삭제되었습니다.");
     }

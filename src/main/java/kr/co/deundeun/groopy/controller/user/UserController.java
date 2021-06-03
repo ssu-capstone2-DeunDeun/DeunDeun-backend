@@ -1,12 +1,12 @@
 package kr.co.deundeun.groopy.controller.user;
 
 import kr.co.deundeun.groopy.config.Me;
-import kr.co.deundeun.groopy.dto.club.ClubResponseDto;
 import kr.co.deundeun.groopy.dto.hashtag.HashtagResponseDto;
 import kr.co.deundeun.groopy.dto.like.liked.LikeListResponseDto;
 import kr.co.deundeun.groopy.dto.user.UserRequestDto;
 import kr.co.deundeun.groopy.dto.user.UserResponseDto;
 import kr.co.deundeun.groopy.domain.user.User;
+import kr.co.deundeun.groopy.dto.user.userClub.UserClubDto;
 import kr.co.deundeun.groopy.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -67,7 +67,7 @@ public class UserController {
     }
 
     @GetMapping("/clubs")
-    public ResponseEntity<List<ClubResponseDto>> getClubs(@Me User user){
+    public ResponseEntity<List<UserClubDto>> getClubs(@Me User user){
         return ResponseEntity.ok(userService.getClubs(user));
     }
 

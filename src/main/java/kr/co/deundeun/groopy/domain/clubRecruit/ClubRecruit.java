@@ -63,6 +63,8 @@ public class ClubRecruit extends BaseEntity {
 
     private int applicantCount = 0;
 
+    private int viewCount = 0;
+
     @OneToMany(mappedBy = "clubRecruit")
     private List<Comment> comments;
 
@@ -87,6 +89,7 @@ public class ClubRecruit extends BaseEntity {
         this.finalPassStartDate = finalPassStartDate;
         this.finalPassEndDate = finalPassEndDate;
         this.comments = comments;
+        this.clubRecruitStatus = ClubRecruitStatus.WAITING;
     }
 
     public void update(ClubRecruitRequestDto clubRecruitRequestDto){

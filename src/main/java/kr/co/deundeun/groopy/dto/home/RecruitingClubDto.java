@@ -1,7 +1,5 @@
 package kr.co.deundeun.groopy.dto.home;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,7 +17,9 @@ public class RecruitingClubDto {
   private String content;
   private String representImageUrl;
   private CategoryType categoryType;
+  private String clubName;
   private boolean isRecruitingNow;
+  private Long dDay;
 
   public RecruitingClubDto(ClubRecruit clubRecruit) {
     this.clubRecruitId = clubRecruit.getId();
@@ -29,7 +29,9 @@ public class RecruitingClubDto {
     Club club = clubRecruit.getClub();
     this.representImageUrl = club.getRepresentImageUrl();
     this.categoryType = club.getCategoryType();
+    this.clubName = club.getClubName();
     this.isRecruitingNow = club.isRecruitingNow();
+    this.dDay = club.getdDay();
   }
 
   public static List<RecruitingClubDto> listOf(List<ClubRecruit> clubRecruits) {

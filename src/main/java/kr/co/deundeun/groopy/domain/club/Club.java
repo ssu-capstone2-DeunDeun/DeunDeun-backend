@@ -1,5 +1,7 @@
 package kr.co.deundeun.groopy.domain.club;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 
 import kr.co.deundeun.groopy.domain.hashtag.HashtagInfo;
@@ -12,7 +14,6 @@ import kr.co.deundeun.groopy.domain.clubRecruit.constant.ClubRecruitStatus;
 import kr.co.deundeun.groopy.domain.hashtag.ClubHashtag;
 import kr.co.deundeun.groopy.domain.post.Post;
 import kr.co.deundeun.groopy.exception.ClubRecruitNotFoundException;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -125,5 +126,16 @@ public class Club extends BaseEntity {
 
     public void setApproved(boolean isApproved) {
         this.isApproved = isApproved;
+    }
+
+    public long getdDay(){
+        long dDay = -1L;
+        if(this.isRecruitingNow()) {
+            ClubRecruit clubRecruit = this.getLastClubRecruit();
+            long duration = Duration.between(LocalDateTime.now(), clubRecruit.getSubmitEndDate()).toDays();
+            if(duration >= 0)
+                dDay = duration;
+        }
+        return dDay;
     }
 }

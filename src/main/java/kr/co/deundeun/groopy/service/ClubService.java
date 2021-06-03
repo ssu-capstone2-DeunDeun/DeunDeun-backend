@@ -4,6 +4,7 @@ import kr.co.deundeun.groopy.config.AppProperties;
 import kr.co.deundeun.groopy.domain.hashtag.HashtagInfo;
 import kr.co.deundeun.groopy.dto.club.ClubRequestDto;
 import kr.co.deundeun.groopy.dto.club.ClubResponseDto;
+import kr.co.deundeun.groopy.dto.club.clubInfo.ClubInfoDto;
 import kr.co.deundeun.groopy.dto.common.mail.MailRequestDto;
 import kr.co.deundeun.groopy.dao.*;
 import kr.co.deundeun.groopy.domain.club.Club;
@@ -43,7 +44,7 @@ public class ClubService {
 
     private final AppProperties appProperties;
 
-    public void registerClub(User user, ClubRequestDto clubRequestDto) {
+    public ClubResponseDto registerClub(User user, ClubRequestDto clubRequestDto) {
         if (user.getId() == null) throw new LoginException();
         if (isDuplicatedName(clubRequestDto.getName()))
             throw new NameDuplicateException("동아리 이름이 존재합니다.");
@@ -58,31 +59,31 @@ public class ClubService {
         participateRepository.save(participate);
 
         MailRequestDto.sendRegisterClub(javaMailSender, appProperties, user, club);
+
+        return ClubResponseDto.of(club);
     }
 
     @Transactional(readOnly = true)
-    public ClubResponseDto getClubInfo(User user, String name) {
+    public ClubInfoDto getClubInfo(User user, String name) {
         Club club = clubRepository.findByClubName(name).orElseThrow(ClubNotFoundException::new);
         boolean isAdmin = participateRepository.findByUserAndClub(user, club).isAdmin();
         return getClubInfo(isAdmin, name);
     }
 
     @Transactional(readOnly = true)
-    public ClubResponseDto getClubInfo(boolean isAdmin, String name) {
+    public ClubInfoDto getClubInfo(boolean isAdmin, String name) {
         Club club = clubRepository.findByClubName(name).orElseThrow(ClubNotFoundException::new);
         List<Post> posts = postRepository.findTop3ByClubOrderByViewCount(club);
         ClubRecruit clubRecruit = clubRecruitRepository.findTopByClubOrderByCreatedAt(club);
-        return ClubResponseDto.of(club, posts, clubRecruit, isAdmin);
+        return new ClubInfoDto(club, posts, clubRecruit, isAdmin);
     }
 
-    public void updateClub(Long clubId, ClubRequestDto clubRequestDto) {
+    public ClubResponseDto updateClub(Long clubId, ClubRequestDto clubRequestDto) {
         Club club = ClubHelper.findClubById(clubRepository, clubId);
         if (isDuplicatedName(clubRequestDto.getName()))
             throw new DuplicateResourceException("닉네임 중복");
-        clubRepository.save(club.update(clubRequestDto));
+        return ClubResponseDto.of(clubRepository.save(club.update(clubRequestDto)));
     }
-
-
 
     public boolean isDuplicatedName(String clubName) {
         return clubRepository.existsByClubName(clubName);
