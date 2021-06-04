@@ -27,7 +27,7 @@ public class ClubApplyFormService {
   // 생성만 있어서 Transactional 필요 X
   public void addClubApplyForm(String clubName, ApplyFormRequestDto applyFormRequestDto) {
     Club club = ClubHelper.findByClubName(clubRepository, clubName);
-    ClubApplyForm clubApplyForm = new ClubApplyForm(club, applyFormRequestDto);
+    ClubApplyForm clubApplyForm = applyFormRequestDto.toEntity(club);
     clubApplyFormRepository.save(clubApplyForm);
   }
 

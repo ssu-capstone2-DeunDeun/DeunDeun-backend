@@ -7,10 +7,9 @@ import javax.persistence.FetchType;
 
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
-import kr.co.deundeun.groopy.dto.clubApplyForm.MultipleChoiceRequestDto;
-import kr.co.deundeun.groopy.dto.clubApplyForm.RecruitQuestionRequestDto;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.clubRecruit.constant.QuestionType;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -40,33 +39,16 @@ public class ClubRecruitQuestion extends BaseEntity {
     @OrderBy("choiceNumber")
     private List<MultipleChoice> multipleChoices = new ArrayList<>();
 
-    public ClubRecruitQuestion(ClubApplyForm clubApplyForm, RecruitQuestionRequestDto recruitQuestionRequestDto) {
-        this();
-        setClubApplyForm(clubApplyForm);
-        this.questionType = recruitQuestionRequestDto.getQuestionType();
-        this.questionContent = recruitQuestionRequestDto.getQuestionContent();
-        if (this.questionType.equals(QuestionType.MULTIPLE)) {
-            this.multipleChoices = MultipleChoiceRequestDto.ofList(this, recruitQuestionRequestDto.getMultipleChoiceRequestDtos());
-        }
-        //            recruitQuestionRequestDto.getMultipleChoiceRequestDtos()
-//                                                        .stream()
-//                                                        .map(multipleChoiceRequestDto -> new MultipleChoice(this, multipleChoiceRequestDto))
-//                                                        .collect(Collectors.toList());
-
+    @Builder
+    public ClubRecruitQuestion(QuestionType questionType, String questionContent, List<MultipleChoice> multipleChoices) {
+        this.questionType = questionType;
+        this.questionContent = questionContent;
+        multipleChoices.forEach(multipleChoice -> multipleChoice.initClubRecruitQuestion(this));
     }
 
-    public void setClubApplyForm(ClubApplyForm clubApplyForm) {
-        if (this.clubApplyForm != null) {
-            this.clubApplyForm.getClubRecruitQuestions().remove(this);
-        }
+    public void initClubApplyForm(ClubApplyForm clubApplyForm) {
         this.clubApplyForm = clubApplyForm;
         clubApplyForm.getClubRecruitQuestions().add(this);
     }
-
-    public boolean equals(RecruitQuestionRequestDto question){
-        return question.getQuestionType().equals(questionType)
-                && question.getQuestionContent().equals(questionContent);
-    }
-
 
 }
