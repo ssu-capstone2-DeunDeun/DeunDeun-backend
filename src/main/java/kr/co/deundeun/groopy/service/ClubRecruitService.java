@@ -7,6 +7,7 @@ import kr.co.deundeun.groopy.dao.ClubRepository;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.exception.AuthorizationException;
+import kr.co.deundeun.groopy.exception.BadRequestException;
 import kr.co.deundeun.groopy.helper.ClubHelper;
 import kr.co.deundeun.groopy.helper.ClubRecruitHelper;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,9 @@ public class ClubRecruitService {
 
     public void addRecruit(String clubName, ClubRecruitRequestDto clubRecruitRequestDto) {
         Club club = ClubHelper.findByClubName(clubRepository, clubName);
-        if (!club.isApproved()) throw new AuthorizationException("동아리 등록 승인이 필요합니다.");
+        if (!club.isApproved()) {
+            throw new AuthorizationException("동아리 등록 승인이 필요합니다.");
+        }
         ClubRecruit clubRecruit = clubRecruitRequestDto.toClubRecruit(club);
         clubRecruitRepository.save(clubRecruit);
     }
@@ -34,13 +37,13 @@ public class ClubRecruitService {
     @Transactional(readOnly = true)
     public List<ClubRecruitResponseDto> getRecruits(String clubName) {
         Club club = ClubHelper.findByClubName(clubRepository, clubName);
-        return ClubRecruitResponseDto.listOf(clubRecruitRepository.findAllByClub(club));
+        return ClubRecruitResponseDto.listOf(club.getClubRecruits());
     }
 
-    @Transactional(readOnly = true)
     public ClubRecruitResponseDto getRecruit(Long recruitId) {
         ClubRecruit clubRecruit = ClubRecruitHelper.findById(clubRecruitRepository, recruitId);
-        return new ClubRecruitResponseDto(clubRecruit);
+        clubRecruit.increaseViewCount();
+        return ClubRecruitResponseDto.of(clubRecruit);
     }
 
     public void updateRecruit(Long recruitId, ClubRecruitRequestDto clubRecruitRequestDto) {
@@ -49,6 +52,12 @@ public class ClubRecruitService {
     }
 
     public void deleteRecruit(Long recruitId) {
-        clubRecruitRepository.deleteById(recruitId);
+        ClubRecruit clubRecruit = ClubRecruitHelper.findById(clubRecruitRepository, recruitId);
+        if (clubRecruit.hasApplicant()){
+            throw new BadRequestException("해당 지원 양식을 사용하는 모집 공고에 지원자가 존재합니다.");
+        }
+        clubRecruit.deleteClubApplyForm();
+        clubRecruit.deleteClub();
+        clubRecruitRepository.deleteById(clubRecruit.getId());
     }
 }

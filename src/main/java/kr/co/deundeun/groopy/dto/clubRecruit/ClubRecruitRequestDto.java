@@ -2,6 +2,7 @@ package kr.co.deundeun.groopy.dto.clubRecruit;
 
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
+import kr.co.deundeun.groopy.domain.clubRecruit.constant.ClubRecruitStatus;
 import lombok.Getter;
 
 import javax.validation.constraints.Future;
@@ -18,17 +19,13 @@ public class ClubRecruitRequestDto {
 
     private int generation;
 
-    @Future
     private LocalDateTime submitStartDate;
 
     @Future
     private LocalDateTime submitEndDate;
 
     @Future
-    private LocalDateTime documentPassStartDate;
-
-    @Future
-    private LocalDateTime documentPassEndDate;
+    private LocalDateTime documentPassAnnounceDate;
 
     @Future
     private LocalDateTime interviewStartDate;
@@ -37,25 +34,20 @@ public class ClubRecruitRequestDto {
     private LocalDateTime interviewEndDate;
 
     @Future
-    private LocalDateTime finalPassStartDate;
-
-    @Future
-    private LocalDateTime finalPassEndDate;
+    private LocalDateTime finalPassAnnounceDate;
 
     public ClubRecruit toClubRecruit(Club club){
-        return ClubRecruit.builder()
-                .club(club)
-                .title(title)
-                .content(content)
-                .submitStartDate(submitStartDate)
-                .submitEndDate(submitEndDate)
-                .documentPassStartDate(documentPassStartDate)
-                .documentPassEndDate(documentPassEndDate)
-                .interviewStartDate(interviewStartDate)
-                .interviewEndDate(interviewEndDate)
-                .finalPassStartDate(finalPassStartDate)
-                .finalPassEndDate(finalPassEndDate)
-                .build();
-    }
 
+        return ClubRecruit.builder()
+                          .club(club)
+                          .title(title)
+                          .content(content)
+                          .submitStartDate(submitStartDate)
+                          .submitEndDate(submitEndDate)
+                          .documentPassAnnounceDate(documentPassAnnounceDate)
+                          .interviewStartDate(interviewStartDate)
+                          .interviewEndDate(interviewEndDate)
+                          .finalPassAnnounceDate(finalPassAnnounceDate)
+                          .build();
+    }
 }

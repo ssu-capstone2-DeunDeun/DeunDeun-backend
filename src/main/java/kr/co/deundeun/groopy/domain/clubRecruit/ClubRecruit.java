@@ -1,5 +1,6 @@
 package kr.co.deundeun.groopy.domain.clubRecruit;
 
+import java.util.ArrayList;
 import javax.persistence.CascadeType;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -46,17 +47,13 @@ public class ClubRecruit extends BaseEntity {
 
     private LocalDateTime submitEndDate;
 
-    private LocalDateTime documentPassStartDate;
-
-    private LocalDateTime documentPassEndDate;
+    private LocalDateTime documentPassAnnounceDate;
 
     private LocalDateTime interviewStartDate;
 
     private LocalDateTime interviewEndDate;
 
-    private LocalDateTime finalPassStartDate;
-
-    private LocalDateTime finalPassEndDate;
+    private LocalDateTime finalPassAnnounceDate;
 
     private int likeCount = 0;
 
@@ -67,30 +64,37 @@ public class ClubRecruit extends BaseEntity {
     private int viewCount = 0;
 
     @OneToMany(mappedBy = "clubRecruit", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public ClubRecruit(Club club,
+    private ClubRecruit(Club club,
                        String title, String content,
                        LocalDateTime submitStartDate, LocalDateTime submitEndDate,
-                       LocalDateTime documentPassStartDate, LocalDateTime documentPassEndDate,
+                       LocalDateTime documentPassAnnounceDate,
                        LocalDateTime interviewStartDate, LocalDateTime interviewEndDate,
-                       LocalDateTime finalPassStartDate, LocalDateTime finalPassEndDate,
-                       List<Comment> comments){
-        this.club = club;
+                       LocalDateTime finalPassAnnounceDate){
+        initClub(club);
         this.recruitGeneration = club.getGeneration() + 1;
         this.content = content;
         this.title = title;
         this.submitStartDate = submitStartDate;
         this.submitEndDate = submitEndDate;
-        this.documentPassStartDate = documentPassStartDate;
-        this.documentPassEndDate = documentPassEndDate;
+        this.documentPassAnnounceDate = documentPassAnnounceDate;
         this.interviewStartDate = interviewStartDate;
         this.interviewEndDate = interviewEndDate;
-        this.finalPassStartDate = finalPassStartDate;
-        this.finalPassEndDate = finalPassEndDate;
-        this.comments = comments;
-        this.clubRecruitStatus = ClubRecruitStatus.WAITING;
+        this.finalPassAnnounceDate = finalPassAnnounceDate;
+        this.clubRecruitStatus = calculateClubRecruitStatus(submitStartDate, submitEndDate);
+    }
+
+    public ClubRecruitStatus calculateClubRecruitStatus(LocalDateTime submitStartDate, LocalDateTime submitEndDate) {
+        LocalDateTime now = LocalDateTime.now();
+        if(now.isBefore(submitStartDate)){
+            return ClubRecruitStatus.WAITING;
+        }
+        if (now.isBefore(submitEndDate)){
+            return ClubRecruitStatus.RECRUIT;
+        }
+        return ClubRecruitStatus.END;
     }
 
     public void update(ClubRecruitRequestDto clubRecruitRequestDto){
@@ -99,12 +103,16 @@ public class ClubRecruit extends BaseEntity {
         this.title = clubRecruitRequestDto.getTitle();
         this.submitStartDate = clubRecruitRequestDto.getSubmitStartDate();
         this.submitEndDate = clubRecruitRequestDto.getSubmitEndDate();
-        this.documentPassStartDate = clubRecruitRequestDto.getDocumentPassStartDate();
-        this.documentPassEndDate = clubRecruitRequestDto.getDocumentPassEndDate();
+        this.documentPassAnnounceDate = clubRecruitRequestDto.getDocumentPassAnnounceDate();
         this.interviewStartDate = clubRecruitRequestDto.getInterviewStartDate();
         this.interviewEndDate = clubRecruitRequestDto.getInterviewEndDate();
-        this.finalPassStartDate = clubRecruitRequestDto.getFinalPassStartDate();
-        this.finalPassEndDate = clubRecruitRequestDto.getFinalPassEndDate();
+        this.finalPassAnnounceDate = clubRecruitRequestDto.getFinalPassAnnounceDate();
+        this.clubRecruitStatus = calculateClubRecruitStatus(submitStartDate, submitEndDate);
+    }
+
+    public void initClub(Club club){
+        club.getClubRecruits().add(this);
+        this.club = club;
     }
 
     public void increaseApplicantCount(){
@@ -127,6 +135,10 @@ public class ClubRecruit extends BaseEntity {
             return;
         }
         this.commentCount -= 1;
+    }
+
+    public void increaseViewCount(){
+        this.viewCount += 1;
     }
 
     public int getQuestionSize(){
