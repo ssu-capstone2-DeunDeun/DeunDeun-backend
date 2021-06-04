@@ -1,5 +1,6 @@
 package kr.co.deundeun.groopy.domain.clubRecruit;
 
+import javax.persistence.CascadeType;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
@@ -65,7 +66,7 @@ public class ClubRecruit extends BaseEntity {
 
     private int viewCount = 0;
 
-    @OneToMany(mappedBy = "clubRecruit")
+    @OneToMany(mappedBy = "clubRecruit", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
     @Builder
@@ -138,5 +139,14 @@ public class ClubRecruit extends BaseEntity {
 
     public List<ClubRecruitQuestion> getClubRecruitQuestions(){
         return clubApplyForm.getClubRecruitQuestions();
+    }
+
+    public void deleteClubApplyForm() {
+        this.clubApplyForm = null;
+    }
+
+    public void deleteClub() {
+        this.club.getClubRecruits().remove(this);
+        this.club = null;
     }
 }

@@ -39,4 +39,9 @@ public class ClubApplyForm extends BaseEntity {
     this.club = club;
     club.getClubApplyForms().add(this);
   }
+
+  public void deleteClub(){
+    this.club.getClubApplyForms().remove(this);
+    this.club = null;
+  }
 }
