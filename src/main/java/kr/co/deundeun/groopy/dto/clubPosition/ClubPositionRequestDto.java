@@ -3,7 +3,9 @@ package kr.co.deundeun.groopy.dto.clubPosition;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.club.ClubPosition;
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 public class ClubPositionRequestDto {
 

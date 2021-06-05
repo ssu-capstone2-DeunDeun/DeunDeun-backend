@@ -2,10 +2,12 @@ package kr.co.deundeun.groopy.dto.clubPosition;
 
 import kr.co.deundeun.groopy.domain.club.ClubPosition;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@ToString
 @Getter
 public class ClubPositionResponseDto {
 

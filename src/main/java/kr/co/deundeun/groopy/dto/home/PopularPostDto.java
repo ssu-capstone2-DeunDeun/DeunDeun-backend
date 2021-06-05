@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import kr.co.deundeun.groopy.domain.post.Post;
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 public class PopularPostDto {
 

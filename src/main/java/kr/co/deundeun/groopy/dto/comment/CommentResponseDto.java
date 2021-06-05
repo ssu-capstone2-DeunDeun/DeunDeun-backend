@@ -3,11 +3,13 @@ package kr.co.deundeun.groopy.dto.comment;
 import kr.co.deundeun.groopy.domain.comment.Comment;
 import kr.co.deundeun.groopy.domain.comment.constant.CommentType;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@ToString
 @Getter
 public class CommentResponseDto {
 

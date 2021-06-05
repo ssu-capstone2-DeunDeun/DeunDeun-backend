@@ -4,11 +4,12 @@ import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.post.Post;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.List;
 
 @Getter
-
+@ToString
 public class HomeResponseDto {
 
     private List<PopularClubDto> popularClubDtos;

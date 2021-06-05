@@ -2,12 +2,14 @@ package kr.co.deundeun.groopy.dto.post;
 
 import kr.co.deundeun.groopy.domain.post.Post;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@ToString
 @Getter
 public class PostResponseDto {
 

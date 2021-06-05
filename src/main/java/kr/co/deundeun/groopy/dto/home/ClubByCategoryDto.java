@@ -7,7 +7,9 @@ import kr.co.deundeun.groopy.domain.club.constant.CategoryType;
 import kr.co.deundeun.groopy.domain.hashtag.ClubHashtag;
 import kr.co.deundeun.groopy.domain.user.User;
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 public class ClubByCategoryDto {
 

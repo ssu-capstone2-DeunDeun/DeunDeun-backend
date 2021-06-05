@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import kr.co.deundeun.groopy.domain.clubApplyForm.ClubApplyForm;
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 public class ApplyFormResponseDto {
 

@@ -4,10 +4,12 @@ import kr.co.deundeun.groopy.domain.clubApply.ClubApply;
 import kr.co.deundeun.groopy.domain.clubApply.constant.ClubApplyStatus;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@ToString
 @Getter
 public class ApplySummaryResponseDto {
 

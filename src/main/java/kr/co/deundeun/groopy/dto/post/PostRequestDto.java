@@ -4,7 +4,9 @@ import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.post.Post;
 import kr.co.deundeun.groopy.exception.BadRequestException;
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 public class PostRequestDto {
 

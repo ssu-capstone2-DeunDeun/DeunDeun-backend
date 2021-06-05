@@ -4,12 +4,14 @@ import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.clubRecruit.constant.ClubRecruitStatus;
 import lombok.Getter;
+import lombok.ToString;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.FutureOrPresent;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@ToString
 @Getter
 public class ClubRecruitRequestDto {
 
