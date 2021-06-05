@@ -27,7 +27,7 @@ public class ClubApplyFormService {
   // 생성만 있어서 Transactional 필요 X
   public void addClubApplyForm(String clubName, ApplyFormRequestDto applyFormRequestDto) {
     Club club = ClubHelper.findByClubName(clubRepository, clubName);
-    ClubApplyForm clubApplyForm = new ClubApplyForm(club, applyFormRequestDto);
+    ClubApplyForm clubApplyForm = applyFormRequestDto.toEntity(club);
     clubApplyFormRepository.save(clubApplyForm);
   }
 
@@ -41,7 +41,7 @@ public class ClubApplyFormService {
     ClubApplyForm clubApplyForm = ClubApplyFormHelper.findByClubApplyFormId(clubApplyFormRepository, clubApplyFormId);
     return new ApplyFormResponseDto(clubApplyForm);
   }
-  
+
   @Transactional
   public void deleteClubApplyForm(Long clubApplyFormId) {
     List<ClubRecruit> clubRecruits = clubRecruitRepository.findAllByClubApplyFormId(clubApplyFormId);
@@ -50,7 +50,15 @@ public class ClubApplyFormService {
     if (hasApplicantToClubApplyForm){
       throw new BadRequestException("해당 지원 양식을 사용하는 모집 공고에 지원자가 존재합니다.");
     }
+
+    clubRecruits.forEach((clubRecruit)->{
+      clubRecruit.deleteClub();
+      clubRecruit.deleteClubApplyForm();
+    });
+    clubRecruitRepository.deleteInBatch(clubRecruits);
+
     ClubApplyForm clubApplyForm = ClubApplyFormHelper.findByClubApplyFormId(clubApplyFormRepository, clubApplyFormId);
+    clubApplyForm.deleteClub();
     clubApplyFormRepository.delete(clubApplyForm);
   }
 }

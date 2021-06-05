@@ -4,8 +4,8 @@ package kr.co.deundeun.groopy.domain.clubApplyForm;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
-import kr.co.deundeun.groopy.dto.clubApplyForm.MultipleChoiceRequestDto;
 import kr.co.deundeun.groopy.domain.BaseEntity;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,18 +21,14 @@ public class MultipleChoice extends BaseEntity {
 
   private String choiceContent; // 선지내용
 
-  public MultipleChoice(ClubRecruitQuestion clubRecruitQuestion, MultipleChoiceRequestDto multipleChoiceRequestDto) {
-    this();
-    setClubRecruitQuestion(clubRecruitQuestion);
-    this.choiceNumber = multipleChoiceRequestDto.getChoiceNumber();
-    this.choiceContent = multipleChoiceRequestDto.getChoiceContent();
+  @Builder
+  public MultipleChoice(int choiceNumber, String choiceContent) {
+    this.choiceNumber = choiceNumber;
+    this.choiceContent = choiceContent;
   }
 
-  public void setClubRecruitQuestion(ClubRecruitQuestion clubRecruitQuestion){
-    if(this.clubRecruitQuestion != null){
-      this.clubRecruitQuestion.getMultipleChoices().remove(this);
-    }
-    this.clubRecruitQuestion = clubRecruitQuestion;
+  public void initClubRecruitQuestion(ClubRecruitQuestion clubRecruitQuestion){
     clubRecruitQuestion.getMultipleChoices().add(this);
+    this.clubRecruitQuestion = clubRecruitQuestion;
   }
 }

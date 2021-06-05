@@ -1,6 +1,7 @@
 package kr.co.deundeun.groopy.dto.clubRecruit;
 
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
+import kr.co.deundeun.groopy.domain.clubRecruit.constant.ClubRecruitStatus;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -20,56 +21,48 @@ public class ClubRecruitResponseDto {
 
     private int generation;
 
+    private ClubRecruitStatus clubRecruitStatus;
+
     private LocalDateTime submitStartDate;
 
     private LocalDateTime submitEndDate;
 
-    private LocalDateTime documentPassStartDate;
-
-    private LocalDateTime documentPassEndDate;
+    private LocalDateTime documentPassAnnounceDate;
 
     private LocalDateTime interviewStartDate;
 
     private LocalDateTime interviewEndDate;
 
-    private LocalDateTime finalPassStartDate;
-
-    private LocalDateTime finalPassEndDate;
+    private LocalDateTime finalPassAnnounceDate;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime modifiedAt;
 
-    private int likeCount;
+    private int likeCount = 0;
 
-    private long remainDays;
+    private long remainDays = 0;
 
-    @Builder
-    public ClubRecruitResponseDto(ClubRecruit clubRecruit) {
-        if (clubRecruit == null) return;
-
+    private ClubRecruitResponseDto(ClubRecruit clubRecruit) {
         this.id = clubRecruit.getId();
         this.title = clubRecruit.getTitle();
         this.content = clubRecruit.getContent();
         this.generation = clubRecruit.getRecruitGeneration();
         this.submitStartDate = clubRecruit.getSubmitStartDate();
         this.submitEndDate = clubRecruit.getSubmitEndDate();
-        this.documentPassStartDate = clubRecruit.getDocumentPassStartDate();
-        this.documentPassEndDate = clubRecruit.getDocumentPassEndDate();
+        this.documentPassAnnounceDate = clubRecruit.getDocumentPassAnnounceDate();
         this.interviewStartDate = clubRecruit.getInterviewStartDate();
         this.interviewEndDate = clubRecruit.getInterviewEndDate();
-        this.finalPassStartDate = clubRecruit.getFinalPassStartDate();
-        this.finalPassEndDate = clubRecruit.getFinalPassEndDate();
+        this.finalPassAnnounceDate = clubRecruit.getFinalPassAnnounceDate();
         this.createdAt = clubRecruit.getCreatedAt();
         this.modifiedAt = clubRecruit.getModifiedAt();
         this.likeCount = clubRecruit.getLikeCount();
+        this.clubRecruitStatus = clubRecruit.getClubRecruitStatus();
         this.remainDays = remainDays(submitEndDate);
     }
 
     public static ClubRecruitResponseDto of(ClubRecruit clubRecruit) {
-        if (clubRecruit == null) return null;
-        return ClubRecruitResponseDto.builder()
-                .clubRecruit(clubRecruit).build();
+        return new ClubRecruitResponseDto(clubRecruit);
     }
 
     public static List<ClubRecruitResponseDto> listOf(List<ClubRecruit> clubRecruits) {
@@ -79,11 +72,9 @@ public class ClubRecruitResponseDto {
     }
 
     private long remainDays(LocalDateTime submitEndDate) {
-        long dayLeft = -1;
-
-        if (LocalDateTime.now().isBefore(submitEndDate))
-            dayLeft = ChronoUnit.DAYS.between(LocalDateTime.now(), submitEndDate);
-
-        return dayLeft;
+        if (LocalDateTime.now().isBefore(submitEndDate)) {
+            return ChronoUnit.DAYS.between(LocalDateTime.now(), submitEndDate);
+        }
+        return -1;
     }
 }

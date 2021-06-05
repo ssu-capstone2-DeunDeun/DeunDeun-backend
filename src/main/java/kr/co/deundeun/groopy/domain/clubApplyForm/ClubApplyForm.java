@@ -8,10 +8,9 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
-import kr.co.deundeun.groopy.dto.clubApplyForm.ApplyFormRequestDto;
-import kr.co.deundeun.groopy.dto.clubApplyForm.RecruitQuestionRequestDto;
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.club.Club;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,18 +28,20 @@ public class ClubApplyForm extends BaseEntity {
 
   private String title;
 
-  public ClubApplyForm(Club club, ApplyFormRequestDto applyFormRequestDto) {
-    this();
-    setClub(club);
-    this.title = applyFormRequestDto.getTitle();
-    this.clubRecruitQuestions = RecruitQuestionRequestDto.ofList(this, applyFormRequestDto.getRecruitQuestionRequestDtos());
+  @Builder
+  public ClubApplyForm(Club club, String title, List<ClubRecruitQuestion> clubRecruitQuestions) {
+    initClub(club);
+    this.title = title;
+    clubRecruitQuestions.forEach(clubRecruitQuestion -> clubRecruitQuestion.initClubApplyForm(this));
   }
 
-  public void setClub(Club club){
-    if (this.club != null) {
-      this.club.getClubApplyForms().remove(this);
-    }
+  private void initClub(Club club){
     this.club = club;
     club.getClubApplyForms().add(this);
+  }
+
+  public void deleteClub(){
+    this.club.getClubApplyForms().remove(this);
+    this.club = null;
   }
 }
