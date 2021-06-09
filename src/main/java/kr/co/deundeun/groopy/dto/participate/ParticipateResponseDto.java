@@ -4,7 +4,9 @@ import kr.co.deundeun.groopy.domain.user.Participate;
 import kr.co.deundeun.groopy.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 public class ParticipateResponseDto {
 

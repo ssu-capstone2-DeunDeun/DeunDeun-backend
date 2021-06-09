@@ -6,7 +6,9 @@ import kr.co.deundeun.groopy.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@ToString
 @NoArgsConstructor
 @Getter
 public class LikeResponseDto {

@@ -7,7 +7,9 @@ import kr.co.deundeun.groopy.domain.clubApply.ClubApplyAnswer;
 import kr.co.deundeun.groopy.domain.clubApplyForm.ClubRecruitQuestion;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 public class ApplyQAResponseDto {
 

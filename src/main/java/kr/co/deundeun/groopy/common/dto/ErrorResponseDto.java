@@ -3,8 +3,10 @@ package kr.co.deundeun.groopy.common.dto;
 import kr.co.deundeun.groopy.common.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 @AllArgsConstructor
+@ToString
 @Getter
 public class ErrorResponseDto {
 

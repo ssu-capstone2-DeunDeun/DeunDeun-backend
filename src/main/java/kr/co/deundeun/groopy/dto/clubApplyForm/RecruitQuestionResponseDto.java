@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 import kr.co.deundeun.groopy.domain.clubApplyForm.ClubRecruitQuestion;
 import kr.co.deundeun.groopy.domain.clubRecruit.constant.QuestionType;
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 public class RecruitQuestionResponseDto {
 

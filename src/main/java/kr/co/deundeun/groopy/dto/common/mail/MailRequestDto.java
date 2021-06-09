@@ -3,6 +3,7 @@ package kr.co.deundeun.groopy.dto.common.mail;
 import kr.co.deundeun.groopy.config.AppProperties;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.user.User;
+import lombok.ToString;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
@@ -10,6 +11,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 
+@ToString
 public class MailRequestDto {
 
     private static final String to = "groopyofficial@gmail.com";

@@ -7,7 +7,9 @@ import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.club.constant.CategoryType;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 public class RecruitingClubDto {
 

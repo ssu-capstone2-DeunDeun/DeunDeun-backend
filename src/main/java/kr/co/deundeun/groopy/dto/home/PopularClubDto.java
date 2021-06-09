@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import kr.co.deundeun.groopy.domain.club.Club;
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 public class PopularClubDto {
 

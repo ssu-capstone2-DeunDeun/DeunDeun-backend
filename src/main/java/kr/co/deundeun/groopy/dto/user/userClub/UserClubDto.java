@@ -3,10 +3,12 @@ package kr.co.deundeun.groopy.dto.user.userClub;
 import kr.co.deundeun.groopy.domain.user.Participate;
 import kr.co.deundeun.groopy.dto.club.ClubResponseDto;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@ToString
 @Getter
 public class UserClubDto {
 

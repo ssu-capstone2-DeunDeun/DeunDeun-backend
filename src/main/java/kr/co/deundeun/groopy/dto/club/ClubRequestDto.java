@@ -1,15 +1,13 @@
 package kr.co.deundeun.groopy.dto.club;
 
-import kr.co.deundeun.groopy.dao.HashtagInfoRepository;
-import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.club.constant.CategoryType;
 import lombok.Getter;
+import lombok.ToString;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
 import java.util.List;
 
+@ToString
 @Getter
 public class ClubRequestDto {
 

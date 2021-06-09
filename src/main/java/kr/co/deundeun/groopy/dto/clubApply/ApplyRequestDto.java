@@ -1,16 +1,14 @@
 package kr.co.deundeun.groopy.dto.clubApply;
 
-import kr.co.deundeun.groopy.dao.ClubRecruitRepository;
 import kr.co.deundeun.groopy.domain.clubApply.ClubApply;
-import kr.co.deundeun.groopy.domain.clubApplyForm.ClubApplyForm;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
 import kr.co.deundeun.groopy.domain.user.User;
-import kr.co.deundeun.groopy.exception.LoginException;
-import kr.co.deundeun.groopy.helper.ClubRecruitHelper;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.List;
 
+@ToString
 @Getter
 public class ApplyRequestDto {
 

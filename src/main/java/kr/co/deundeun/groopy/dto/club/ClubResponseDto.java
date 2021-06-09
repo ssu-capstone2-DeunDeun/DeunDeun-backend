@@ -6,10 +6,12 @@ import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.club.constant.CategoryType;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@ToString
 @Getter
 public class ClubResponseDto {
 

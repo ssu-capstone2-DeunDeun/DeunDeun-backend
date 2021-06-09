@@ -5,9 +5,11 @@ import kr.co.deundeun.groopy.domain.clubApplyForm.ClubRecruitQuestion;
 import kr.co.deundeun.groopy.domain.clubApplyForm.MultipleChoice;
 import kr.co.deundeun.groopy.domain.clubRecruit.constant.QuestionType;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.List;
 
+@ToString
 @Getter
 public class RecruitQuestionRequestDto {
 

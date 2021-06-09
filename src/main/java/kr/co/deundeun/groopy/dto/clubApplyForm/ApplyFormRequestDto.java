@@ -7,7 +7,9 @@ import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.clubApplyForm.ClubApplyForm;
 import kr.co.deundeun.groopy.domain.clubApplyForm.ClubRecruitQuestion;
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 public class ApplyFormRequestDto {
 

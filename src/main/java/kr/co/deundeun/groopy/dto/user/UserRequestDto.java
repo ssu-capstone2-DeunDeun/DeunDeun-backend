@@ -2,10 +2,12 @@ package kr.co.deundeun.groopy.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+@ToString
 @AllArgsConstructor
 @Getter
 public class UserRequestDto {

@@ -1,8 +1,10 @@
 package kr.co.deundeun.groopy.dto.common.page;
 
+import lombok.ToString;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+@ToString
 public final class PageRequestDto {
 
     private final int DEFAULT_SIZE = 10;

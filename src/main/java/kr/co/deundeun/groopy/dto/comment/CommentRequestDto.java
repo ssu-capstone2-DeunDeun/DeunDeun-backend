@@ -7,10 +7,12 @@ import kr.co.deundeun.groopy.domain.comment.constant.CommentType;
 import kr.co.deundeun.groopy.domain.post.Post;
 import kr.co.deundeun.groopy.domain.user.User;
 import lombok.Getter;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
+@ToString
 @Getter
 public class CommentRequestDto {
 
