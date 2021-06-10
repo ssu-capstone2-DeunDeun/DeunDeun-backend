@@ -68,11 +68,11 @@ public class ClubRecruit extends BaseEntity {
 
     @Builder
     private ClubRecruit(Club club,
-                       String title, String content,
-                       LocalDateTime submitStartDate, LocalDateTime submitEndDate,
-                       LocalDateTime documentPassAnnounceDate,
-                       LocalDateTime interviewStartDate, LocalDateTime interviewEndDate,
-                       LocalDateTime finalPassAnnounceDate){
+                        String title, String content,
+                        LocalDateTime submitStartDate, LocalDateTime submitEndDate,
+                        LocalDateTime documentPassAnnounceDate,
+                        LocalDateTime interviewStartDate, LocalDateTime interviewEndDate,
+                        LocalDateTime finalPassAnnounceDate) {
         initClub(club);
         this.recruitGeneration = club.getGeneration() + 1;
         this.content = content;
@@ -88,16 +88,16 @@ public class ClubRecruit extends BaseEntity {
 
     public ClubRecruitStatus calculateClubRecruitStatus(LocalDateTime submitStartDate, LocalDateTime submitEndDate) {
         LocalDateTime now = LocalDateTime.now();
-        if(now.isBefore(submitStartDate)){
+        if (now.isBefore(submitStartDate)) {
             return ClubRecruitStatus.WAITING;
         }
-        if (now.isBefore(submitEndDate)){
+        if (now.isBefore(submitEndDate)) {
             return ClubRecruitStatus.RECRUIT;
         }
         return ClubRecruitStatus.END;
     }
 
-    public void update(ClubRecruitRequestDto clubRecruitRequestDto){
+    public void update(ClubRecruitRequestDto clubRecruitRequestDto) {
         this.recruitGeneration = clubRecruitRequestDto.getGeneration();
         this.content = clubRecruitRequestDto.getContent();
         this.title = clubRecruitRequestDto.getTitle();
@@ -110,46 +110,46 @@ public class ClubRecruit extends BaseEntity {
         this.clubRecruitStatus = calculateClubRecruitStatus(submitStartDate, submitEndDate);
     }
 
-    public void initClub(Club club){
+    public void initClub(Club club) {
         club.getClubRecruits().add(this);
         this.club = club;
     }
 
-    public void increaseApplicantCount(){
+    public void increaseApplicantCount() {
         this.applicantCount += 1;
     }
 
-    public void decreaseApplicantCount(){
+    public void decreaseApplicantCount() {
         if (this.applicantCount <= 0) {
             return;
         }
         this.applicantCount -= 1;
     }
 
-    public void increaseCommentCount(){
+    public void increaseCommentCount() {
         this.commentCount += 1;
     }
 
-    public void decreaseCommentCount(){
-        if (this.commentCount <= 0){
+    public void decreaseCommentCount() {
+        if (this.commentCount <= 0) {
             return;
         }
         this.commentCount -= 1;
     }
 
-    public void increaseViewCount(){
+    public void increaseViewCount() {
         this.viewCount += 1;
     }
 
-    public int getQuestionSize(){
+    public int getQuestionSize() {
         return this.getClubApplyForm().getClubRecruitQuestions().size();
     }
 
-    public boolean hasApplicant(){
+    public boolean hasApplicant() {
         return this.applicantCount != 0;
     }
 
-    public List<ClubRecruitQuestion> getClubRecruitQuestions(){
+    public List<ClubRecruitQuestion> getClubRecruitQuestions() {
         return clubApplyForm.getClubRecruitQuestions();
     }
 
@@ -160,5 +160,23 @@ public class ClubRecruit extends BaseEntity {
     public void deleteClub() {
         this.club.getClubRecruits().remove(this);
         this.club = null;
+    }
+
+    public void updateClubRecruitStatus() {
+        if (this.submitStartDate.isBefore(LocalDateTime.now()))
+            startSubmit();
+
+        if (this.submitEndDate.isBefore(LocalDateTime.now()))
+            endSubmit();
+    }
+
+    public void startSubmit() {
+        if (this.clubRecruitStatus.equals(ClubRecruitStatus.WAITING))
+            this.clubRecruitStatus = ClubRecruitStatus.RECRUIT;
+    }
+
+    public void endSubmit() {
+        if (this.clubRecruitStatus.equals(ClubRecruitStatus.RECRUIT))
+            this.clubRecruitStatus = ClubRecruitStatus.END;
     }
 }

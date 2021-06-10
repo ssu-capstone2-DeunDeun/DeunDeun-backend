@@ -1,5 +1,6 @@
 package kr.co.deundeun.groopy.service;
 
+import kr.co.deundeun.groopy.domain.clubRecruit.constant.ClubRecruitStatus;
 import kr.co.deundeun.groopy.dto.clubRecruit.ClubRecruitRequestDto;
 import kr.co.deundeun.groopy.dto.clubRecruit.ClubRecruitResponseDto;
 import kr.co.deundeun.groopy.dao.ClubRecruitRepository;
@@ -53,11 +54,17 @@ public class ClubRecruitService {
 
     public void deleteRecruit(Long recruitId) {
         ClubRecruit clubRecruit = ClubRecruitHelper.findById(clubRecruitRepository, recruitId);
-        if (clubRecruit.hasApplicant()){
+        if (clubRecruit.hasApplicant()) {
             throw new BadRequestException("해당 지원 양식을 사용하는 모집 공고에 지원자가 존재합니다.");
         }
         clubRecruit.deleteClubApplyForm();
         clubRecruit.deleteClub();
         clubRecruitRepository.deleteById(clubRecruit.getId());
+    }
+
+    public void scheduling() {
+        List<ClubRecruit> clubRecruits =
+                clubRecruitRepository.findAllByClubRecruitStatusIsNot(ClubRecruitStatus.END);
+        clubRecruits.forEach(ClubRecruit::updateClubRecruitStatus);
     }
 }
