@@ -24,6 +24,7 @@ import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class CommentService {
 
@@ -32,9 +33,7 @@ public class CommentService {
     private final PostRepository postRepository;
     private final ClubRecruitRepository clubRecruitRepository;
 
-    @Transactional
     public void commentClubApply(User user, Long applyId, CommentRequestDto commentRequestDto) {
-
         if (user.getId() == null) throw new LoginException();
 
         ClubApply clubApply = ClubApplyHelper.findById(clubApplyRepository, applyId);
@@ -49,14 +48,12 @@ public class CommentService {
         return CommentResponseDto.ofList(comments);
     }
 
-    @Transactional
     public void updateComment(User user, Long commentId, CommentRequestDto commentRequestDto) {
         Comment comment = CommentHelper.findById(commentRepository, commentId);
         if (!user.equals(comment.getUser())) throw new AuthorizationException();
         comment.updateComment(commentRequestDto);
     }
 
-    @Transactional
     public void deleteComment(User user, Long commentId) {
         Comment comment = CommentHelper.findById(commentRepository, commentId);
         if (!user.equals(comment.getUser())) throw new AuthorizationException();
@@ -65,7 +62,6 @@ public class CommentService {
     }
 
 
-    @Transactional
     public void commentPost(User user, Long postId, CommentRequestDto commentRequestDto) {
         if (user.getId() == null) throw new LoginException(); // 근데 user가 없을 때, getId해도 되나?
         Post post = PostHelper.findById(postRepository, postId);
@@ -80,7 +76,6 @@ public class CommentService {
         return CommentResponseDto.ofList(comments);
     }
 
-    @Transactional
     public void commentClubRecruit(User user, Long clubRecruitId, CommentRequestDto commentRequestDto){
         if (user.getId() == null) throw new LoginException(); // 근데 user가 없을 때, getId해도 되나?
         ClubRecruit clubRecruit = ClubRecruitHelper.findById(clubRecruitRepository, clubRecruitId);
@@ -88,7 +83,6 @@ public class CommentService {
         Comment comment = commentRequestDto.toClubRecruitComment(user, clubRecruit, parentComment);
         commentRepository.save(comment);
     }
-
 
     public List<CommentResponseDto> getClubRecruitComments(Long clubRecruitId){
         ClubRecruit clubRecruit = ClubRecruitHelper.findById(clubRecruitRepository, clubRecruitId);

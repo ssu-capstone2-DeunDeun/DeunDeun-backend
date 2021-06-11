@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class ClubApplyFormService {
 
@@ -24,7 +25,7 @@ public class ClubApplyFormService {
   private final ClubApplyFormRepository clubApplyFormRepository;
   private final ClubRecruitRepository clubRecruitRepository;
 
-  // 생성만 있어서 Transactional 필요 X
+  // 생성만 있어서 Transactional 필요 X -> 필요합니다..
   public void addClubApplyForm(String clubName, ApplyFormRequestDto applyFormRequestDto) {
     Club club = ClubHelper.findByClubName(clubRepository, clubName);
     ClubApplyForm clubApplyForm = applyFormRequestDto.toEntity(club);
@@ -42,7 +43,6 @@ public class ClubApplyFormService {
     return new ApplyFormResponseDto(clubApplyForm);
   }
 
-  @Transactional
   public void deleteClubApplyForm(Long clubApplyFormId) {
     List<ClubRecruit> clubRecruits = clubRecruitRepository.findAllByClubApplyFormId(clubApplyFormId);
     boolean hasApplicantToClubApplyForm = clubRecruits.stream()

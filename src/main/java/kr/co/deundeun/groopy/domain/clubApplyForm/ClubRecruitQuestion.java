@@ -7,6 +7,7 @@ import javax.persistence.FetchType;
 
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.clubRecruit.constant.QuestionType;
 import lombok.Builder;
@@ -37,7 +38,7 @@ public class ClubRecruitQuestion extends BaseEntity {
      */
     @OneToMany(mappedBy = "clubRecruitQuestion", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("choiceNumber")
-    private List<MultipleChoice> multipleChoices = new ArrayList<>();
+    private List< MultipleChoice > multipleChoices = new ArrayList<>();
 
     @Builder
     public ClubRecruitQuestion(QuestionType questionType, String questionContent, List<MultipleChoice> multipleChoices) {

@@ -67,7 +67,7 @@ public class ClubRecruitResponseDto {
         return new ClubRecruitResponseDto(clubRecruit);
     }
 
-    public static List<ClubRecruitResponseDto> listOf(List<ClubRecruit> clubRecruits) {
+    public static List< ClubRecruitResponseDto > listOf(List< ClubRecruit > clubRecruits) {
         return clubRecruits.stream()
                 .map(ClubRecruitResponseDto::new)
                 .collect(Collectors.toList());

@@ -72,7 +72,7 @@ public class ClubRecruit extends BaseEntity {
                         LocalDateTime submitStartDate, LocalDateTime submitEndDate,
                         LocalDateTime documentPassAnnounceDate,
                         LocalDateTime interviewStartDate, LocalDateTime interviewEndDate,
-                        LocalDateTime finalPassAnnounceDate) {
+                        LocalDateTime finalPassAnnounceDate, ClubApplyForm clubApplyForm) {
         initClub(club);
         this.recruitGeneration = club.getGeneration() + 1;
         this.content = content;
@@ -84,6 +84,7 @@ public class ClubRecruit extends BaseEntity {
         this.interviewEndDate = interviewEndDate;
         this.finalPassAnnounceDate = finalPassAnnounceDate;
         this.clubRecruitStatus = calculateClubRecruitStatus(submitStartDate, submitEndDate);
+        this.clubApplyForm = clubApplyForm;
     }
 
     public ClubRecruitStatus calculateClubRecruitStatus(LocalDateTime submitStartDate, LocalDateTime submitEndDate) {

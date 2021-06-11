@@ -40,8 +40,6 @@ public class ClubService {
 
     private final MailService mailService;
 
-
-    @Async
     public ClubResponseDto registerClub(User user, ClubRequestDto clubRequestDto) {
         if (user.getId() == null) throw new LoginException();
         if (isDuplicatedName(clubRequestDto.getName()))
