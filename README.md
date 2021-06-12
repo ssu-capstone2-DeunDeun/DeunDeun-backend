@@ -1,11 +1,20 @@
-# Groopy
+# [Groopy]("https://groopy.site)
 ---
-- [Overview](#Overview)
-- [Documentation](#Documentation)
-- [Support](#Support)
+- [서비스 소개](#서비스-소개)
+- [기술 스택](#기술-스택)
+- [연락처](#연락처)
 
-### Overview
+## 서비스 소개
 
-### Documentation
+### 링크
+[GROOPY]("https://groopy.site)
+## 기술 스택
+- Spring boot
+- Spring Data JPA
+- Spring Security
+- MariaDB
 
-### Support
+### 연락처
+문의사항은 이메일로 남겨주세요!
+
+_groopyofficial@gmail.com
