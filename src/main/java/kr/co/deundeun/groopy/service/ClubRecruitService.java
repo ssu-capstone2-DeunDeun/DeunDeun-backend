@@ -1,5 +1,6 @@
 package kr.co.deundeun.groopy.service;
 
+import kr.co.deundeun.groopy.dao.ClubApplyFormRepository;
 import kr.co.deundeun.groopy.domain.clubRecruit.constant.ClubRecruitStatus;
 import kr.co.deundeun.groopy.dto.clubRecruit.ClubRecruitRequestDto;
 import kr.co.deundeun.groopy.dto.clubRecruit.ClubRecruitResponseDto;
@@ -24,6 +25,8 @@ public class ClubRecruitService {
 
     private final ClubRecruitRepository clubRecruitRepository;
 
+    private final ClubApplyFormRepository clubApplyFormRepository;
+
     private final ClubRepository clubRepository;
 
     public void addRecruit(String clubName, ClubRecruitRequestDto clubRecruitRequestDto) {
@@ -31,7 +34,7 @@ public class ClubRecruitService {
         if (!club.isApproved()) {
             throw new AuthorizationException("동아리 등록 승인이 필요합니다.");
         }
-        ClubRecruit clubRecruit = clubRecruitRequestDto.toClubRecruit(club);
+        ClubRecruit clubRecruit = clubRecruitRequestDto.toClubRecruit(clubApplyFormRepository, club);
         clubRecruitRepository.save(clubRecruit);
     }
 

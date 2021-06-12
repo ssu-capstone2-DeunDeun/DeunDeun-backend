@@ -64,6 +64,7 @@ public class ClubRecruitResponseDto {
     }
 
     public static ClubRecruitResponseDto of(ClubRecruit clubRecruit) {
+        if (clubRecruit == null) return null;
         return new ClubRecruitResponseDto(clubRecruit);
     }
 

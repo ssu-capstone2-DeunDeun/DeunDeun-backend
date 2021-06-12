@@ -95,4 +95,10 @@ public class ExceptionAdvice {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ErrorResponseDto.of(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
     }
+
+    @ExceptionHandler(AuthorizationException.class)
+    protected ResponseEntity<ErrorResponseDto> authorizationException(AuthorizationException e){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(ErrorResponseDto.of(HttpStatus.FORBIDDEN.value(), e.getMessage()));
+    }
 }

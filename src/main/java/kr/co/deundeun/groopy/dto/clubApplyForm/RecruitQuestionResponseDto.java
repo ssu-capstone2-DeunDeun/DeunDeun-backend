@@ -3,6 +3,7 @@ package kr.co.deundeun.groopy.dto.clubApplyForm;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import kr.co.deundeun.groopy.domain.clubApplyForm.ClubRecruitQuestion;
 import kr.co.deundeun.groopy.domain.clubRecruit.constant.QuestionType;
 import lombok.Getter;
@@ -16,19 +17,22 @@ public class RecruitQuestionResponseDto {
 
     private String questionContent;
 
-    private List<MultipleChoiceResponseDto> multipleChoiceResponseDtos = new ArrayList<>();
+    private int questionNumber;
+
+    private List< MultipleChoiceResponseDto > multipleChoiceResponseDtos = new ArrayList<>();
 
     public RecruitQuestionResponseDto(ClubRecruitQuestion clubRecruitQuestion) {
         this.questionType = clubRecruitQuestion.getQuestionType();
         this.questionContent = clubRecruitQuestion.getQuestionContent();
-        if (this.questionType.equals(QuestionType.MULTIPLE)){
+        this.questionNumber = clubRecruitQuestion.getQuestionNumber();
+        if (this.questionType.equals(QuestionType.MULTIPLE)) {
             this.multipleChoiceResponseDtos = MultipleChoiceResponseDto.listOf(clubRecruitQuestion.getMultipleChoices());
         }
     }
 
-    public static List<RecruitQuestionResponseDto> listOf(List<ClubRecruitQuestion> clubRecruitQuestions){
+    public static List< RecruitQuestionResponseDto > listOf(List< ClubRecruitQuestion > clubRecruitQuestions) {
         return clubRecruitQuestions.stream()
-                                   .map(RecruitQuestionResponseDto::new)
-                                   .collect(Collectors.toList());
+                .map(RecruitQuestionResponseDto::new)
+                .collect(Collectors.toList());
     }
 }

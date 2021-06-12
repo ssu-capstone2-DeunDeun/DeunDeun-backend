@@ -1,8 +1,11 @@
 package kr.co.deundeun.groopy.dto.clubRecruit;
 
+import kr.co.deundeun.groopy.dao.ClubApplyFormRepository;
 import kr.co.deundeun.groopy.domain.club.Club;
+import kr.co.deundeun.groopy.domain.clubApplyForm.ClubApplyForm;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
-import kr.co.deundeun.groopy.domain.clubRecruit.constant.ClubRecruitStatus;
+import kr.co.deundeun.groopy.exception.IdNotFoundException;
+import kr.co.deundeun.groopy.helper.ClubApplyFormHelper;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -36,18 +39,25 @@ public class ClubRecruitRequestDto {
     @Future
     private LocalDateTime finalPassAnnounceDate;
 
-    public ClubRecruit toClubRecruit(Club club){
+    private Long clubApplyFormId;
+
+    public ClubRecruit toClubRecruit(ClubApplyFormRepository clubApplyFormRepository, Club club) {
+        ClubApplyForm clubApplyForm =
+                ClubApplyFormHelper.findByClubApplyFormId(clubApplyFormRepository, clubApplyFormId);
+        if(clubApplyForm == null)
+            throw new IdNotFoundException("해당하는 clubApplyFormId가 없습니다.");
 
         return ClubRecruit.builder()
-                          .club(club)
-                          .title(title)
-                          .content(content)
-                          .submitStartDate(submitStartDate)
-                          .submitEndDate(submitEndDate)
-                          .documentPassAnnounceDate(documentPassAnnounceDate)
-                          .interviewStartDate(interviewStartDate)
-                          .interviewEndDate(interviewEndDate)
-                          .finalPassAnnounceDate(finalPassAnnounceDate)
-                          .build();
+                .club(club)
+                .title(title)
+                .content(content)
+                .submitStartDate(submitStartDate)
+                .submitEndDate(submitEndDate)
+                .documentPassAnnounceDate(documentPassAnnounceDate)
+                .interviewStartDate(interviewStartDate)
+                .interviewEndDate(interviewEndDate)
+                .finalPassAnnounceDate(finalPassAnnounceDate)
+                .clubApplyForm(clubApplyForm)
+                .build();
     }
 }
