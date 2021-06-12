@@ -30,19 +30,24 @@ public class PostService {
 
     public PostResponseDto getPost(Long postId) {
         Post post = PostHelper.findById(postRepository, postId);
+        Post beforePost = postRepository.findTopByClubAndIdBeforeOrderByIdDesc(post.getClub(), postId);
+        Post afterPost = postRepository.findFirstByClubAndIdAfter(post.getClub(), postId);
         post.increaseViewCount();
         postRepository.save(post);
-        return PostResponseDto.of(post);
+        PostResponseDto postResponseDto = PostResponseDto.of(post);
+        if (beforePost != null) postResponseDto.setBeforePost(PostResponseDto.of(beforePost));
+        if (afterPost != null) postResponseDto.setAfterPost(PostResponseDto.of(afterPost));
+        return postResponseDto;
     }
 
     @Transactional(readOnly = true)
-    public Page<PostResponseDto> getClubPosts(Long clubId, PageRequestDto pageRequestDto) {
+    public Page< PostResponseDto > getClubPosts(Long clubId, PageRequestDto pageRequestDto) {
         Club club = ClubHelper.findClubById(clubRepository, clubId);
         return postRepository.findAllByClub(club, pageRequestDto.of()).map(PostResponseDto::of);
     }
 
     @Transactional(readOnly = true)
-    public Page<PostResponseDto> getPosts(PageRequestDto pageRequestDto) {
+    public Page< PostResponseDto > getPosts(PageRequestDto pageRequestDto) {
         return postRepository.findAll(pageRequestDto.of()).map(PostResponseDto::of);
     }
 

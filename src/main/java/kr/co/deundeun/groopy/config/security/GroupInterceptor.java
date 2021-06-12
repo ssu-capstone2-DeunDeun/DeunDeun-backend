@@ -3,6 +3,7 @@ package kr.co.deundeun.groopy.config.security;
 import kr.co.deundeun.groopy.dao.ClubRepository;
 import kr.co.deundeun.groopy.dao.ParticipateRepository;
 import kr.co.deundeun.groopy.domain.club.Club;
+import kr.co.deundeun.groopy.domain.user.Participate;
 import kr.co.deundeun.groopy.domain.user.User;
 import kr.co.deundeun.groopy.exception.ClubNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,15 +31,15 @@ public class GroupInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        final Map<String, String> pathVariables = (Map<String, String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+        final Map< String, String > pathVariables = (Map< String, String >) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if(isMatchRole(auth, "ROLE_USER")){
+        if (isMatchRole(auth, "ROLE_USER")) {
             UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             User user = userPrincipal.getUser();
             Club club = clubRepository.findByClubName(pathVariables.get("clubName")).orElseThrow(ClubNotFoundException::new);
-            if(isClubAdmin(user, club)){
+            if (isClubAdmin(user, club)) {
                 userPrincipal.updateRoles("ROLE_GROUP");
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), null, userPrincipal.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -48,12 +49,15 @@ public class GroupInterceptor implements HandlerInterceptor {
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 
-    private boolean isClubAdmin(User user, Club club){
-        return participateRepository.findByUserAndClub(user, club).isAdmin();
+    private boolean isClubAdmin(User user, Club club) {
+        Participate participate = participateRepository.findByUserAndClub(user, club);
+        if (participate != null)
+            return participate.isAdmin();
+        return false;
     }
 
-    private boolean isMatchRole(Authentication authentication, String role){
-        Collection<? extends GrantedAuthority> roles = authentication.getAuthorities();
+    private boolean isMatchRole(Authentication authentication, String role) {
+        Collection< ? extends GrantedAuthority > roles = authentication.getAuthorities();
         return roles.stream().anyMatch(authority -> authority.getAuthority().equals(role));
     }
 }
