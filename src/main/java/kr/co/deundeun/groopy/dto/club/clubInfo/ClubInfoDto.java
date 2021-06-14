@@ -17,14 +17,14 @@ public class ClubInfoDto {
 
     private List<PostResponseDto> postResponseDtos;
 
-    private ClubRecruitResponseDto clubRecruitResponseDto;
+    private List<ClubRecruitResponseDto> clubRecruitResponseDtos;
 
     private boolean isAdmin;
 
-    public ClubInfoDto(Club club, List<Post> posts, ClubRecruit clubRecruit, boolean isAdmin) {
+    public ClubInfoDto(Club club, List<Post> posts, List<ClubRecruit> clubRecruits, boolean isAdmin) {
         this.clubResponseDto = ClubResponseDto.of(club);
         this.postResponseDtos = PostResponseDto.listOf(posts);
-        this.clubRecruitResponseDto = ClubRecruitResponseDto.of(clubRecruit);
+        this.clubRecruitResponseDtos = ClubRecruitResponseDto.listOf(clubRecruits);
         this.isAdmin = isAdmin;
     }
 }

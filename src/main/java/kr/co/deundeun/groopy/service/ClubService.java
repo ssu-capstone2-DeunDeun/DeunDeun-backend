@@ -73,8 +73,8 @@ public class ClubService {
     public ClubInfoDto getClubInfo(boolean isAdmin, String name) {
         Club club = clubRepository.findByClubName(name).orElseThrow(ClubNotFoundException::new);
         List<Post> posts = postRepository.findTop3ByClubOrderByViewCount(club);
-        ClubRecruit clubRecruit = clubRecruitRepository.findTopByClubOrderByCreatedAt(club);
-        return new ClubInfoDto(club, posts, clubRecruit, isAdmin);
+        List<ClubRecruit> clubRecruits = clubRecruitRepository.findAllByClubOrderByCreatedAtDesc(club);
+        return new ClubInfoDto(club, posts, clubRecruits, isAdmin);
     }
 
     public ClubResponseDto updateClub(Long clubId, ClubRequestDto clubRequestDto) {

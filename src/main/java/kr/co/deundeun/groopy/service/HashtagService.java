@@ -19,24 +19,27 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class HashtagService {
-    private final HashtagInfoRepository hashtagInfoRepository;
 
-    public List<String> getHashtagNames() {
-        return hashtagInfoRepository.findAll().stream()
-                .map(HashtagInfo::getName)
-                .collect(Collectors.toList());
-    }
+  private final HashtagInfoRepository hashtagInfoRepository;
 
-    public List<HashtagInfo> getHashtagInfos(List<Long> hashtagInfoIds) {
-        return hashtagInfoIds.stream()
-                .map(id -> hashtagInfoRepository.findById(id)
-                        .orElseThrow(() -> new IdNotFoundException("등록된 해시태그 ID가 아닙니다.")))
-                .collect(Collectors.toList());
-    }
+  public List<String> getHashtagNames() {
+    return hashtagInfoRepository.findAll()
+                                .stream()
+                                .map(HashtagInfo::getName)
+                                .collect(Collectors.toList());
+  }
 
-    public List<HashtagResponseDto> getAllHashtagInfos() {
-        return HashtagResponseDto.ofList(hashtagInfoRepository.findAll());
-    }
+  public List<HashtagInfo> getHashtagInfos(List<Long> hashtagInfoIds) {
+    return hashtagInfoIds.stream()
+                         .map(id -> hashtagInfoRepository.findById(id)
+                                                         .orElseThrow(() -> new IdNotFoundException(
+                                                             "등록된 해시태그 ID가 아닙니다.")))
+                         .collect(Collectors.toList());
+  }
+
+  public List<HashtagResponseDto> getAllHashtagInfos() {
+    return HashtagResponseDto.ofList(hashtagInfoRepository.findAll());
+  }
 
 
 }

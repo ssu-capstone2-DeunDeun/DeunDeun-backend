@@ -28,6 +28,7 @@ public class ClubApply extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private ClubRecruit clubRecruit;
 
+    @Enumerated(EnumType.STRING)
     private ClubApplyStatus clubApplyStatus = ClubApplyStatus.WAITING;
 
     @OneToMany(mappedBy = "clubApply", cascade = CascadeType.ALL, orphanRemoval = true)

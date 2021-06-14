@@ -16,6 +16,7 @@ public class PopularPostDto {
   private String clubName;
   private int commentCount;
   private int likeCount;
+  private int viewCount;
   private LocalDateTime createdAt;
   private String thumbnailImageUrl;
   private String title;
@@ -30,6 +31,7 @@ public class PopularPostDto {
     this.thumbnailImageUrl = post.getThumbnailImageUrl();
     this.title = post.getTitle();
     this.content = post.getContent();
+    this.viewCount = post.getViewCount();
   }
 
   public static List<PopularPostDto> listOf(List<Post> posts) {

@@ -17,6 +17,8 @@ public class ClubRecruitResponseDto {
 
     private Long id;
 
+    private Long clubApplyFormId;
+
     private String title;
 
     private String content;
@@ -47,6 +49,7 @@ public class ClubRecruitResponseDto {
 
     private ClubRecruitResponseDto(ClubRecruit clubRecruit) {
         this.id = clubRecruit.getId();
+        this.clubApplyFormId = clubRecruit.getClubApplyForm().getId();
         this.title = clubRecruit.getTitle();
         this.content = clubRecruit.getContent();
         this.generation = clubRecruit.getRecruitGeneration();
