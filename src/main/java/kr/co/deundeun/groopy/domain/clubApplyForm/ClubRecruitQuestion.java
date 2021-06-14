@@ -7,6 +7,7 @@ import javax.persistence.FetchType;
 
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+
 import kr.co.deundeun.groopy.domain.BaseEntity;
 import kr.co.deundeun.groopy.domain.clubRecruit.constant.QuestionType;
 import lombok.Builder;
@@ -31,19 +32,23 @@ public class ClubRecruitQuestion extends BaseEntity {
 
     private String questionContent;
 
+    private int questionNumber;
+
     /*
     주관식인 경우 : 빈 리스트 저장
     객관식인 경우 : 선택지 저장
      */
     @OneToMany(mappedBy = "clubRecruitQuestion", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("choiceNumber")
-    private List<MultipleChoice> multipleChoices = new ArrayList<>();
+    private List< MultipleChoice > multipleChoices = new ArrayList<>();
 
     @Builder
-    public ClubRecruitQuestion(QuestionType questionType, String questionContent, List<MultipleChoice> multipleChoices) {
+    public ClubRecruitQuestion(QuestionType questionType, String questionContent, int questionNumber, List< MultipleChoice > multipleChoices) {
         this.questionType = questionType;
         this.questionContent = questionContent;
-        multipleChoices.forEach(multipleChoice -> multipleChoice.initClubRecruitQuestion(this));
+        this.questionNumber = questionNumber;
+        if (questionType.equals(QuestionType.MULTIPLE))
+            multipleChoices.forEach(multipleChoice -> multipleChoice.initClubRecruitQuestion(this));
     }
 
     public void initClubApplyForm(ClubApplyForm clubApplyForm) {

@@ -64,10 +64,11 @@ public class ClubRecruitResponseDto {
     }
 
     public static ClubRecruitResponseDto of(ClubRecruit clubRecruit) {
+        if (clubRecruit == null) return null;
         return new ClubRecruitResponseDto(clubRecruit);
     }
 
-    public static List<ClubRecruitResponseDto> listOf(List<ClubRecruit> clubRecruits) {
+    public static List< ClubRecruitResponseDto > listOf(List< ClubRecruit > clubRecruits) {
         return clubRecruits.stream()
                 .map(ClubRecruitResponseDto::new)
                 .collect(Collectors.toList());

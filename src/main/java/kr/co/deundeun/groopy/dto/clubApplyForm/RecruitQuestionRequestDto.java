@@ -1,6 +1,7 @@
 package kr.co.deundeun.groopy.dto.clubApplyForm;
 
 import java.util.stream.Collectors;
+
 import kr.co.deundeun.groopy.domain.clubApplyForm.ClubRecruitQuestion;
 import kr.co.deundeun.groopy.domain.clubApplyForm.MultipleChoice;
 import kr.co.deundeun.groopy.domain.clubRecruit.constant.QuestionType;
@@ -17,11 +18,13 @@ public class RecruitQuestionRequestDto {
 
     private String questionContent;
 
+    private int questionNumber;
+
     private List<MultipleChoiceRequestDto> multipleChoiceRequestDtos;
 
-    public ClubRecruitQuestion toEntity(){
+    public ClubRecruitQuestion toEntity() {
 
-        if (this.questionType.equals(QuestionType.SUBJECTIVE)){
+        if (this.questionType.equals(QuestionType.SUBJECTIVE)) {
             return toSubjectiveTypeEntity();
         }
         return toMultipleTypeEntity();
@@ -29,23 +32,25 @@ public class RecruitQuestionRequestDto {
 
     private ClubRecruitQuestion toSubjectiveTypeEntity() {
         return ClubRecruitQuestion.builder()
-                                  .questionType(QuestionType.SUBJECTIVE)
-                                  .questionContent(questionContent)
-                                  .build();
+                .questionType(QuestionType.SUBJECTIVE)
+                .questionContent(questionContent)
+                .questionNumber(questionNumber)
+                .build();
     }
 
     private ClubRecruitQuestion toMultipleTypeEntity() {
         List<MultipleChoice> multipleChoices = MultipleChoiceRequestDto.toEntityList(multipleChoiceRequestDtos);
         return ClubRecruitQuestion.builder()
-                                  .questionType(QuestionType.MULTIPLE)
-                                  .questionContent(questionContent)
-                                  .multipleChoices(multipleChoices)
-                                  .build();
+                .questionType(QuestionType.MULTIPLE)
+                .questionContent(questionContent)
+                .questionNumber(questionNumber)
+                .multipleChoices(multipleChoices)
+                .build();
     }
 
-    public static List<ClubRecruitQuestion> toEntityList(List<RecruitQuestionRequestDto> recruitQuestionRequestDtos){
+    public static List<ClubRecruitQuestion> toEntityList(List<RecruitQuestionRequestDto> recruitQuestionRequestDtos) {
         return recruitQuestionRequestDtos.stream()
-                                  .map(RecruitQuestionRequestDto::toEntity)
-                                  .collect(Collectors.toList());
+                .map(RecruitQuestionRequestDto::toEntity)
+                .collect(Collectors.toList());
     }
 }

@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RequiredArgsConstructor
 @RestController
 public class MessageController {
@@ -15,7 +17,7 @@ public class MessageController {
     private final MessageService messageService;
 
     @PostMapping("/message")
-    public ResponseEntity<String> sendMessage(@RequestBody MessageRequest messageRequest){
+    public ResponseEntity<String> sendMessage(@RequestBody @Valid MessageRequest messageRequest){
         return ResponseEntity.ok(messageService.sendMessage(messageRequest));
     }
 

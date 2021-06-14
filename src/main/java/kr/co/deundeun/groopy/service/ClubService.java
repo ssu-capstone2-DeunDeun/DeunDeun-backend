@@ -1,11 +1,9 @@
 package kr.co.deundeun.groopy.service;
 
-import kr.co.deundeun.groopy.config.AppProperties;
 import kr.co.deundeun.groopy.domain.hashtag.HashtagInfo;
 import kr.co.deundeun.groopy.dto.club.ClubRequestDto;
 import kr.co.deundeun.groopy.dto.club.ClubResponseDto;
 import kr.co.deundeun.groopy.dto.club.clubInfo.ClubInfoDto;
-import kr.co.deundeun.groopy.dto.common.mail.MailRequestDto;
 import kr.co.deundeun.groopy.dao.*;
 import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
@@ -18,7 +16,7 @@ import kr.co.deundeun.groopy.exception.LoginException;
 import kr.co.deundeun.groopy.exception.NameDuplicateException;
 import kr.co.deundeun.groopy.helper.ClubHelper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -40,9 +38,7 @@ public class ClubService {
 
     private final HashtagService hashtagService;
 
-    private final JavaMailSender javaMailSender;
-
-    private final AppProperties appProperties;
+    private final MailService mailService;
 
     public ClubResponseDto registerClub(User user, ClubRequestDto clubRequestDto) {
         if (user.getId() == null) throw new LoginException();
@@ -58,7 +54,7 @@ public class ClubService {
         Participate participate = new Participate(user, club, true);
         participateRepository.save(participate);
 
-        MailRequestDto.sendRegisterClub(javaMailSender, appProperties, user, club);
+        mailService.sendRegisterMail(club, user);
 
         return ClubResponseDto.of(club);
     }
@@ -66,7 +62,10 @@ public class ClubService {
     @Transactional(readOnly = true)
     public ClubInfoDto getClubInfo(User user, String name) {
         Club club = clubRepository.findByClubName(name).orElseThrow(ClubNotFoundException::new);
-        boolean isAdmin = participateRepository.findByUserAndClub(user, club).isAdmin();
+        Participate participate = participateRepository.findByUserAndClub(user, club);
+        boolean isAdmin = false;
+        if(participate != null)
+            isAdmin = participate.isAdmin();
         return getClubInfo(isAdmin, name);
     }
 

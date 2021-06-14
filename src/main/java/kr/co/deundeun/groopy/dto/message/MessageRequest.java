@@ -3,6 +3,7 @@ package kr.co.deundeun.groopy.dto.message;
 import lombok.Getter;
 import lombok.ToString;
 
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class MessageRequest {
 
     private LocalDateTime reserveTime;
 
+    @Size(max = 500)
     private String message;
 
     private ContentType contentType;
