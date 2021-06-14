@@ -32,12 +32,16 @@ public class MailService {
   }
 
   public void sendMail(MessageRequest messageRequest, Club club) {
+    if (messageRequest.getEmails().isEmpty()) {
+      return;
+    }
     try {
       MimeMessage message = javaMailSender.createMimeMessage();
       MimeMessageHelper mimeMessageHelper =
           new MimeMessageHelper(message, true, "UTF-8");
 
-      String[] emails = messageRequest.getEmails().toArray(new String[0]);
+      String[] emails = messageRequest.getEmails()
+                                      .toArray(new String[0]);
       ContentType contentType = messageRequest.getContentType();
 
       mimeMessageHelper.setFrom(admin, "groopy");
