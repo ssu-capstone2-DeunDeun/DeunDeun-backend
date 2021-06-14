@@ -3,6 +3,7 @@ package kr.co.deundeun.groopy.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.co.deundeun.groopy.config.SmsProperties;
+import kr.co.deundeun.groopy.domain.club.Club;
 import kr.co.deundeun.groopy.dto.message.*;
 import kr.co.deundeun.groopy.exception.BadRequestException;
 import org.apache.commons.codec.binary.Base64;
@@ -42,12 +43,12 @@ public class MessageService {
         this.SEND_API_URL = HOST + URL + serviceId + MESSAGE_API;
     }
 
-    public String sendMessage(MessageRequest messageRequest) {
+    public String sendMessage(MessageRequest messageRequest, Club club) {
 
         String timestamp = Long.toString(System.currentTimeMillis());
 
         HttpHeaders headers = getHeaders(timestamp);
-        String body = getSendMessageBody(messageRequest);
+        String body = getSendMessageBody(messageRequest, club.getClubName());
 
         HttpEntity<String> request = new HttpEntity<>(body, headers); // body + header 요청
 
@@ -73,7 +74,7 @@ public class MessageService {
             return MessageType.LMS.toString();
     }
 
-    private String getSendMessageBody(MessageRequest messageRequest) {
+    private String getSendMessageBody(MessageRequest messageRequest, String clubName) {
         List<Message> messages = Message.ofList(messageRequest.getPhoneNumbers(), messageRequest.getMessage());
         String messageType = getType(messageRequest.getMessage());
 

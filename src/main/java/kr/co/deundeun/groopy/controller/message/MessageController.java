@@ -16,9 +16,9 @@ public class MessageController {
 
     private final MessageService messageService;
 
-    @PostMapping("/message")
-    public ResponseEntity<String> sendMessage(@RequestBody @Valid MessageRequest messageRequest){
-        return ResponseEntity.ok(messageService.sendMessage(messageRequest));
-    }
+//    @PostMapping("/message")
+//    public ResponseEntity<String> sendMessage(@RequestBody @Valid MessageRequest messageRequest){
+//        return ResponseEntity.ok(messageService.sendMessage(messageRequest));
+//    }
 
 }
