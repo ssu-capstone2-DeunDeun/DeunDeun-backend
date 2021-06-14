@@ -82,4 +82,11 @@ public class ClubApply extends BaseEntity {
         }
         this.commentCount -= 1;
     }
+
+    public void changeApplyStatus(ClubApplyStatus clubApplyStatus) {
+        if (this.clubApplyStatus == null){
+            throw new BadRequestException("유효한 지원서 상태가 아닙니다");
+        }
+        this.clubApplyStatus = clubApplyStatus;
+    }
 }

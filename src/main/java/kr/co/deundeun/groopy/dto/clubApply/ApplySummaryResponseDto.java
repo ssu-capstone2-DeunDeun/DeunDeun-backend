@@ -1,5 +1,6 @@
 package kr.co.deundeun.groopy.dto.clubApply;
 
+import java.util.Set;
 import kr.co.deundeun.groopy.domain.clubApply.ClubApply;
 import kr.co.deundeun.groopy.domain.clubApply.constant.ClubApplyStatus;
 import kr.co.deundeun.groopy.domain.clubRecruit.ClubRecruit;
@@ -34,11 +35,11 @@ public class ApplySummaryResponseDto {
         return clubApplies.stream()
                           .map(ApplySummaryResponseDto::new)
                           .collect(Collectors.toList());
-//        Map<ClubApply, ClubRecruit> applyInfos = IntStream.range(0, clubApplies.size())
-//                .boxed().collect(Collectors.toMap(clubApplies::get, clubRecruits::get));
-//
-//        return applyInfos.entrySet().stream()
-//                .map(entry -> of(entry.getKey(), entry.getValue()))
-//                .collect(Collectors.toList());
+    }
+
+    public static List<ApplySummaryResponseDto> setOf(Set<ClubApply> clubApplies){
+        return clubApplies.stream()
+                          .map(ApplySummaryResponseDto::new)
+                          .collect(Collectors.toList());
     }
 }

@@ -91,4 +91,19 @@ public class User extends BaseEntity {
                 .anyMatch(clubLike -> clubLike.getClub().equals(club));
     }
 
+    public boolean isNameContaining(String keyword){
+        return isContaining(this.name, keyword);
+    }
+
+    public boolean isNicknameContaining(String keyword){
+        return isContaining(this.nickname, keyword);
+    }
+
+    private boolean isContaining(String target, String keyword){
+        if(target == null){
+            return false;
+        }
+        return target.toLowerCase().contains(keyword.toLowerCase());
+    }
+
 }

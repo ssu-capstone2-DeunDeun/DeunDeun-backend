@@ -1,7 +1,10 @@
 package kr.co.deundeun.groopy.controller.clubApply;
 
 import io.swagger.annotations.ApiOperation;
+import java.util.Set;
+import javax.validation.constraints.NotNull;
 import kr.co.deundeun.groopy.config.Me;
+import kr.co.deundeun.groopy.domain.clubApply.constant.ClubApplyStatus;
 import kr.co.deundeun.groopy.dto.clubApply.ApplyInfoDto;
 import kr.co.deundeun.groopy.dto.clubApply.ApplyRequestDto;
 import kr.co.deundeun.groopy.dto.clubApply.ApplyResponseDto;
@@ -98,5 +101,36 @@ public class ClubApplyController {
     public ResponseEntity<Void> deleteApply(@PathVariable Long applyId) {
         clubApplyService.deleteApply(applyId);
         return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(
+        value = "지원서의 상태를 변경합니다. ",
+        notes = "<h3>\n"
+            + "- 관리자가 지원자의 지원서를 보고, 각 단계의 합불상태를 관리합니다.\n"
+            + "- Path Variable 로 넘어오는 상태로, 지원서의 상태를 변경합니다.`\n"
+            + "- WAITING(\"대기중\"),\n"
+            + "- FIRST_ROUND_PASS(\"1차 합격\"),\n"
+            + "- FIRST_ROUND_FAIL(\"1차 탈락\"),\n"
+            + "- FINAL_PASS(\"최종 합격\"),\n"
+            + "- FINAL_FAIL(\"최종 탈락\") \n"
+            + "</h3>"
+    )
+    @PostMapping("/applies/{applyId}/{clubApplyStatus}")
+    public ResponseEntity<Void> changeClubApplyStatus(@PathVariable Long applyId, @PathVariable ClubApplyStatus clubApplyStatus){
+        clubApplyService.changeClubApplyStatus(applyId, clubApplyStatus);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @ApiOperation(
+        value = "지원자의 닉네임 혹은 이름으로 검색",
+        notes = "<h3>\n"
+            + "- 파라미터의 recruitId의 지원자를 검색합니다.\n"
+            + "- 지원자 관리에서 닉네임 혹은 이름으로 지원자를 검색합니다.\n"
+            + "</h3>"
+    )
+    @GetMapping("/{recruitId}")
+    public ResponseEntity<List<ApplySummaryResponseDto>> searchApply(@PathVariable Long recruitId, @RequestParam @NotNull String keyword){
+        List<ApplySummaryResponseDto> applySummaryResponseDtos = clubApplyService.searchApply(recruitId, keyword);
+        return ResponseEntity.ok(applySummaryResponseDtos);
     }
 }

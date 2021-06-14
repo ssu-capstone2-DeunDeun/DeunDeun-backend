@@ -1,6 +1,11 @@
 package kr.co.deundeun.groopy.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 import kr.co.deundeun.groopy.dao.CommentRepository;
+import kr.co.deundeun.groopy.domain.clubApply.constant.ClubApplyStatus;
 import kr.co.deundeun.groopy.domain.comment.Comment;
 import kr.co.deundeun.groopy.dto.clubApply.ApplyInfoDto;
 import kr.co.deundeun.groopy.dto.clubApply.ApplyRequestDto;
@@ -43,6 +48,7 @@ public class ClubApplyService {
     }
 
     public List<ApplyInfoDto> getAppliesInfo(User user, Long recruitId) {
+        // user 권한관리?
         List<ClubApply> clubApplies = clubApplyRepository.findAllByClubRecruit_Id(recruitId);
         return ApplyInfoDto.ofList(clubApplies);
     }
@@ -77,5 +83,25 @@ public class ClubApplyService {
         clubRecruit.decreaseApplicantCount();
 
         clubApplyRepository.deleteById(applyId);
+    }
+
+    public void changeClubApplyStatus(Long applyId, ClubApplyStatus clubApplyStatus) {
+        ClubApply clubApply = ClubApplyHelper.findById(clubApplyRepository, applyId);
+        clubApply.changeApplyStatus(clubApplyStatus);
+    }
+
+    public List<ApplySummaryResponseDto> searchApply(Long recruitId, String keyword) {
+        List<ClubApply> clubApplies = clubApplyRepository.findAllByClubRecruit_Id(recruitId);
+
+        Set<ClubApply> resultSet = new HashSet<>();
+        Set<ClubApply> nameSet = clubApplies.stream()
+                                            .filter(clubApply -> clubApply.getUser().isNameContaining(keyword))
+                                            .collect(Collectors.toSet());
+        Set<ClubApply> nicknameSet = clubApplies.stream()
+                                                .filter(clubApply -> clubApply.getUser().isNicknameContaining(keyword))
+                                                .collect(Collectors.toSet());
+        resultSet.addAll(nameSet);
+        resultSet.addAll(nicknameSet);
+        return ApplySummaryResponseDto.setOf(resultSet);
     }
 }
