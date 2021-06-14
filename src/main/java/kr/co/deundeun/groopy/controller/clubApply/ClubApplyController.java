@@ -1,6 +1,7 @@
 package kr.co.deundeun.groopy.controller.clubApply;
 
 import kr.co.deundeun.groopy.config.Me;
+import kr.co.deundeun.groopy.dto.clubApply.ApplyInfoDto;
 import kr.co.deundeun.groopy.dto.clubApply.ApplyRequestDto;
 import kr.co.deundeun.groopy.dto.clubApply.ApplyResponseDto;
 import kr.co.deundeun.groopy.dto.clubApply.ApplySummaryResponseDto;
@@ -24,6 +25,11 @@ public class ClubApplyController {
     public ResponseEntity<ApplyResponseDto> apply(@Me User user, @PathVariable Long recruitId, @RequestBody ApplyRequestDto applyRequestDto) {
         clubApplyService.apply(user, recruitId, applyRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/{recruitId}/applies")     // 동아리에 지원한 특정 공고의 지원자 목록 불러오기, [지원자 관리 첫화면]
+    public ResponseEntity<List<ApplyInfoDto>> getAppliesInfo(@Me User user, @PathVariable Long recruitId){
+        return ResponseEntity.ok(clubApplyService.getAppliesInfo(user, recruitId));
     }
 
     @GetMapping("/applies")              // 유저가 그동안 작성 및 지원했던 지원서 리스트 조회

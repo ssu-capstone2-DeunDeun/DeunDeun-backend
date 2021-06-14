@@ -2,6 +2,7 @@ package kr.co.deundeun.groopy.service;
 
 import kr.co.deundeun.groopy.dao.CommentRepository;
 import kr.co.deundeun.groopy.domain.comment.Comment;
+import kr.co.deundeun.groopy.dto.clubApply.ApplyInfoDto;
 import kr.co.deundeun.groopy.dto.clubApply.ApplyRequestDto;
 import kr.co.deundeun.groopy.dto.clubApply.ApplyResponseDto;
 import kr.co.deundeun.groopy.dto.clubApply.ApplySummaryResponseDto;
@@ -39,20 +40,11 @@ public class ClubApplyService {
         ClubRecruit clubRecruit = ClubRecruitHelper.findById(clubRecruitRepository, clubRecruitId);
         ClubApply clubApply = applyRequestDto.toClubApply(user, clubRecruit);
         clubApplyRepository.save(clubApply);
-//        if (clubApply == null) {
-//            ClubApply newClubApply = applyRequestDto.toClubApply(user);
-//            clubApplyRepository.save(newClubApply);
-//
-//            List<ClubApplyAnswer> clubApplyAnswers =
-//                    Arrays.asList(new ClubApplyAnswer[clubRecruit.getQuestionSize()]);
-//            clubApplyAnswers = clubApplyAnswers.stream()
-//                    .map(clubApplyAnswer -> ClubApplyAnswer.builder().clubApply(newClubApply).build())
-//                    .collect(Collectors.toList());
-//            clubApplyAnswerRepository.saveAll(clubApplyAnswers);
-//            return ApplyResponseDto.of(newClubApply, clubRecruit);
-//        }
-//
-//        return ApplyResponseDto.of(clubApply, clubRecruit);
+    }
+
+    public List<ApplyInfoDto> getAppliesInfo(User user, Long recruitId) {
+        List<ClubApply> clubApplies = clubApplyRepository.findAllByClubRecruit_Id(recruitId);
+        return ApplyInfoDto.ofList(clubApplies);
     }
 
     public List<ApplySummaryResponseDto> getApplies(User user) {
