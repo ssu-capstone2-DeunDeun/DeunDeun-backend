@@ -11,12 +11,12 @@ import java.util.stream.Collectors;
 @Getter
 public class ClubPositionResponseDto {
 
-    private Long id;
+    private Long positionId;
 
     private String positionName;
 
     public ClubPositionResponseDto(ClubPosition clubPosition){
-        this.id = clubPosition.getId();
+        this.positionId = clubPosition.getId();
         this.positionName = clubPosition.getPositionName();
     }
 

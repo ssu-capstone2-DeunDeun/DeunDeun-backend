@@ -7,7 +7,7 @@ import java.util.List;
 
 @ToString
 @Getter
-public class PositionChangeDto {
+public class PositionChangeRequestDto {
 
     private List<Long> participateIds;
 
