@@ -20,4 +20,5 @@ public interface ParticipateRepository extends JpaRepository<Participate, Long> 
 
     List<Participate> findAllByClubPosition(ClubPosition clubPosition);
 
+    List<Participate> findAllByIdInAndClub(Collection<Long> id, Club club);
 }
